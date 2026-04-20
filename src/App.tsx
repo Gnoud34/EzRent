@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Tenants from './pages/Tenants/Tenants'
@@ -8,7 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Automatically go to dashboard when opening the site */}
+        {/* Mặc định vào dashboard */}
         <Route path="/" element={<Navigate to="/dashboard" />} />
 
         {/* Main Routes */}
