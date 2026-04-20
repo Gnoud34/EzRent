@@ -1,0 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif; /* Hoặc Arial nếu chưa cài font */
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #1a1a1a;
+}

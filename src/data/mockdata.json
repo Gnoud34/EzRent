@@ -1,0 +1,188 @@
+{
+    "users": [
+        {
+            "id": "u0",
+            "email": "ntd@gmail.com",
+            "password": "password123",
+            "name": "Nguyễn Tuấn Dương",
+            "role": "admin",
+            "phoneNumber": "0912345678",
+            "token": "fake-jwt-token-admin-123"
+        },
+        {
+            "id": "u1`",
+            "email": "nva01@gmail.com",
+            "password": "password123",
+            "name": "Nguyen Van An",
+            "role": "tenant",
+            "targetId": "1",
+            "phoneNumber": "+84 123 456 789",
+            "token": "fake-jwt-token-tenant-456"
+        },
+        {
+            "id": "u2",
+            "email": "ndb02@gmail.com",
+            "password": "password123",
+            "name": "Nguyen Duc Binh",
+            "role": "tenant",
+            "targetId": "2",
+            "phoneNumber": "+84 123 456 783",
+            "token": "fake-jwt-token-tenant-789"
+        }
+    ],
+    "rooms": [
+        {
+            "id": "1",
+            "number": "R101",
+            "capacity": 1,
+            "status": "occupied",
+            "notes": "Single room with AC",
+            "tenantIds": [
+                "1"
+            ]
+        },
+        {
+            "id": "2",
+            "number": "R102",
+            "capacity": 2,
+            "status": "occupied",
+            "notes": "Double room",
+            "tenantIds": [
+                "2",
+                "5"
+            ]
+        },
+        {
+            "id": "3",
+            "number": "R103",
+            "capacity": 1,
+            "status": "available",
+            "notes": "Single room",
+            "tenantIds": []
+        },
+        {
+            "id": "4",
+            "number": "R104",
+            "capacity": 2,
+            "status": "available",
+            "notes": "Double room with balcony",
+            "tenantIds": []
+        },
+        {
+            "id": "5",
+            "number": "R201",
+            "capacity": 1,
+            "status": "occupied",
+            "notes": "Single room",
+            "tenantIds": [
+                "3"
+            ]
+        },
+        {
+            "id": "6",
+            "number": "R202",
+            "capacity": 2,
+            "status": "occupied",
+            "notes": "Double room with AC",
+            "tenantIds": [
+                "4",
+                "6"
+            ]
+        },
+        {
+            "id": "7",
+            "number": "R203",
+            "capacity": 1,
+            "status": "available",
+            "notes": "Single room",
+            "tenantIds": []
+        },
+        {
+            "id": "8",
+            "number": "R204",
+            "capacity": 2,
+            "status": "available",
+            "notes": "Double room",
+            "tenantIds": []
+        }
+    ],
+    "tenants": [
+        {
+            "id": "1",
+            "name": "Nguyen Van An",
+            "phone": "+84 123 456 789",
+            "roomId": "1",
+            "moveInDate": "2026-01-15",
+            "userId": "u2"
+        },
+        {
+            "id": "2",
+            "name": "Nguyen Duc Binh",
+            "phone": "+84 123 456 783",
+            "roomId": "2",
+            "moveInDate": "2026-02-01"
+        },
+        {
+            "id": "3",
+            "name": "Nguyen Cong Chien",
+            "phone": "+84 123 456 735",
+            "roomId": "5",
+            "moveInDate": "2025-12-10"
+        },
+        {
+            "id": "4",
+            "name": "Nguyen Van Duc",
+            "phone": "+84 123 456 726",
+            "roomId": "6",
+            "moveInDate": "2026-03-05"
+        },
+        {
+            "id": "5",
+            "name": "Nguyen Duc Minh",
+            "phone": "+84 123 456 732",
+            "roomId": "2",
+            "moveInDate": "2026-02-01"
+        },
+        {
+            "id": "6",
+            "name": "Nguyen Tran Long",
+            "phone": "+84 123 456 712",
+            "roomId": "6",
+            "moveInDate": "2026-03-05"
+        }
+    ],
+    "maintenanceRequests": [
+        {
+            "id": "1",
+            "roomNumber": "R101",
+            "description": "Air conditioner not cooling properly",
+            "status": "pending",
+            "createdAt": "2026-04-08",
+            "createdBy": "1"
+        },
+        {
+            "id": "2",
+            "roomNumber": "R202",
+            "description": "Leaking faucet in bathroom",
+            "status": "pending",
+            "createdAt": "2026-04-09",
+            "createdBy": "4"
+        },
+        {
+            "id": "3",
+            "roomNumber": "R103",
+            "description": "Light bulb replacement needed",
+            "status": "resolved",
+            "createdAt": "2026-04-05",
+            "createdBy": "1"
+        },
+        {
+            "id": "4",
+            "roomNumber": "R201",
+            "description": "Door lock issue",
+            "status": "pending",
+            "createdAt": "2026-04-10",
+            "createdBy": "3"
+        }
+    ]
+}
