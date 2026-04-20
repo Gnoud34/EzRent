@@ -29,13 +29,12 @@ const Tenants: React.FC = () => {
         return mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
     };
 
-    // --- MỞ MODAL THÊM MỚI ---
     const openAddModal = () => {
         setEditingTenant(null);
         setFormData({
             name: '',
             phone: '',
-            roomId: '', // Để trống để bắt người dùng phải chọn
+            roomId: '', 
             moveInDate: new Date().toISOString().split('T')[0]
         });
         setIsModalOpen(true);
@@ -133,7 +132,6 @@ const Tenants: React.FC = () => {
                 </div>
             </main>
 
-            {/* --- MODAL --- */}
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
