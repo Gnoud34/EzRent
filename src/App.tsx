@@ -4,6 +4,7 @@ import Tenants from './pages/Tenants/Tenants'
 import Rooms from './pages/Rooms/Rooms';
 import Auth from './pages/Auth/Auth';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import Settings from './pages/Settings/Settings';
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
         {/* Placeholders for other pages */}
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/maintenances" element={<div>Maintenance Page Coming Soon</div>} />
-        <Route path="/settings" element={<div>Setting Page Coming Soon</div>} />
+        <Route path="/settings" element={<Settings />} />
 
       </Routes>
     </Router>
