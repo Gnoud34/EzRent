@@ -1,4 +1,4 @@
-# **Project Management / The Furniture**
+# **Project Management / EzRent**
 
 This project is developed by Nguyen Tuan Duong and associates, focusing on building a modern management application or landing page using React and Vite.
 
