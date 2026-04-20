@@ -23,11 +23,10 @@ const Dashboard: React.FC = () => {
         return mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
     };
 
-    return (
-        <div className="dashboard-layout">
-            {/* Thành phần Menu bên trái */}
-            <Sidebar />
-
+return (
+    <div className="dashboard-layout">
+        {/* Sidebar đã chứa các liên kết điều hướng rồi, không cần viết thêm NavLink ở đây */}
+        <Sidebar /> 
             <main className="main-view">
                 {/* Header phía trên */}
                 <header className="top-header">
