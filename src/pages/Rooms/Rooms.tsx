@@ -89,7 +89,6 @@ const Rooms: React.FC = () => {
                 {/* Header Section */}
                 <header className="top-header">
                     <div className="header-title">
-                        <i className="bi bi-door-open-fill"></i>
                         <h3>Room Management</h3>
                     </div>
                     <div className="admin-profile">
