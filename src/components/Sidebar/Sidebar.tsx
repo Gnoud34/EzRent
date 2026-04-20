@@ -1,13 +1,14 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'; // Import NavLink
 import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
     const menuItems = [
-        { name: 'Dashboard', icon: 'bi-grid-1x2-fill' },
-        { name: 'Rooms', icon: 'bi-door-open-fill' },
-        { name: 'Tenants', icon: 'bi-people-fill' },
-        { name: 'Maintenance', icon: 'bi-tools' },
-        { name: 'Settings', icon: 'bi-gear-fill' },
+        { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/' },
+        { name: 'Rooms', icon: 'bi-door-open-fill', path: '/rooms' },
+        { name: 'Tenants', icon: 'bi-people-fill', path: '/tenants' },
+        { name: 'Maintenance', icon: 'bi-tools', path: '/maintenance' },
+        { name: 'Settings', icon: 'bi-gear-fill', path: '/settings' },
     ];
 
     return (
@@ -16,14 +17,21 @@ const Sidebar: React.FC = () => {
                 <i className="bi bi-house-door-fill" style={{ fontSize: '24px', color: '#2563eb' }}></i>
                 EzRent
             </div>
-            <ul className="sidebar-nav">
-                {menuItems.map((item) => (
-                    <li key={item.name} className={`nav-item ${item.name === 'Dashboard' ? 'active' : ''}`}>
-                        <i className={`bi ${item.icon}`} style={{ marginRight: '12px' }}></i>
-                        {item.name}
-                    </li>
-                ))}
-            </ul>
+            <nav className="sidebar-nav">
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                    {menuItems.map((item) => (
+                        <li key={item.name}>
+                            <NavLink
+                                to={item.path}
+                                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                            >
+                                <i className={`bi ${item.icon}`} style={{ marginRight: '12px' }}></i>
+                                {item.name}
+                            </NavLink>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
             <div className="sidebar-footer">
                 <div className="logout-btn">
                     <i className="bi bi-box-arrow-left" style={{ marginRight: '12px' }}></i>
