@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Dashboard from './pages/Dashboard/Dashboard';
 import Tenants from './pages/Tenants/Tenants'
 import Rooms from './pages/Rooms/Rooms';
+import Auth from './pages/Auth/Auth';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 function App() {
   return (
@@ -10,14 +12,16 @@ function App() {
       <Routes>
         {/* Mặc định vào dashboard */}
         <Route path="/" element={<Navigate to="/dashboard" />} />
-
+        <Route path="/login" element={<Auth />} />
         {/* Main Routes */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/tenants" element={<Tenants />} />
 
         {/* Placeholders for other pages */}
         <Route path="/rooms" element={<Rooms />} />
-        <Route path="/maintenance" element={<div>Maintenance Page Coming Soon</div>} />
+        <Route path="/maintenances" element={<div>Maintenance Page Coming Soon</div>} />
+        <Route path="/settings" element={<div>Setting Page Coming Soon</div>} />
+
       </Routes>
     </Router>
   );

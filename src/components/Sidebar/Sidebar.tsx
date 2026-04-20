@@ -1,15 +1,29 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'; // Import NavLink
+import { NavLink, useNavigate } from 'react-router-dom'; // Import NavLink
 import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
+    const navigate = useNavigate();
     const menuItems = [
         { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/' },
-        { name: 'Rooms', icon: 'bi-door-open-fill', path: '/rooms' },
-        { name: 'Tenants', icon: 'bi-people-fill', path: '/tenants' },
-        { name: 'Maintenance', icon: 'bi-tools', path: '/maintenance' },
-        { name: 'Settings', icon: 'bi-gear-fill', path: '/settings' },
+        { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms' },
+        { name: 'Tenant', icon: 'bi-people-fill', path: '/tenants' },
+        { name: 'Maintenance', icon: 'bi-tools', path: '/maintenances' },
+        { name: 'Setting', icon: 'bi-gear-fill', path: '/settings' },
     ];
+
+    const handleLogout = () => {
+        if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+            // 1. Xóa dữ liệu user khỏi localStorage
+            localStorage.removeItem('user');
+
+            // 2. Log ra console để kiểm tra (Cách 1 bạn đang dùng)
+            console.log('Đã đăng xuất. LocalStorage hiện tại:', localStorage.getItem('user'));
+
+            // 3. Điều hướng về trang Login
+            navigate('/login');
+        }
+    };
 
     return (
         <aside className="sidebar">
@@ -33,7 +47,7 @@ const Sidebar: React.FC = () => {
                 </ul>
             </nav>
             <div className="sidebar-footer">
-                <div className="logout-btn">
+                <div className="logout-btn" onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     <i className="bi bi-box-arrow-left" style={{ marginRight: '12px' }}></i>
                     Logout
                 </div>

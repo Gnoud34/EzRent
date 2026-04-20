@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import mockData from '../../data/mockdata.json';
 import './Tenants.css';
+import Header from '../../components/Header/Header';
 
 interface Tenant {
     id: string;
@@ -14,7 +15,7 @@ interface Tenant {
 const Tenants: React.FC = () => {
     const [tenants, setTenants] = useState<Tenant[]>(mockData.tenants);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     // New Tenant Form State
     const [newTenant, setNewTenant] = useState({
         name: '',
@@ -23,7 +24,7 @@ const Tenants: React.FC = () => {
         moveInDate: new Date().toISOString().split('T')[0] // Default to today
     });
 
-    const admin = mockData.users.find(u => u.role === 'admin');
+    // const admin = mockData.users.find(u => u.role === 'admin');
 
     const getRoomNumber = (roomId: string) => {
         return mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
@@ -38,7 +39,7 @@ const Tenants: React.FC = () => {
     // --- CREATE HANDLER ---
     const handleCreate = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         const createdTenant: Tenant = {
             id: `T${Date.now()}`, // Generate unique ID
             ...newTenant
@@ -54,16 +55,8 @@ const Tenants: React.FC = () => {
             <Sidebar />
 
             <main className="main-view">
-                <header className="top-header">
-                    <div className="header-title"><h3>Tenants Management</h3></div>
-                    <div className="admin-profile">
-                        <div className="admin-text">
-                            <span className="admin-name">{admin?.name}</span>
-                            <span className="admin-email">{admin?.email}</span>
-                        </div>
-                        <div className="admin-avatar">{admin?.name?.substring(0, 2).toUpperCase()}</div>
-                    </div>
-                </header>
+                <Header pageTitle="Tenants" />
+
 
                 <div className="dashboard-content">
                     <div className="section-header">
@@ -116,25 +109,25 @@ const Tenants: React.FC = () => {
                         <form onSubmit={handleCreate}>
                             <div className="form-group">
                                 <label>Full Name</label>
-                                <input 
-                                    type="text" required 
+                                <input
+                                    type="text" required
                                     value={newTenant.name}
-                                    onChange={(e) => setNewTenant({...newTenant, name: e.target.value})}
+                                    onChange={(e) => setNewTenant({ ...newTenant, name: e.target.value })}
                                 />
                             </div>
                             <div className="form-group">
                                 <label>Phone Number</label>
-                                <input 
-                                    type="text" required 
+                                <input
+                                    type="text" required
                                     value={newTenant.phone}
-                                    onChange={(e) => setNewTenant({...newTenant, phone: e.target.value})}
+                                    onChange={(e) => setNewTenant({ ...newTenant, phone: e.target.value })}
                                 />
                             </div>
                             <div className="form-group">
                                 <label>Assign Room</label>
-                                <select 
+                                <select
                                     value={newTenant.roomId}
-                                    onChange={(e) => setNewTenant({...newTenant, roomId: e.target.value})}
+                                    onChange={(e) => setNewTenant({ ...newTenant, roomId: e.target.value })}
                                 >
                                     {mockData.rooms.map(room => (
                                         <option key={room.id} value={room.id}>

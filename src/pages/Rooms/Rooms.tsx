@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import mockData from '../../data/mockdata.json';
+import Header from '../../components/Header/Header'; // Import Header mới
+
 import './Rooms.css';
 
 interface Room {
@@ -23,7 +25,7 @@ const Rooms: React.FC = () => {
         notes: ''
     });
 
-    const admin = mockData.users.find(u => u.role === 'admin');
+    // const admin = mockData.users.find(u => u.role === 'admin');
 
     // 2. XỬ LÝ ĐÓNG/MỞ MODAL
     const openAddModal = () => {
@@ -87,21 +89,8 @@ const Rooms: React.FC = () => {
 
             <main className="main-view">
                 {/* Header Section */}
-                <header className="top-header">
-                    <div className="header-title">
-                        <i className="bi bi-door-open-fill"></i>
-                        <h3>Room Management</h3>
-                    </div>
-                    <div className="admin-profile">
-                        <div className="admin-text">
-                            <span className="admin-name">{admin?.name}</span>
-                            <span className="admin-email">{admin?.email}</span>
-                        </div>
-                        <div className="admin-avatar">
-                            {admin?.name?.substring(0, 2).toUpperCase()}
-                        </div>
-                    </div>
-                </header>
+                <Header pageTitle="Room Management" />
+
 
                 {/* Content Section */}
                 <div className="dashboard-content">

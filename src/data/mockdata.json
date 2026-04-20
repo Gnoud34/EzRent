@@ -3,16 +3,17 @@
         {
             "id": "u0",
             "email": "ntd@gmail.com",
-            "password": "password123",
+            "password": "12345678",
             "name": "Nguyễn Tuấn Dương",
             "role": "admin",
             "phoneNumber": "0912345678",
+            "avatar": "/SepQuan.png",
             "token": "fake-jwt-token-admin-123"
         },
         {
             "id": "u1`",
             "email": "nva01@gmail.com",
-            "password": "password123",
+            "password": "12345678",
             "name": "Nguyen Van An",
             "role": "tenant",
             "targetId": "1",
@@ -22,7 +23,7 @@
         {
             "id": "u2",
             "email": "ndb02@gmail.com",
-            "password": "password123",
+            "password": "12345678",
             "name": "Nguyen Duc Binh",
             "role": "tenant",
             "targetId": "2",
