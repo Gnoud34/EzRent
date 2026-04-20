@@ -89,7 +89,9 @@ const Rooms: React.FC = () => {
 
             <main className="main-view">
                 {/* Header Section */}
+
                 <Header pageTitle="Room Management" />
+
 
 
                 {/* Content Section */}
