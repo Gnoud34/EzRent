@@ -1,145 +1,219 @@
-/* Giao diện tổng thể */
-.landing-container {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    min-height: 100vh;
-    background-color: #f8fafc;
-    color: #1e293b;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --accent: #f59e0b;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --bg-light: #f8fafc;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Thanh điều hướng (Navbar) */
+.landing-container {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-light);
+    min-height: 100vh;
+}
+
+/* Navbar Style */
 .landing-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 8%;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    position: sticky;
+    padding: 1.5rem 8%;
+    position: fixed;
+    width: 100%;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
+    transition: var(--transition);
+    box-sizing: border-box;
 }
 
-.landing-nav .logo {
+.landing-nav.scrolled {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    padding: 1rem 8%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-size: 1.5rem;
     font-weight: 800;
-    color: #2563eb;
+    color: var(--primary);
+}
+
+.logo i { font-size: 1.8rem; }
+
+.user-profile {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    text-align: right;
 }
 
-.nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+.welcome-text { font-size: 0.75rem; color: var(--text-muted); }
+.user-name { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
 
-.nav-actions span {
-    font-weight: 500;
-    color: #64748b;
-}
-
-.btn-logout-lite {
-    padding: 8px 18px;
-    border: 1.5px solid #ef4444;
-    color: #ef4444;
-    background: transparent;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-logout-lite:hover {
-    background: #ef4444;
-    color: white;
-}
-
-/* Khu vực Hero (Banner chào mừng) */
-.landing-hero {
-    text-align: center;
-    padding: 100px 20px 140px;
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-    color: white;
-}
-
-.landing-hero h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-.landing-hero p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-}
-
-/* Lưới tính năng (Cards) */
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    max-width: 1100px;
-    margin: -60px auto 50px;
-    padding: 0 20px;
-}
-
-.feature-card {
+.btn-logout {
+    margin-left: 20px;
+    padding: 10px 20px;
     background: white;
-    padding: 40px 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #ef4444;
     cursor: pointer;
-    border: 1px solid #f1f5f9;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
-    border-color: #dbeafe;
+.btn-logout:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    transform: translateY(-2px);
 }
 
-.feature-card i {
-    font-size: 3rem;
-    color: #2563eb;
+/* Hero Section */
+.landing-hero {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    padding: 180px 8% 0;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
     margin-bottom: 20px;
     display: inline-block;
 }
 
-.feature-card h3 {
+.landing-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 15px;
+    letter-spacing: -1px;
+}
+
+.landing-hero p {
     font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+.hero-waves {
+    margin-top: -100px;
+}
+
+/* Features Grid */
+.content-section {
+    padding: 0 8% 80px;
+    margin-top: -120px;
+    position: relative;
+    z-index: 10;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.feature-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 30px 60px rgba(37, 99, 235, 0.1);
+}
+
+.icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    transition: var(--transition);
+}
+
+.bill-card .icon-box { background: #eff6ff; color: #2563eb; }
+.maintenance-card .icon-box { background: #fffbeb; color: #f59e0b; }
+.room-card .icon-box { background: #f0fdf4; color: #10b981; }
+
+.feature-card h3 {
+    font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 12px;
-    color: #0f172a;
+    margin-bottom: 15px;
+    color: var(--text-main);
 }
 
 .feature-card p {
-    font-size: 0.95rem;
-    color: #64748b;
+    color: var(--text-muted);
     line-height: 1.6;
+    margin-bottom: 25px;
 }
 
-/* Hiệu ứng riêng cho icon từng card */
-.feature-card:nth-child(2) i { color: #f59e0b; } /* Màu vàng cho Repair */
-.feature-card:nth-child(3) i { color: #10b981; } /* Màu xanh cho Room Info */
+.card-link {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-/* Responsive (Cho điện thoại) */
+.card-link i { transition: var(--transition); }
+.feature-card:hover .card-link i { transform: translateX(5px); }
+
+/* Footer */
+.landing-footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-    .landing-hero {
-        padding: 60px 20px 100px;
-    }
-    
-    .landing-hero h1 {
-        font-size: 2rem;
-    }
-    
-    .features-grid {
-        margin-top: -40px;
-    }
-
-    .nav-actions span {
-        display: none; /* Ẩn tên user trên mobile cho gọn */
-    }
+    .landing-hero h1 { font-size: 2.5rem; }
+    .nav-actions .welcome-text { display: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .content-section { margin-top: -60px; }
 }
