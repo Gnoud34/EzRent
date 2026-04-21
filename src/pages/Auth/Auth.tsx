@@ -21,18 +21,15 @@ const Auth: React.FC = () => {
             );
 
             if (userFound) {
-                // 2. Lưu user vào localStorage
                 localStorage.setItem('user', JSON.stringify(userFound));
 
                 console.log('Đăng nhập thành công với vai trò:', userFound.role);
 
-                // 3. ĐIỀU HƯỚNG DỰA TRÊN VAI TRÒ (FIX Ở ĐÂY)
                 if (userFound.role === 'admin') {
                     navigate('/dashboard');
                 } else if (userFound.role === 'tenant') {
                     navigate('/landing');
                 } else {
-                    // Trường hợp mặc định nếu role lạ
                     navigate('/');
                 }
             } else {
@@ -41,7 +38,6 @@ const Auth: React.FC = () => {
             }
 
         } else {
-            // LOGIC ĐĂNG KÝ (Giả lập)
             console.log('Đang đăng ký tài khoản mới:', { name, email, password });
             alert('Đăng ký thành công! Hãy đăng nhập.');
             setIsLogin(true);
