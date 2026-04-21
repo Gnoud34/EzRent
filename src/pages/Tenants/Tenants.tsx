@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import mockData from '../../data/mockdata.json';
 import './Tenants.css';
-import Header from '../../components/Header/Header';
 
 interface Tenant {
     id: string;
@@ -15,19 +14,54 @@ interface Tenant {
 const Tenants: React.FC = () => {
     const [tenants, setTenants] = useState<Tenant[]>(mockData.tenants);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingTenant, setEditingTenant] = useState<Tenant | null>(null);
 
-    // New Tenant Form State
-    const [newTenant, setNewTenant] = useState({
+    const [formData, setFormData] = useState({
         name: '',
         phone: '',
-        roomId: mockData.rooms[0]?.id || '', // Default to first room
-        moveInDate: new Date().toISOString().split('T')[0] // Default to today
+        roomId: '',
+        moveInDate: new Date().toISOString().split('T')[0]
     });
 
-    // const admin = mockData.users.find(u => u.role === 'admin');
+    const admin = mockData.users.find(u => u.role === 'admin');
 
     const getRoomNumber = (roomId: string) => {
         return mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
+    };
+
+    // --- MỞ MODAL THÊM MỚI ---
+    const openAddModal = () => {
+        setEditingTenant(null);
+        setFormData({
+            name: '',
+            phone: '',
+            roomId: '', // Để trống để bắt người dùng phải chọn
+            moveInDate: new Date().toISOString().split('T')[0]
+        });
+        setIsModalOpen(true);
+    };
+
+    // --- MỞ MODAL CHỈNH SỬA ---
+    const openEditModal = (tenant: Tenant) => {
+        setEditingTenant(tenant);
+        setFormData({
+            name: tenant.name,
+            phone: tenant.phone,
+            roomId: tenant.roomId,
+            moveInDate: tenant.moveInDate
+        });
+        setIsModalOpen(true);
+    };
+
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (editingTenant) {
+            setTenants(tenants.map(t => t.id === editingTenant.id ? { ...t, ...formData } : t));
+        } else {
+            const newEntry: Tenant = { id: `T${Date.now()}`, ...formData };
+            setTenants([newEntry, ...tenants]);
+        }
+        setIsModalOpen(false);
     };
 
     const handleDelete = (id: string) => {
@@ -36,27 +70,21 @@ const Tenants: React.FC = () => {
         }
     };
 
-    // --- CREATE HANDLER ---
-    const handleCreate = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const createdTenant: Tenant = {
-            id: `T${Date.now()}`, // Generate unique ID
-            ...newTenant
-        };
-
-        setTenants([createdTenant, ...tenants]); // Add to the top of the list
-        setIsModalOpen(false); // Close modal
-        setNewTenant({ name: '', phone: '', roomId: mockData.rooms[0]?.id, moveInDate: new Date().toISOString().split('T')[0] }); // Reset form
-    };
-
     return (
         <div className="dashboard-layout">
             <Sidebar />
 
             <main className="main-view">
-                <Header pageTitle="Tenants" />
-
+                <header className="top-header">
+                    <div className="header-title"><h3>Tenants Management</h3></div>
+                    <div className="admin-profile">
+                        <div className="admin-text">
+                            <span className="admin-name">{admin?.name}</span>
+                            <span className="admin-email">{admin?.email}</span>
+                        </div>
+                        <div className="admin-avatar">{admin?.name?.substring(0, 2).toUpperCase()}</div>
+                    </div>
+                </header>
 
                 <div className="dashboard-content">
                     <div className="section-header">
@@ -64,12 +92,11 @@ const Tenants: React.FC = () => {
                             <h2>Tenants List</h2>
                             <p>Manage all residents</p>
                         </div>
-                        <button className="btn-add" onClick={() => setIsModalOpen(true)}>
+                        <button className="btn-add" onClick={openAddModal}>
                             <i className="bi bi-person-plus-fill"></i> Add New Tenant
                         </button>
                     </div>
 
-                    {/* TABLE */}
                     <div className="table-container">
                         <table className="tenants-table">
                             <thead>
@@ -89,9 +116,14 @@ const Tenants: React.FC = () => {
                                         <td><span className="room-badge">{getRoomNumber(tenant.roomId)}</span></td>
                                         <td>{new Date(tenant.moveInDate).toLocaleDateString()}</td>
                                         <td>
-                                            <button className="btn-icon delete" onClick={() => handleDelete(tenant.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
+                                            <div className="action-buttons">
+                                                <button className="btn-icon edit" onClick={() => openEditModal(tenant)}>
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </button>
+                                                <button className="btn-icon delete" onClick={() => handleDelete(tenant.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -101,44 +133,70 @@ const Tenants: React.FC = () => {
                 </div>
             </main>
 
-            {/* --- ADD NEW TENANT MODAL --- */}
+            {/* --- MODAL --- */}
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <h3>Add New Tenant</h3>
-                        <form onSubmit={handleCreate}>
+                        <h3>{editingTenant ? 'Edit Tenant' : 'Add New Tenant'}</h3>
+                        <form onSubmit={handleSave}>
                             <div className="form-group">
                                 <label>Full Name</label>
-                                <input
-                                    type="text" required
-                                    value={newTenant.name}
-                                    onChange={(e) => setNewTenant({ ...newTenant, name: e.target.value })}
+                                <input 
+                                    type="text" required 
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
                                 />
                             </div>
                             <div className="form-group">
                                 <label>Phone Number</label>
-                                <input
-                                    type="text" required
-                                    value={newTenant.phone}
-                                    onChange={(e) => setNewTenant({ ...newTenant, phone: e.target.value })}
+                                <input 
+                                    type="text" required 
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
                                 />
                             </div>
+                            
                             <div className="form-group">
                                 <label>Assign Room</label>
-                                <select
-                                    value={newTenant.roomId}
-                                    onChange={(e) => setNewTenant({ ...newTenant, roomId: e.target.value })}
+                                <select 
+                                    value={formData.roomId}
+                                    onChange={(e) => setFormData({...formData, roomId: e.target.value})}
+                                    required
                                 >
-                                    {mockData.rooms.map(room => (
-                                        <option key={room.id} value={room.id}>
-                                            Room {room.number}
-                                        </option>
-                                    ))}
+                                    <option value="" disabled>-- Select a room --</option>
+                                    {mockData.rooms.map(room => {
+                                        const isCurrentRoom = room.id === editingTenant?.roomId;
+                                        const isOccupied = room.status === 'occupied';
+
+                                        return (
+                                            <option 
+                                                key={room.id} 
+                                                value={room.id}
+                                                // Vô hiệu hóa nếu phòng đã đầy và không phải phòng hiện tại
+                                                disabled={isOccupied && !isCurrentRoom}
+                                            >
+                                                Room {room.number} 
+                                                {isCurrentRoom ? ' (Current)' : isOccupied ? ' (Occupied)' : ''}
+                                            </option>
+                                        );
+                                    })}
                                 </select>
                             </div>
+
+                            <div className="form-group">
+                                <label>Move-in Date</label>
+                                <input 
+                                    type="date" required 
+                                    value={formData.moveInDate}
+                                    onChange={(e) => setFormData({...formData, moveInDate: e.target.value})}
+                                />
+                            </div>
+
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setIsModalOpen(false)} className="btn-cancel">Cancel</button>
-                                <button type="submit" className="btn-save">Save Tenant</button>
+                                <button type="submit" className="btn-save">
+                                    {editingTenant ? 'Update Changes' : 'Save Tenant'}
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -146,19 +204,26 @@ const Tenants: React.FC = () => {
             )}
 
             <style>{`
+                .action-buttons { display: flex; gap: 8px; }
+                .btn-icon { border: none; padding: 6px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+                .btn-icon.edit { color: #2563eb; background: #eff6ff; }
+                .btn-icon.delete { color: #dc2626; background: #fef2f2; }
+                
                 .modal-overlay {
                     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-                    background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+                    background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;
                 }
-                .modal-content {
-                    background: white; padding: 2rem; border-radius: 12px; width: 400px;
-                }
-                .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; }
-                .form-group label { margin-bottom: 5px; font-weight: 500; }
-                .form-group input, .form-group select { padding: 8px; border: 1px solid #ddd; border-radius: 6px; }
+                .modal-content { background: white; padding: 2rem; border-radius: 12px; width: 400px; }
+                .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 5px; }
+                .form-group label { font-size: 14px; font-weight: 500; color: #475569; }
+                .form-group input, .form-group select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; }
+                
+                /* Làm mờ các option bị disabled */
+                select option:disabled { color: #94a3b8; background-color: #f1f5f9; }
+
                 .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
-                .btn-save { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
-                .btn-cancel { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+                .btn-save { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+                .btn-cancel { background: #f1f5f9; color: #475569; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
             `}</style>
         </div>
     );
