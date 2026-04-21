@@ -29,19 +29,17 @@ const Tenants: React.FC = () => {
         return mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
     };
 
-    // --- MỞ MODAL THÊM MỚI ---
     const openAddModal = () => {
         setEditingTenant(null);
         setFormData({
             name: '',
             phone: '',
-            roomId: '', // Để trống để bắt người dùng phải chọn
+            roomId: '', 
             moveInDate: new Date().toISOString().split('T')[0]
         });
         setIsModalOpen(true);
     };
 
-    // --- MỞ MODAL CHỈNH SỬA ---
     const openEditModal = (tenant: Tenant) => {
         setEditingTenant(tenant);
         setFormData({
@@ -133,7 +131,6 @@ const Tenants: React.FC = () => {
                 </div>
             </main>
 
-            {/* --- MODAL --- */}
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -172,7 +169,6 @@ const Tenants: React.FC = () => {
                                             <option 
                                                 key={room.id} 
                                                 value={room.id}
-                                                // Vô hiệu hóa nếu phòng đã đầy và không phải phòng hiện tại
                                                 disabled={isOccupied && !isCurrentRoom}
                                             >
                                                 Room {room.number} 

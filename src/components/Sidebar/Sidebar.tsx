@@ -8,7 +8,7 @@ const Sidebar: React.FC = () => {
         { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/' },
         { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms' },
         { name: 'Tenant', icon: 'bi-people-fill', path: '/tenants' },
-        { name: 'Maintenance', icon: 'bi-tools', path: '/maintenances' },
+        { name: 'Maintenance', icon: 'bi-tools', path: '/Maintenances' },
         { name: 'Setting', icon: 'bi-gear-fill', path: '/settings' },
     ];
 
