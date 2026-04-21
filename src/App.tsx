@@ -7,24 +7,86 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Settings from './pages/Settings/Settings';
 import Maintenances from './pages/Maintenances/Maintenances';
 import LandingPage from './LandingPage';
+import type { JSX } from 'react';
 
+const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles: string[] }) => {
+  const userJson = localStorage.getItem('user');
+  const user = userJson ? JSON.parse(userJson) : null;
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/landing" replace />;
+  }
+
+  return children;
+};
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Mặc định vào dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/login" element={<Auth />} />
-        {/* Main Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/tenants" element={<Tenants />} />
+        
+        <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Placeholders for other pages */}
-        <Route path="/rooms" element={<Rooms />} />
-        <Route path="/maintenance" element={<Maintenances />} />
-        <Route path="/settings" element={<Settings />} />
-<Route path="/landing" element={<LandingPage />} />
+        <Route 
+          path="/landing" 
+          element={
+            <ProtectedRoute allowedRoles={['tenant', 'admin']}>
+              <LandingPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/tenants" 
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <Tenants />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/rooms" 
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <Rooms />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/maintenance" 
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'tenant']}>
+              <Maintenances />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings" 
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'tenant']}>
+              <Settings />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

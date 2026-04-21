@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mockData from '../../data/mockdata.json'; // Import dữ liệu để kiểm tra
+import mockData from '../../data/mockdata.json'; 
 import './Auth.css';
 
 const Auth: React.FC = () => {
@@ -15,26 +15,28 @@ const Auth: React.FC = () => {
         e.preventDefault();
 
         if (isLogin) {
-            // --- LOGIC ĐĂNG NHẬP (CÁCH 1) ---
-
-            // 1. Tìm user trong mockData khớp với Email và Password
+            // 1. Tìm user trong mockData
             const userFound = mockData.users.find(
                 (u) => u.email === email && u.password === password
             );
 
             if (userFound) {
-                // 2. Lưu thông tin user vào localStorage (đánh dấu đã log)
+                // 2. Lưu user vào localStorage
                 localStorage.setItem('user', JSON.stringify(userFound));
 
-                // 3. Log ra console để bạn kiểm tra (Cách 1)
-                console.log('Đăng nhập thành công!');
-                console.log('Dữ liệu đã lưu vào LocalStorage:', JSON.parse(localStorage.getItem('user') || '{}'));
+                console.log('Đăng nhập thành công với vai trò:', userFound.role);
 
-                // 4. Chuyển về trang chủ
-                navigate('/');
+                // 3. ĐIỀU HƯỚNG DỰA TRÊN VAI TRÒ (FIX Ở ĐÂY)
+                if (userFound.role === 'admin') {
+                    navigate('/dashboard');
+                } else if (userFound.role === 'tenant') {
+                    navigate('/landing');
+                } else {
+                    // Trường hợp mặc định nếu role lạ
+                    navigate('/');
+                }
             } else {
-                // Log lỗi ra console nếu sai thông tin
-                console.error('Đăng nhập thất bại: Sai email hoặc mật khẩu');
+                console.error('Đăng nhập thất bại');
                 alert('Sai email hoặc mật khẩu! (Thử: ntd@gmail.com / password123)');
             }
 
@@ -81,7 +83,7 @@ const Auth: React.FC = () => {
                             <i className="bi bi-envelope"></i>
                             <input
                                 type="email"
-                                placeholder="ntd@gmail.com"
+                                placeholder="Email (vd: ntd@gmail.com)"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -95,7 +97,7 @@ const Auth: React.FC = () => {
                             <i className="bi bi-lock"></i>
                             <input
                                 type="password"
-                                placeholder="password123"
+                                placeholder="Mật khẩu (vd: password123)"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -110,7 +112,7 @@ const Auth: React.FC = () => {
 
                 <div className="auth-footer">
                     {isLogin ? "Don't have an account?" : "Already have an account?"}
-                    <span onClick={() => setIsLogin(!isLogin)}>
+                    <span onClick={() => setIsLogin(!isLogin)} style={{ cursor: 'pointer', color: '#2563eb', marginLeft: '5px' }}>
                         {isLogin ? 'Create one' : 'Login now'}
                     </span>
                 </div>

@@ -1,0 +1,145 @@
+/* Giao diện tổng thể */
+.landing-container {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+/* Thanh điều hướng (Navbar) */
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 8%;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.landing-nav .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-actions span {
+    font-weight: 500;
+    color: #64748b;
+}
+
+.btn-logout-lite {
+    padding: 8px 18px;
+    border: 1.5px solid #ef4444;
+    color: #ef4444;
+    background: transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-logout-lite:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* Khu vực Hero (Banner chào mừng) */
+.landing-hero {
+    text-align: center;
+    padding: 100px 20px 140px;
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+}
+
+.landing-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.landing-hero p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Lưới tính năng (Cards) */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: -60px auto 50px;
+    padding: 0 20px;
+}
+
+.feature-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: 1px solid #f1f5f9;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
+    border-color: #dbeafe;
+}
+
+.feature-card i {
+    font-size: 3rem;
+    color: #2563eb;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #0f172a;
+}
+
+.feature-card p {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* Hiệu ứng riêng cho icon từng card */
+.feature-card:nth-child(2) i { color: #f59e0b; } /* Màu vàng cho Repair */
+.feature-card:nth-child(3) i { color: #10b981; } /* Màu xanh cho Room Info */
+
+/* Responsive (Cho điện thoại) */
+@media (max-width: 768px) {
+    .landing-hero {
+        padding: 60px 20px 100px;
+    }
+    
+    .landing-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .features-grid {
+        margin-top: -40px;
+    }
+
+    .nav-actions span {
+        display: none; /* Ẩn tên user trên mobile cho gọn */
+    }
+}
