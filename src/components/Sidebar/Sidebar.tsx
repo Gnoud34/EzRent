@@ -5,10 +5,10 @@ import './Sidebar.css';
 const Sidebar: React.FC = () => {
     const navigate = useNavigate();
     const menuItems = [
-        { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/' },
+        { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/dashboard' },
         { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms' },
         { name: 'Tenant', icon: 'bi-people-fill', path: '/tenants' },
-        { name: 'Maintenance', icon: 'bi-tools', path: '/Maintenances' },
+        { name: 'Maintenance', icon: 'bi-tools', path: '/maintenance' },
         { name: 'Setting', icon: 'bi-gear-fill', path: '/settings' },
     ];
 
