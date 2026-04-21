@@ -1,0 +1,82 @@
+.user-request-container {
+    padding: 30px 5%;
+    background: #f8fafc;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.user-header { margin-bottom: 30px; }
+.user-header h2 { color: #1e293b; font-size: 28px; margin-bottom: 5px; }
+.user-header p { color: #64748b; }
+
+.request-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+}
+
+.request-form-card, .request-history-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+h3 { font-size: 18px; margin-bottom: 20px; color: #334155; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+
+.disabled-input { background: #f1f5f9; border: 1px solid #e2e8f0; cursor: not-allowed; }
+
+textarea, input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.btn-submit-request {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit-request:hover { background: #1d4ed8; }
+
+.history-list { max-height: 500px; overflow-y: auto; }
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.req-id { font-weight: bold; color: #2563eb; font-size: 12px; }
+.history-info p { margin: 5px 0; font-size: 14px; color: #475569; }
+
+.status-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.status-pill.pending { background: #fef3c7; color: #d97706; }
+.status-pill.resolved { background: #dcfce7; color: #16a34a; }
+
+@media (max-width: 900px) {
+    .request-grid { grid-template-columns: 1fr; }
+}

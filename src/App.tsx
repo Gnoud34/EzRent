@@ -6,6 +6,7 @@ import Auth from './pages/Auth/Auth';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Settings from './pages/Settings/Settings';
 import Maintenances from './pages/Maintenances/Maintenances';
+import UserRequest from './pages/UserRequest/UserRequest';
 import LandingPage from './LandingPage';
 import type { JSX } from 'react';
 
@@ -82,6 +83,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin', 'tenant']}>
               <Settings />
+            </ProtectedRoute>
+          } 
+        />
+                <Route 
+          path="/UserRequest" 
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <UserRequest />
             </ProtectedRoute>
           } 
         />
