@@ -11,7 +11,7 @@
             "token": "fake-jwt-token-admin-123"
         },
         {
-            "id": "u1`",
+            "id": "u1",
             "email": "nva01@gmail.com",
             "password": "12345678",
             "name": "Nguyen Van An",
@@ -114,42 +114,74 @@
             "phone": "+84 123 456 789",
             "roomId": "1",
             "moveInDate": "2026-01-15",
-            "userId": "u2"
+            "status": "active",
+            "userId": "u1"
         },
         {
             "id": "2",
             "name": "Nguyen Duc Binh",
             "phone": "+84 123 456 783",
             "roomId": "2",
-            "moveInDate": "2026-02-01"
+            "moveInDate": "2026-02-01",
+            "status": "active",
+            "userId": "u2"
+        },
+        {
+            "id": "inq_01",
+            "name": "Tran Thi Hoa",
+            "phone": "+84 988 777 666",
+            "roomId": "",
+            "status": "inquiry",
+            "note": "Cần phòng tầng 1, có chỗ để xe điện"
+        },
+        {
+            "id": "inq_02",
+            "name": "Le Van Nam",
+            "phone": "+84 911 222 333",
+            "roomId": "3",
+            "status": "inquiry",
+            "note": "Muốn xem phòng R103 vào chiều mai"
         },
         {
             "id": "3",
             "name": "Nguyen Cong Chien",
             "phone": "+84 123 456 735",
             "roomId": "5",
-            "moveInDate": "2025-12-10"
+            "moveInDate": "2025-12-10",
+            "status": "active"
         },
         {
             "id": "4",
             "name": "Nguyen Van Duc",
             "phone": "+84 123 456 726",
             "roomId": "6",
-            "moveInDate": "2026-03-05"
+            "moveInDate": "2026-03-05",
+            "status": "active"
         },
         {
             "id": "5",
             "name": "Nguyen Duc Minh",
             "phone": "+84 123 456 732",
             "roomId": "2",
-            "moveInDate": "2026-02-01"
+            "moveInDate": "2026-02-01",
+            "status": "active"
         },
         {
             "id": "6",
             "name": "Nguyen Tran Long",
             "phone": "+84 123 456 712",
             "roomId": "6",
-            "moveInDate": "2026-03-05"
+            "moveInDate": "2026-03-05",
+            "status": "active"
+        },
+        {
+            "id": "old_01",
+            "name": "Pham Quang Hai",
+            "phone": "+84 900 111 222",
+            "roomId": "1",
+            "moveInDate": "2024-10-01",
+            "status": "expired",
+            "note": "Đã trả phòng đúng hạn, hoàn cọc xong"
         }
     ],
     "maintenanceRequests": [
@@ -168,22 +200,6 @@
             "status": "pending",
             "createdAt": "2026-04-09",
             "createdBy": "4"
-        },
-        {
-            "id": "3",
-            "roomNumber": "R103",
-            "description": "Light bulb replacement needed",
-            "status": "resolved",
-            "createdAt": "2026-04-05",
-            "createdBy": "1"
-        },
-        {
-            "id": "4",
-            "roomNumber": "R201",
-            "description": "Door lock issue",
-            "status": "pending",
-            "createdAt": "2026-04-10",
-            "createdBy": "3"
         }
     ]
 }
