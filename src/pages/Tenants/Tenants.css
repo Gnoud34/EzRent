@@ -1,113 +1,112 @@
-/* Header & Section Styles */
-.section-header {
+.tabs-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.btn-add {
-    background-color: #2563eb;
-    color: white;
+.tabs-bar button {
+    padding: 8px 16px;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
+    background: #e5e7eb;
+    border-radius: 6px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: background 0.2s;
 }
 
-.btn-add:hover {
-    background-color: #1d4ed8;
+.tabs-bar .active {
+    background: #2563eb;
+    color: white;
 }
 
-/* Table Styles */
-.table-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    overflow: hidden;
-}
-
+/* TABLE */
 .tenants-table {
     width: 100%;
     border-collapse: collapse;
-    text-align: left;
+    background: white;
 }
 
-.tenants-table th {
-    background-color: #f8fafc;
-    padding: 1rem;
-    font-size: 0.875rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid #e2e8f0;
-}
-
+.tenants-table th,
 .tenants-table td {
-    padding: 1rem;
-    border-bottom: 1px solid #f1f5f9;
-    color: #1e293b;
-    vertical-align: middle;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
 }
 
-/* Tenant Name Cell with Initial Icon */
-.tenant-name-cell {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-weight: 500;
+/* STATUS */
+.status {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
 }
 
-.tenant-icon {
-    width: 32px;
-    height: 32px;
-    background-color: #eff6ff;
-    color: #2563eb;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
-/* Room Badge */
-.room-badge {
-    background-color: #f0fdf4;
+.status.active {
+    background: #dcfce7;
     color: #16a34a;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    font-weight: 600;
 }
 
-/* Action Buttons */
-.action-buttons {
+.status.expired {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.status.left {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* TAG */
+.tag-container {
     display: flex;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
-.btn-icon {
-    background: none;
-    border: 1px solid #e2e8f0;
-    padding: 0.5rem;
+.tag {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.no-tag {
+    color: #94a3b8;
+}
+
+/* BUTTON */
+.btn-move {
+    background: #f97316;
+    color: white;
+    border: none;
+    padding: 5px 10px;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
-.btn-icon.edit:hover {
-    color: #2563eb;
-    border-color: #2563eb;
-    background-color: #eff6ff;
+.btn-move:hover {
+    background: #ea580c;
 }
 
-.btn-icon.delete:hover {
-    color: #dc2626;
-    border-color: #dc2626;
-    background-color: #fef2f2;
+/* MODAL */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
