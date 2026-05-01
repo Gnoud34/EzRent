@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import mockData from '../../data/mockdata.json';
+import Sidebar from '../../../components/Sidebar/Sidebar';
+import mockData from '../../../data/mockdata.json';
 import './Maintenances.css';
-import Header from '../../components/Header/Header';
 
 interface MaintenanceRequest {
     id: string;
@@ -17,6 +16,7 @@ const Maintenances: React.FC = () => {
     const [requests, setRequests] = useState<MaintenanceRequest[]>(mockData.maintenanceRequests);
     const [filter, setFilter] = useState('all');
 
+    const admin = mockData.users.find(u => u.role === 'admin');
 
     const filteredRequests = requests.filter(req => {
         if (filter === 'all') return true;
@@ -28,7 +28,7 @@ const Maintenances: React.FC = () => {
     };
 
     const handleUpdateStatus = (id: string, newStatus: string) => {
-        setRequests(requests.map(req =>
+        setRequests(requests.map(req => 
             req.id === id ? { ...req, status: newStatus } : req
         ));
     };
@@ -37,7 +37,16 @@ const Maintenances: React.FC = () => {
         <div className="dashboard-layout">
             <Sidebar />
             <main className="main-view">
-                <Header pageTitle="Maintenance Management" />
+                <header className="top-header">
+                    <div className="header-title"><h3>Maintenance Management</h3></div>
+                    <div className="admin-profile">
+                        <div className="admin-text">
+                            <span className="admin-name">{admin?.name}</span>
+                            <span className="admin-email">{admin?.email}</span>
+                        </div>
+                        <div className="admin-avatar">{admin?.name?.substring(0, 2).toUpperCase()}</div>
+                    </div>
+                </header>
 
                 <div className="dashboard-content">
                     <div className="section-header">
@@ -78,7 +87,7 @@ const Maintenances: React.FC = () => {
                                         </td>
                                         <td>
                                             {req.status === 'pending' ? (
-                                                <button
+                                                <button 
                                                     className="btn-resolve"
                                                     onClick={() => handleUpdateStatus(req.id, 'resolved')}
                                                 >

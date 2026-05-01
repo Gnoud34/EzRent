@@ -1,0 +1,89 @@
+.ul-root {
+  display: flex;
+  min-height: 100vh;
+  background: #F9FAFB;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Main area */
+.ul-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.ul-header {
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.ul-page-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+.ul-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ul-user-info {
+  text-align: right;
+  line-height: 1.3;
+}
+.ul-user-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+.ul-user-email {
+  display: block;
+  font-size: 11px;
+  color: #9CA3AF;
+}
+.ul-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+.ul-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Content */
+.ul-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .ul-user-info { display: none; }
+}
+@media (max-width: 600px) {
+  .ul-header { padding: 0 14px; }
+  .ul-page-title { font-size: 14px; }
+}

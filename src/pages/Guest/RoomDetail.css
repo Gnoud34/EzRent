@@ -1,0 +1,248 @@
+/* ═══════════════════════════════════
+   RoomDetail.css — Guest role
+═══════════════════════════════════ */
+
+.rd-root {
+  min-height: 100vh;
+  background: #F9FAFB;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Navbar ── */
+.rd-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #E5E7EB;
+  z-index: 100;
+}
+.rd-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rd-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2563EB;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.rd-logo:hover { opacity: 0.8; }
+.rd-nav-inner button {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.rd-nav-inner button:hover { background: #1D4ED8; }
+
+/* ── Body container ── */
+.rd-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px 72px;
+}
+
+/* ── Breadcrumb ── */
+.rd-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #9CA3AF;
+  margin-bottom: 28px;
+}
+.rd-breadcrumb span {
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.rd-breadcrumb span:hover { color: #2563EB; }
+.rd-breadcrumb span:last-child {
+  color: #374151;
+  font-weight: 500;
+  cursor: default;
+}
+
+/* ── Main grid ── */
+.rd-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .rd-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Left column ── */
+
+/* Room image */
+.rd-img {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border-radius: 16px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.rd-img::before {
+  content: '🏠';
+  font-size: 72px;
+  opacity: 0.3;
+}
+.rd-img span {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.rd-green { background: #DCFCE7; color: #16A34A; }
+.rd-red   { background: #FEE2E2; color: #DC2626; }
+
+/* Panel */
+.rd-panel {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.rd-panel h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 12px;
+}
+.rd-panel p {
+  font-size: 14px;
+  color: #6B7280;
+  line-height: 1.7;
+  margin: 0;
+}
+.rd-panel div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #EFF6FF;
+  color: #2563EB;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin: 0 6px 6px 0;
+}
+.rd-panel div::before {
+  content: '✓';
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Right sticky card ── */
+.rd-detail-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 24px;
+  position: sticky;
+  top: 84px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.rd-detail-card h1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 8px;
+}
+.rd-detail-card > p:first-of-type {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2563EB;
+  margin: 0 0 20px;
+}
+.rd-detail-card > p:first-of-type::after {
+  content: ' / tháng';
+  font-size: 14px;
+  font-weight: 400;
+  color: #9CA3AF;
+}
+.rd-detail-card > div {
+  background: #F9FAFB;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.rd-detail-card > div p {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #374151;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #E5E7EB;
+}
+.rd-detail-card > div p:last-child { border-bottom: none; }
+.rd-detail-card > div p strong {
+  font-weight: 600;
+  color: #111827;
+}
+.rd-detail-card button {
+  width: 100%;
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.rd-detail-card button:hover { background: #1D4ED8; }
+
+/* ── Not found ── */
+.rd-not-found {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.rd-not-found p {
+  font-size: 18px;
+  color: #6B7280;
+  margin: 0;
+}
+.rd-not-found button {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.rd-not-found button:hover { background: #1D4ED8; }

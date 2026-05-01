@@ -10,11 +10,11 @@ const ROOMS_PREVIEW = [
 ];
 
 const FEATURES = [
-  { icon: '🔒', title: 'An ninh 24/7',      desc: 'Camera giám sát và bảo vệ túc trực toàn thời gian.' },
-  { icon: '⚡', title: 'Điện nước đầy đủ',  desc: 'Hệ thống điện nước ổn định, tính phí minh bạch.' },
-  { icon: '🌐', title: 'WiFi tốc độ cao',   desc: 'Internet cáp quang miễn phí cho tất cả cư dân.' },
-  { icon: '🛠️', title: 'Bảo trì nhanh',    desc: 'Đội ngũ kỹ thuật xử lý sự cố trong vòng 24h.' },
-  { icon: '🅿️', title: 'Bãi đỗ xe',        desc: 'Bãi đỗ xe rộng rãi cho xe máy và ô tô.' },
+  { icon: '🔒', title: 'An ninh 24/7',        desc: 'Camera giám sát và bảo vệ túc trực toàn thời gian.' },
+  { icon: '⚡', title: 'Điện nước đầy đủ',    desc: 'Hệ thống điện nước ổn định, tính phí minh bạch.' },
+  { icon: '🌐', title: 'WiFi tốc độ cao',     desc: 'Internet cáp quang miễn phí cho tất cả cư dân.' },
+  { icon: '🛠️', title: 'Bảo trì nhanh',      desc: 'Đội ngũ kỹ thuật xử lý sự cố trong vòng 24h.' },
+  { icon: '🅿️', title: 'Bãi đỗ xe',          desc: 'Bãi đỗ xe rộng rãi cho xe máy và ô tô.' },
   { icon: '🏪', title: 'Tiện ích xung quanh', desc: 'Gần chợ, siêu thị, trường học và bệnh viện.' },
 ];
 
@@ -44,7 +44,8 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="lp-hero">
-        <div className="lp-hero-inner">
+        {/* fix: dùng div thường thay vì lp-hero-inner không có trong CSS */}
+        <div>
           <p className="lp-hero-badge">🏠 Hệ thống quản lý phòng trọ thông minh</p>
           <h1 className="lp-hero-title">Tìm phòng trọ<br /><span>ưng ý ngay hôm nay</span></h1>
           <p className="lp-hero-sub">
@@ -53,7 +54,7 @@ export default function LandingPage() {
           </p>
           <div className="lp-hero-btns">
             <button className="lp-btn-primary" onClick={() => navigate('/rooms')}>Xem phòng trống</button>
-            <button className="lp-btn-ghost" onClick={() => navigate('/login')}>Đăng nhập</button>
+            <button className="lp-btn-ghost"   onClick={() => navigate('/login')}>Đăng nhập</button>
           </div>
           <div className="lp-hero-stats">
             <div className="lp-stat"><strong>120+</strong><span>Phòng trọ</span></div>
@@ -139,7 +140,7 @@ export default function LandingPage() {
         <div className="lp-section-inner lp-contact-grid">
           <div className="lp-contact-info">
             <h2>Liên hệ với chúng tôi</h2>
-            <p>Có thắc mắc về phòng trọ? Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ bạn.</p>
+            <p>Có thắc mắc về phòng trọ? Đội ngũ hỗ trợ luôn sẵn sàng giúp đỡ bạn.</p>
             <div className="lp-contact-items">
               <div className="lp-contact-item"><span>📍</span><p>123 Đường Lê Lợi, Q.1, TP.HCM</p></div>
               <div className="lp-contact-item"><span>📞</span><p>0901 234 567</p></div>

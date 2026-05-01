@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UserRequest.css';
-import mockData from '../../data/mockdata.json';
+import mockData from '../../../data/mockdata.json';
 
 interface Request {
     id: string;

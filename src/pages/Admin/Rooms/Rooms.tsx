@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import mockData from '../../data/mockdata.json';
-import Header from '../../components/Header/Header';
+import Sidebar from '../../../components/Sidebar/Sidebar';
+import mockData from '../../../data/mockdata.json';
+import Header from '../../../components/Header/Header'; // Import Header mới
+
 import './Rooms.css';
 
 interface Room {
@@ -10,49 +11,26 @@ interface Room {
     capacity: number;
     status: string;
     notes: string;
-    images: string[];
-}
-
-interface Tenant {
-    id: string;
-    name: string;
-    phone: string;
-    roomId: string;
-    moveInDate?: string;
-    status: string;
 }
 
 const Rooms: React.FC = () => {
-    // 1. Khởi tạo danh sách phòng và bổ sung ảnh mặc định nếu thiếu
-    const [rooms, setRooms] = useState<Room[]>(mockData.rooms.map(r => ({
-        ...r,
-        images: (r as any).images || [
-            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400",
-            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400",
-            "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400"
-        ]
-    })));
-
+    // 1. QUẢN LÝ STATE
+    const [rooms, setRooms] = useState<Room[]>(mockData.rooms);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRoom, setEditingRoom] = useState<Room | null>(null);
-    const [selectedRoomDetail, setSelectedRoomDetail] = useState<Room | null>(null);
-
     const [roomForm, setRoomForm] = useState({
         number: '',
         capacity: 1,
         status: 'available',
-        notes: '',
-        heroImage: ''
+        notes: ''
     });
 
-    // Hàm lấy danh sách người thuê thuộc về một phòng cụ thể (Lọc từ mockData.tenants)
-    const getTenantsInRoom = (roomId: string) => {
-        return mockData.tenants.filter(t => t.roomId === roomId && t.status === 'active');
-    };
+    // const admin = mockData.users.find(u => u.role === 'admin');
 
+    // 2. XỬ LÝ ĐÓNG/MỞ MODAL
     const openAddModal = () => {
         setEditingRoom(null);
-        setRoomForm({ number: '', capacity: 1, status: 'available', notes: '', heroImage: '' });
+        setRoomForm({ number: '', capacity: 1, status: 'available', notes: '' });
         setIsModalOpen(true);
     };
 
@@ -62,78 +40,103 @@ const Rooms: React.FC = () => {
             number: room.number,
             capacity: room.capacity,
             status: room.status,
-            notes: room.notes,
-            heroImage: room.images[0] || ''
+            notes: room.notes
         });
         setIsModalOpen(true);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (editingRoom) {
-            setRooms(rooms.map(r => r.id === editingRoom.id ? { ...editingRoom, ...roomForm, images: [roomForm.heroImage, ...editingRoom.images.slice(1)] } : r));
-        } else {
-            setRooms([{ id: `${Date.now()}`, ...roomForm, images: [roomForm.heroImage, "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400", "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400"] }, ...rooms]);
+    // 3. XỬ LÝ CRUD
+    const handleDelete = (id: string) => {
+        if (window.confirm('Are you sure you want to delete this room?')) {
+            setRooms(rooms.filter(r => r.id !== id));
         }
-        setIsModalOpen(false);
     };
 
-    const handleEditSingleImage = (index: number) => {
-        if (!selectedRoomDetail) return;
-        const newUrl = prompt("Enter new Image URL:", selectedRoomDetail.images[index]);
-        if (newUrl) {
-            const updatedImages = [...selectedRoomDetail.images];
-            updatedImages[index] = newUrl;
-            const updatedRoom = { ...selectedRoomDetail, images: updatedImages };
-            setRooms(rooms.map(r => r.id === selectedRoomDetail.id ? updatedRoom : r));
-            setSelectedRoomDetail(updatedRoom);
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Kiểm tra trùng lặp số phòng (Không phân biệt hoa thường)
+        const isDuplicate = rooms.some(r => {
+            const isSameNumber = r.number.toLowerCase() === roomForm.number.toLowerCase();
+            return editingRoom ? (isSameNumber && r.id !== editingRoom.id) : isSameNumber;
+        });
+
+        if (isDuplicate) {
+            alert(`Error: Room number "${roomForm.number}" already exists!`);
+            return;
         }
+
+        if (editingRoom) {
+            // Cập nhật phòng hiện có
+            setRooms(rooms.map(r =>
+                r.id === editingRoom.id ? { ...editingRoom, ...roomForm } : r
+            ));
+        } else {
+            // Thêm phòng mới
+            const createdRoom: Room = {
+                id: `R${Date.now()}`,
+                ...roomForm
+            };
+            setRooms([createdRoom, ...rooms]);
+        }
+
+        setIsModalOpen(false);
     };
 
     return (
         <div className="dashboard-layout">
             <Sidebar />
+
             <main className="main-view">
+                {/* Header Section */}
+
                 <Header pageTitle="Room Management" />
+
+
+
+                {/* Content Section */}
                 <div className="dashboard-content">
                     <div className="section-header">
                         <div>
                             <h2>Rooms List</h2>
                             <p>Manage and monitor all boarding house units</p>
                         </div>
-                        <button className="btn-add" onClick={openAddModal}>Add New Room</button>
+                        <button className="btn-add" onClick={openAddModal}>
+                            Add New Room
+                        </button>
                     </div>
 
+                    {/* Table Container */}
                     <div className="table-container">
                         <table className="rooms-table">
                             <thead>
                                 <tr>
-                                    <th>Preview</th>
                                     <th>Room Number</th>
                                     <th>Status</th>
                                     <th>Capacity</th>
+                                    <th>Notes</th>
                                     <th style={{ textAlign: 'center' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {rooms.map(room => (
                                     <tr key={room.id}>
+                                        <td style={{ fontWeight: 700, color: '#1e293b' }}>{room.number}</td>
                                         <td>
-                                            <div className="room-preview-container" onClick={() => setSelectedRoomDetail(room)}>
-                                                <img src={room.images[0]} alt="Hero" className="room-hero-thumb" />
-                                                <span className="view-more-overlay">+{room.images.length - 1}</span>
-                                            </div>
-                                        </td>
-                                        <td className="room-number-cell">{room.number}</td>
-                                        <td>
-                                            <span className={`status-badge ${room.status}`}>{room.status}</span>
+                                            <span className={`status-badge ${room.status}`}>
+                                                {room.status.charAt(0).toUpperCase() + room.status.slice(1)}
+                                            </span>
                                         </td>
                                         <td>{room.capacity} Person(s)</td>
+                                        <td style={{ color: '#64748b', maxWidth: '300px' }}>{room.notes}</td>
                                         <td>
                                             <div className="action-buttons" style={{ justifyContent: 'center' }}>
-                                                <button className="btn-icon view" onClick={() => setSelectedRoomDetail(room)}><i className="bi bi-eye"></i></button>
-                                                <button className="btn-icon edit" onClick={() => openEditModal(room)}><i className="bi bi-pencil-square"></i></button>
-                                                <button className="btn-icon delete" onClick={() => alert('Delete logic')}><i className="bi bi-trash"></i></button>
+                                                <button className="btn-icon edit" onClick={() => openEditModal(room)} title="Edit Room">
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </button>
+                                                <button className="btn-icon delete" onClick={() => handleDelete(room.id)} title="Delete Room">
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -144,149 +147,71 @@ const Rooms: React.FC = () => {
                 </div>
             </main>
 
-            {/* --- MODAL VIEW DETAIL --- */}
-            {selectedRoomDetail && (
-                <div className="modal-overlay" onClick={() => setSelectedRoomDetail(null)}>
-                    <div className="modal-content room-detail-modal" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h3>Room {selectedRoomDetail.number} - Detailed</h3>
-                            <button className="close-modal" onClick={() => setSelectedRoomDetail(null)}>×</button>
-                        </div>
-
-                        <div className="modal-body">
-                            {/* Gallery Section */}
-                            <div className="image-management-section">
-                                <label className="section-label">Gallery (Click photo to edit URL)</label>
-                                <div className="gallery-admin-grid">
-                                    <div className="hero-edit-wrapper" onClick={() => handleEditSingleImage(0)}>
-                                        <img src={selectedRoomDetail.images[0]} alt="Hero" className="hero-manage-img" />
-                                        <div className="img-overlay">Change Hero</div>
-                                        <div className="badge-hero">HERO</div>
-                                    </div>
-                                    <div className="sub-images-edit-grid">
-                                        {[1, 2].map((idx) => (
-                                            <div key={idx} className="sub-edit-wrapper" onClick={() => handleEditSingleImage(idx)}>
-                                                <img src={selectedRoomDetail.images[idx]} alt="sub" />
-                                                <div className="img-overlay">Edit</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Info & Occupant Section */}
-                            <div className="detail-container-grid">
-                                {/* Room Info */}
-                                <div className="info-detail-grid">
-                                    <div className="detail-item">
-                                        <label>Status</label>
-                                        <span className={`status-badge ${selectedRoomDetail.status}`}>{selectedRoomDetail.status}</span>
-                                    </div>
-                                    <div className="detail-item">
-                                        <label>Capacity</label>
-                                        <p>{selectedRoomDetail.capacity} Persons</p>
-                                    </div>
-                                    <div className="detail-item full-width">
-                                        <label>Notes</label>
-                                        <p>{selectedRoomDetail.notes || "No notes available"}</p>
-                                    </div>
-                                </div>
-
-                                {/* THÔNG TIN NGƯỜI Ở (TENANT INFO) */}
-                                <div className="occupant-info-card">
-                                    <label className="section-label-sm">Current Occupants</label>
-                                    {selectedRoomDetail.status === 'occupied' ? (
-                                        <div className="tenant-list-wrapper">
-                                            {getTenantsInRoom(selectedRoomDetail.id).map(tenant => (
-                                                <div key={tenant.id} className="tenant-data-item">
-                                                    <div className="tenant-avatar-mini">
-                                                        {tenant.name.charAt(0)}
-                                                    </div>
-                                                    <div className="tenant-details">
-                                                        <p className="t-name">{tenant.name}</p>
-                                                        <p className="t-phone"><i className="bi bi-telephone"></i> {tenant.phone}</p>
-                                                        <p className="t-date"><i className="bi bi-calendar-check"></i> In: {tenant.moveInDate}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            {getTenantsInRoom(selectedRoomDetail.id).length === 0 && (
-                                                <p className="no-data-text">Occupied but no tenant record found.</p>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <div className="no-tenant">
-                                            <p>Room is currently vacant</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn-save" onClick={() => setSelectedRoomDetail(null)}>Close</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* MODAL ADD/EDIT */}
+            {/* --- POPUP MODAL --- */}
             {isModalOpen && (
-                <div className="modal-overlay">
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+
+                        <div className="modal-header">
+                            <h3>{editingRoom ? 'Edit Room Details' : 'Add New Room'}</h3>
+                            <button className="close-modal" onClick={() => setIsModalOpen(false)}>
+                                <i className="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+
                         <form onSubmit={handleSubmit}>
-                            <div className="modal-header">
-                                <h3>{editingRoom ? 'Edit Room' : 'Add New Room'}</h3>
-                                <button type="button" className="close-modal" onClick={() => setIsModalOpen(false)}>×</button>
-                            </div>
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label>Room Number</label>
-                                    <input 
-                                        type="text" 
-                                        value={roomForm.number} 
-                                        onChange={e => setRoomForm({...roomForm, number: e.target.value})} 
-                                        required 
-                                        placeholder="e.g. R101"
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. 101"
+                                        required
+                                        value={roomForm.number}
+                                        onChange={(e) => setRoomForm({ ...roomForm, number: e.target.value })}
                                     />
                                 </div>
+
                                 <div className="form-group">
-                                    <label>Capacity</label>
-                                    <input 
-                                        type="number" 
-                                        value={roomForm.capacity} 
-                                        onChange={e => setRoomForm({...roomForm, capacity: parseInt(e.target.value)})} 
-                                        required 
-                                    />
+                                    <label>Capacity (People)</label>
+                                    <div style={{ position: 'relative' }}>
+                                        <input
+                                            type="number" min="1" required
+                                            value={roomForm.capacity}
+                                            onChange={(e) => setRoomForm({ ...roomForm, capacity: parseInt(e.target.value) })}
+                                        />
+                                    </div>
                                 </div>
+
                                 <div className="form-group">
                                     <label>Status</label>
-                                    <select 
-                                        value={roomForm.status} 
-                                        onChange={e => setRoomForm({...roomForm, status: e.target.value})}
+                                    <select
+                                        value={roomForm.status}
+                                        onChange={(e) => setRoomForm({ ...roomForm, status: e.target.value })}
                                     >
                                         <option value="available">Available</option>
                                         <option value="occupied">Occupied</option>
                                     </select>
                                 </div>
-                                <div className="form-group">
-                                    <label>Hero Image URL</label>
-                                    <input 
-                                        type="text" 
-                                        value={roomForm.heroImage} 
-                                        onChange={e => setRoomForm({...roomForm, heroImage: e.target.value})} 
-                                        placeholder="https://..."
-                                    />
-                                </div>
+
                                 <div className="form-group">
                                     <label>Notes</label>
-                                    <textarea 
-                                        value={roomForm.notes} 
-                                        onChange={e => setRoomForm({...roomForm, notes: e.target.value})}
-                                    />
+                                    <textarea
+                                        rows={3}
+                                        placeholder="Enter room description or facilities..."
+                                        value={roomForm.notes}
+                                        onChange={(e) => setRoomForm({ ...roomForm, notes: e.target.value })}
+                                    ></textarea>
                                 </div>
                             </div>
+
                             <div className="modal-footer">
-                                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                                <button type="submit" className="btn-save">Save Room</button>
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="btn-cancel">
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn-save">
+                                    {editingRoom ? 'Update Room' : 'Create Room'}
+                                </button>
                             </div>
                         </form>
                     </div>
