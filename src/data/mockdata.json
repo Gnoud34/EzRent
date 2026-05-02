@@ -36,6 +36,8 @@
             "id": "1",
             "number": "R101",
             "capacity": 1,
+            "area": 20,
+            "floor": 1,
             "status": "occupied",
             "notes": "Single room with AC",
             "tenantIds": [
@@ -46,6 +48,8 @@
             "id": "2",
             "number": "R102",
             "capacity": 2,
+            "area": 25,
+            "floor": 1,
             "status": "occupied",
             "notes": "Double room",
             "tenantIds": [
@@ -57,6 +61,8 @@
             "id": "3",
             "number": "R103",
             "capacity": 1,
+            "area": 20,
+            "floor": 1,
             "status": "available",
             "notes": "Single room",
             "tenantIds": []
@@ -65,6 +71,8 @@
             "id": "4",
             "number": "R104",
             "capacity": 2,
+            "area": 30,
+            "floor": 1,
             "status": "available",
             "notes": "Double room with balcony",
             "tenantIds": []
@@ -73,6 +81,8 @@
             "id": "5",
             "number": "R201",
             "capacity": 1,
+            "area": 20,
+            "floor": 2,
             "status": "occupied",
             "notes": "Single room",
             "tenantIds": [
@@ -83,6 +93,8 @@
             "id": "6",
             "number": "R202",
             "capacity": 2,
+            "area": 30,
+            "floor": 2,
             "status": "occupied",
             "notes": "Double room with AC",
             "tenantIds": [
@@ -94,6 +106,8 @@
             "id": "7",
             "number": "R203",
             "capacity": 1,
+            "area": 20,
+            "floor": 2,
             "status": "available",
             "notes": "Single room",
             "tenantIds": []
@@ -102,6 +116,8 @@
             "id": "8",
             "number": "R204",
             "capacity": 2,
+            "area": 30,
+            "floor": 2,
             "status": "available",
             "notes": "Double room",
             "tenantIds": []
