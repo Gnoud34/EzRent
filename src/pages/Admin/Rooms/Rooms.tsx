@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-import mockData from '../../../data/mockdata.json';
-import Header from '../../../components/Header/Header'; // Import Header mới
-
+import mockData from '../../../../public/mockdata.json';
+import Header from '../../../components/Header/Header';
 import './Rooms.css';
 
 interface Room {
     id: string;
     number: string;
     capacity: number;
+    area?: number;
+    floor?: number;
+    price?: number;
     status: string;
-    notes: string;
+    description?: string;  // ✅ dùng description thay vì notes
+    amenities?: string[];
+    tenantIds?: string[];
 }
 
 const Rooms: React.FC = () => {
-    // 1. QUẢN LÝ STATE
     const [rooms, setRooms] = useState<Room[]>(mockData.rooms);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRoom, setEditingRoom] = useState<Room | null>(null);
@@ -22,15 +25,12 @@ const Rooms: React.FC = () => {
         number: '',
         capacity: 1,
         status: 'available',
-        notes: ''
+        description: ''
     });
 
-    // const admin = mockData.users.find(u => u.role === 'admin');
-
-    // 2. XỬ LÝ ĐÓNG/MỞ MODAL
     const openAddModal = () => {
         setEditingRoom(null);
-        setRoomForm({ number: '', capacity: 1, status: 'available', notes: '' });
+        setRoomForm({ number: '', capacity: 1, status: 'available', description: '' });
         setIsModalOpen(true);
     };
 
@@ -40,12 +40,11 @@ const Rooms: React.FC = () => {
             number: room.number,
             capacity: room.capacity,
             status: room.status,
-            notes: room.notes
+            description: room.description || ''
         });
         setIsModalOpen(true);
     };
 
-    // 3. XỬ LÝ CRUD
     const handleDelete = (id: string) => {
         if (window.confirm('Are you sure you want to delete this room?')) {
             setRooms(rooms.filter(r => r.id !== id));
@@ -55,7 +54,6 @@ const Rooms: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Kiểm tra trùng lặp số phòng (Không phân biệt hoa thường)
         const isDuplicate = rooms.some(r => {
             const isSameNumber = r.number.toLowerCase() === roomForm.number.toLowerCase();
             return editingRoom ? (isSameNumber && r.id !== editingRoom.id) : isSameNumber;
@@ -67,12 +65,10 @@ const Rooms: React.FC = () => {
         }
 
         if (editingRoom) {
-            // Cập nhật phòng hiện có
             setRooms(rooms.map(r =>
                 r.id === editingRoom.id ? { ...editingRoom, ...roomForm } : r
             ));
         } else {
-            // Thêm phòng mới
             const createdRoom: Room = {
                 id: `R${Date.now()}`,
                 ...roomForm
@@ -88,13 +84,8 @@ const Rooms: React.FC = () => {
             <Sidebar />
 
             <main className="main-view">
-                {/* Header Section */}
-
                 <Header pageTitle="Room Management" />
 
-
-
-                {/* Content Section */}
                 <div className="dashboard-content">
                     <div className="section-header">
                         <div>
@@ -106,7 +97,6 @@ const Rooms: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Table Container */}
                     <div className="table-container">
                         <table className="rooms-table">
                             <thead>
@@ -114,7 +104,7 @@ const Rooms: React.FC = () => {
                                     <th>Room Number</th>
                                     <th>Status</th>
                                     <th>Capacity</th>
-                                    <th>Notes</th>
+                                    <th>Description</th>
                                     <th style={{ textAlign: 'center' }}>Actions</th>
                                 </tr>
                             </thead>
@@ -128,7 +118,9 @@ const Rooms: React.FC = () => {
                                             </span>
                                         </td>
                                         <td>{room.capacity} Person(s)</td>
-                                        <td style={{ color: '#64748b', maxWidth: '300px' }}>{room.notes}</td>
+                                        <td style={{ color: '#64748b', maxWidth: '300px' }}>
+                                            {room.description || '—'}
+                                        </td>
                                         <td>
                                             <div className="action-buttons" style={{ justifyContent: 'center' }}>
                                                 <button className="btn-icon edit" onClick={() => openEditModal(room)} title="Edit Room">
@@ -147,11 +139,9 @@ const Rooms: React.FC = () => {
                 </div>
             </main>
 
-            {/* --- POPUP MODAL --- */}
             {isModalOpen && (
                 <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-
                         <div className="modal-header">
                             <h3>{editingRoom ? 'Edit Room Details' : 'Add New Room'}</h3>
                             <button className="close-modal" onClick={() => setIsModalOpen(false)}>
@@ -165,7 +155,7 @@ const Rooms: React.FC = () => {
                                     <label>Room Number</label>
                                     <input
                                         type="text"
-                                        placeholder="e.g. 101"
+                                        placeholder="e.g. R101"
                                         required
                                         value={roomForm.number}
                                         onChange={(e) => setRoomForm({ ...roomForm, number: e.target.value })}
@@ -174,13 +164,11 @@ const Rooms: React.FC = () => {
 
                                 <div className="form-group">
                                     <label>Capacity (People)</label>
-                                    <div style={{ position: 'relative' }}>
-                                        <input
-                                            type="number" min="1" required
-                                            value={roomForm.capacity}
-                                            onChange={(e) => setRoomForm({ ...roomForm, capacity: parseInt(e.target.value) })}
-                                        />
-                                    </div>
+                                    <input
+                                        type="number" min="1" required
+                                        value={roomForm.capacity}
+                                        onChange={(e) => setRoomForm({ ...roomForm, capacity: parseInt(e.target.value) })}
+                                    />
                                 </div>
 
                                 <div className="form-group">
@@ -195,12 +183,12 @@ const Rooms: React.FC = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Notes</label>
+                                    <label>Description</label>
                                     <textarea
                                         rows={3}
                                         placeholder="Enter room description or facilities..."
-                                        value={roomForm.notes}
-                                        onChange={(e) => setRoomForm({ ...roomForm, notes: e.target.value })}
+                                        value={roomForm.description}
+                                        onChange={(e) => setRoomForm({ ...roomForm, description: e.target.value })}
                                     ></textarea>
                                 </div>
                             </div>

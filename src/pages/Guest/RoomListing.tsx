@@ -1,39 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RoomListing.css';
 
 type Status = 'all' | 'available' | 'occupied';
 
 type Room = {
-  id: number;
+  id: string;
   number: string;
-  floor: number;
   capacity: number;
-  area: number;
-  price: number;
   status: 'available' | 'occupied';
-  amenities: string[];
+  notes: string;
 };
-
-const ROOMS: Room[] = [
-  { id: 1, number: '101', floor: 1, capacity: 2, area: 20, price: 3_500_000, status: 'available', amenities: ['WiFi', 'Điều hòa', 'Tủ lạnh'] },
-  { id: 2, number: '202', floor: 2, capacity: 2, area: 25, price: 4_200_000, status: 'occupied',  amenities: ['WiFi', 'Điều hòa', 'Ban công'] },
-  { id: 3, number: '303', floor: 3, capacity: 3, area: 30, price: 5_000_000, status: 'available', amenities: ['WiFi', 'Điều hòa', 'Tủ lạnh', 'Ban công'] },
-  { id: 4, number: '404', floor: 4, capacity: 1, area: 18, price: 2_800_000, status: 'available', amenities: ['WiFi', 'Điều hòa'] },
-  { id: 5, number: '105', floor: 1, capacity: 2, area: 22, price: 3_800_000, status: 'occupied',  amenities: ['WiFi', 'Tủ lạnh'] },
-  { id: 6, number: '206', floor: 2, capacity: 3, area: 28, price: 4_800_000, status: 'available', amenities: ['WiFi', 'Điều hòa', 'Tủ lạnh', 'Ban công'] },
-];
 
 export default function RoomListing() {
   const navigate = useNavigate();
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<Status>('all');
 
-  const filtered = ROOMS.filter(r => {
-    const matchSearch = r.number.includes(search) || String(r.floor).includes(search);
+  useEffect(() => {
+    fetch('/mockdata.json')
+      .then(res => res.json())
+      .then(data => setRooms(data.rooms))
+      .catch(err => console.error('Failed to load rooms:', err));
+  }, []);
+
+  const filtered = rooms.filter(r => {
+    const matchSearch = r.number.toLowerCase().includes(search.toLowerCase()) || 
+                       r.number.includes(search);
     const matchStatus = status === 'all' || r.status === status;
     return matchSearch && matchStatus;
   });
+
+  // Helper functions
+  const getPrice = (roomNumber: string) => {
+    const num = parseInt(roomNumber.replace('R', ''));
+    if (num >= 200) return 4_200_000;
+    if (num >= 100) return 3_500_000;
+    return 3_000_000;
+  };
+
+  const getFloor = (roomNumber: string) => {
+    return parseInt(roomNumber.charAt(1));
+  };
+
+  const getArea = (capacity: number) => {
+    if (capacity === 1) return 18;
+    if (capacity === 2) return 25;
+    return 30;
+  };
+
+  const getAmenities = (capacity: number) => {
+    const base = ['WiFi', 'Điều hòa'];
+    if (capacity >= 2) base.push('Tủ lạnh');
+    if (capacity >= 3) base.push('Ban công');
+    return base;
+  };
 
   return (
     <div className="rl-root">
@@ -99,41 +121,48 @@ export default function RoomListing() {
           </div>
         ) : (
           <div className="rl-grid">
-            {filtered.map(room => (
-              <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
-                {/* Image */}
-                <div className="rl-card-img">
-                  <svg width="36" height="36" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                  </svg>
-                  <span className={`rl-status-badge ${room.status === 'available' ? 'rl-status-badge--green' : 'rl-status-badge--gray'}`}>
-                    {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
-                  </span>
-                </div>
+            {filtered.map(room => {
+              const price = getPrice(room.number);
+              const floor = getFloor(room.number);
+              const area = getArea(room.capacity);
+              const amenities = getAmenities(room.capacity);
 
-                {/* Body */}
-                <div className="rl-card-body">
-                  <div className="rl-card-top">
-                    <h3>Phòng {room.number}</h3>
-                    <span className="rl-card-price">
-                      {room.price.toLocaleString('vi-VN')}đ<small>/tháng</small>
+              return (
+                <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
+                  {/* Image */}
+                  <div className="rl-card-img">
+                    <svg width="36" height="36" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                        d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    </svg>
+                    <span className={`rl-status-badge ${room.status === 'available' ? 'rl-status-badge--green' : 'rl-status-badge--gray'}`}>
+                      {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
                     </span>
                   </div>
-                  <div className="rl-card-meta">
-                    <span>🏢 Tầng {room.floor}</span>
-                    <span>👤 {room.capacity} người</span>
-                    <span>📐 {room.area}m²</span>
+
+                  {/* Body */}
+                  <div className="rl-card-body">
+                    <div className="rl-card-top">
+                      <h3>Phòng {room.number}</h3>
+                      <span className="rl-card-price">
+                        {price.toLocaleString('vi-VN')}đ<small>/tháng</small>
+                      </span>
+                    </div>
+                    <div className="rl-card-meta">
+                      <span>🏢 Tầng {floor}</span>
+                      <span>👤 {room.capacity} người</span>
+                      <span>📐 {area}m²</span>
+                    </div>
+                    <div className="rl-card-amenities">
+                      {amenities.slice(0, 3).map(a => (
+                        <span key={a} className="rl-amenity-tag">{a}</span>
+                      ))}
+                    </div>
+                    <button className="rl-card-btn">Xem chi tiết →</button>
                   </div>
-                  <div className="rl-card-amenities">
-                    {room.amenities.slice(0, 3).map(a => (
-                      <span key={a} className="rl-amenity-tag">{a}</span>
-                    ))}
-                  </div>
-                  <button className="rl-card-btn">Xem chi tiết →</button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

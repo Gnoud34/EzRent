@@ -1,18 +1,16 @@
 import React from 'react';
 import './MyRoom.css';
+import mockData from '../../../public/mockdata.json';
 
-const ROOM = {
-  number: '202', floor: 2, capacity: 2, area: 25,
-  monthlyRent: 4_200_000,
-  moveInDate:  '2024-01-15',
-  contractEnd: '2025-07-15',
-  description: 'Phòng góc thoáng mát, view đẹp, ban công rộng. Gần chợ và siêu thị. Khu vực an ninh 24/7, có camera giám sát toàn khu.',
-  amenities: ['WiFi tốc độ cao', 'Điều hòa', 'WC riêng', 'Ban công', 'Tủ lạnh'],
-  roommates: [
-    { name: 'TH', phone: '+84 901 222 333' },
-  ],
-};
+/* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
+const storedUser  = JSON.parse(localStorage.getItem('user') || '{}');
+const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
+const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
+  || mockData.tenants[0];
+const currentRoom = mockData.rooms.find(r => r.id === currentTenant?.roomId)
+  || mockData.rooms[0];
 
+/* ─── Helpers ─── */
 function fmtDate(d: string) { return new Date(d).toLocaleDateString('vi-VN'); }
 function getDaysLeft(d: string) {
   const today = new Date(); today.setHours(0,0,0,0);
@@ -21,7 +19,10 @@ function getDaysLeft(d: string) {
 }
 
 export default function MyRoom() {
-  const days = getDaysLeft(ROOM.contractEnd);
+  const contractEnd = currentTenant?.expireDate || '';
+  const moveInDate  = currentTenant?.moveInDate || '';
+  const days = contractEnd ? getDaysLeft(contractEnd) : 999;
+  const roommates: { name: string; phone: string }[] = currentTenant?.roommates || [];
 
   return (
     <div className="mr-page">
@@ -45,27 +46,31 @@ export default function MyRoom() {
           <div className="mr-info-panel">
             <div className="mr-info-row">
               <span className="mr-info-label">Số phòng</span>
-              <span className="mr-info-value mr-info-value--blue">R{ROOM.number}</span>
+              <span className="mr-info-value mr-info-value--blue">{currentRoom.number}</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Tầng</span>
-              <span className="mr-info-value">Tầng {ROOM.floor}</span>
+              <span className="mr-info-value">Tầng {currentRoom.floor}</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Diện tích</span>
-              <span className="mr-info-value">{ROOM.area} m²</span>
+              <span className="mr-info-value">{currentRoom.area} m²</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Sức chứa</span>
-              <span className="mr-info-value">{ROOM.capacity} người</span>
+              <span className="mr-info-value">{currentRoom.capacity} người</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Tiền thuê</span>
-              <span className="mr-info-value">{ROOM.monthlyRent.toLocaleString('vi-VN')} đ</span>
+              <span className="mr-info-value">
+                {(currentTenant?.monthlyRent ?? currentRoom.price).toLocaleString('vi-VN')} đ
+              </span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Tiền cọc</span>
-              <span className="mr-info-value">{(ROOM.monthlyRent * 2).toLocaleString('vi-VN')} đ</span>
+              <span className="mr-info-value">
+                {(currentTenant?.deposit ?? currentRoom.price * 2).toLocaleString('vi-VN')} đ
+              </span>
             </div>
           </div>
 
@@ -73,7 +78,7 @@ export default function MyRoom() {
           <div className="mr-amenities-panel">
             <p className="mr-section-label">Tiện nghi</p>
             <div className="mr-amenities">
-              {ROOM.amenities.map(a => (
+              {(currentRoom.amenities || []).map((a: string) => (
                 <span key={a} className="mr-amenity-tag">{a}</span>
               ))}
             </div>
@@ -87,22 +92,26 @@ export default function MyRoom() {
             <p className="mr-section-label">Thông tin hợp đồng</p>
             <div className="mr-contract-row">
               <span className="mr-contract-label">Ngày chuyển vào</span>
-              <span className="mr-contract-value">{fmtDate(ROOM.moveInDate)}</span>
+              <span className="mr-contract-value">
+                {moveInDate ? fmtDate(moveInDate) : '—'}
+              </span>
             </div>
             <div className="mr-contract-row">
               <span className="mr-contract-label">Ngày hết hạn HĐ</span>
               <span className={`mr-contract-value ${days <= 30 ? 'mr-contract-value--orange' : ''}`}>
-                {fmtDate(ROOM.contractEnd)}
+                {contractEnd ? fmtDate(contractEnd) : '—'}
               </span>
             </div>
             <div className="mr-contract-row">
               <span className="mr-contract-label">Trạng thái HĐ</span>
-              <span className="mr-contract-badge">Còn hiệu lực</span>
+              <span className="mr-contract-badge">
+                {days > 0 ? 'Còn hiệu lực' : 'Đã hết hạn'}
+              </span>
             </div>
           </div>
 
           {/* Roommates */}
-          {ROOM.roommates.length > 0 && (
+          {roommates.length > 0 && (
             <div className="mr-roommates-panel">
               <div className="mr-roommates-icon">
                 <svg width="16" height="16" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
@@ -110,9 +119,11 @@ export default function MyRoom() {
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              {ROOM.roommates.map((r, i) => (
+              {roommates.map((r, i) => (
                 <div key={i} className="mr-roommate">
-                  <div className="mr-roommate-avatar">{r.name}</div>
+                  <div className="mr-roommate-avatar">
+                    {r.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+                  </div>
                   <div className="mr-roommate-info">
                     <svg width="14" height="14" fill="none" stroke="#6B7280" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -134,7 +145,7 @@ export default function MyRoom() {
               </svg>
               <span>Mô tả phòng</span>
             </div>
-            <p className="mr-desc-text">{ROOM.description}</p>
+            <p className="mr-desc-text">{currentRoom.description}</p>
           </div>
         </div>
       </div>

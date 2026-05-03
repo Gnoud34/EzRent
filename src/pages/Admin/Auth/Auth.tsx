@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mockData from '../../../data/mockdata.json'; 
+import mockData from '../../../../public/mockdata.json'; 
 import './Auth.css';
 
 const Auth: React.FC = () => {

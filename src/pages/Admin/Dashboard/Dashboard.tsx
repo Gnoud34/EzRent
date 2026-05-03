@@ -2,7 +2,7 @@ import React from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import StatCard from '../../../components/StatCard/StatCard';
 import Header from '../../../components/Header/Header'; // Import Header mới
-import mockData from '../../../data/mockdata.json';
+import mockData from '../../../../public/mockdata.json'; 
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {

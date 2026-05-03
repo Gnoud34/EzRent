@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './TenantMaintenance.css';
+import mockData from '../../../public/mockdata.json';
 
 type StatusKey = 'pending' | 'in-progress' | 'resolved';
 
@@ -11,39 +12,47 @@ interface Request {
   status: StatusKey;
 }
 
-const MOCK_REQUESTS: Request[] = [
-  { id: 'M1', title: 'Máy lạnh chạy nhưng không ra hơi lạnh',       description: 'Máy lạnh chạy nhưng không ra hơi lạnh, có tiếng kêu lạ.', date: '20/05/2025', status: 'in-progress' },
-  { id: 'M2', title: 'Cửa sổ không đóng kín được',                   description: 'Cửa sổ không đóng kín được, có tiếng gió lọt vào ban đêm.', date: '15/05/2025', status: 'pending' },
-  { id: 'M3', title: 'Vòi tắm nhỏ giọt liên tục',                    description: 'Vòi tắm nhỏ giọt liên tục, đã xử lý xong ngày 12/04/2025.', date: '10/04/2025', status: 'resolved' },
-  { id: 'M4', title: 'Đèn LED nhấp nháy rồi tắt hẳn',               description: 'Đèn LED nhấp nháy rồi tắt hẳn.', date: '02/04/2025', status: 'resolved' },
-  { id: 'M5', title: 'Ổ điện phía góc trái phòng không có điện',     description: 'Ổ điện phía góc trái phòng không có điện.', date: '18/03/2025', status: 'resolved' },
-];
+/* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
+const storedUser    = JSON.parse(localStorage.getItem('user') || '{}');
+const currentUser   = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
+const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
+  || mockData.tenants[0];
+
+const initialRequests: Request[] = mockData.maintenanceRequests
+  .filter(m => m.tenantId === currentTenant?.id)
+  .map(m => ({
+    id:          m.id,
+    title:       m.title,
+    description: m.description,
+    date:        m.createdAt,
+    status:      m.status as StatusKey,
+  }));
 
 const STATUS_CONFIG: Record<StatusKey, { label: string; dotCls: string; badgeCls: string }> = {
-  'in-progress': { label: 'Đang xử lý', dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--orange' },
-  pending:       { label: 'Chờ xử lý',  dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--pending' },
+  'in-progress': { label: 'Đang xử lý', dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--orange'  },
+  pending:       { label: 'Chờ xử lý',  dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--pending'  },
   resolved:      { label: 'Đã xử lý',   dotCls: 'mt-dot--green',  badgeCls: 'mt-badge--resolved' },
 };
 
 export default function TenantMaintenance() {
-  const [requests, setRequests] = useState<Request[]>(MOCK_REQUESTS);
+  const [requests, setRequests] = useState<Request[]>(initialRequests);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ title: '', description: '' });
 
   const counts = {
-    total:       requests.length,
-    inProgress:  requests.filter(r => r.status === 'in-progress').length,
-    resolved:    requests.filter(r => r.status === 'resolved').length,
+    total:      requests.length,
+    inProgress: requests.filter(r => r.status === 'in-progress').length,
+    resolved:   requests.filter(r => r.status === 'resolved').length,
   };
 
   const handleSubmit = () => {
     if (!form.title.trim() || !form.description.trim()) return;
     const newReq: Request = {
-      id: `M${Date.now()}`,
-      title: form.title.trim(),
+      id:          `M${Date.now()}`,
+      title:       form.title.trim(),
       description: form.description.trim(),
-      date: new Date().toLocaleDateString('vi-VN'),
-      status: 'pending',
+      date:        new Date().toLocaleDateString('vi-VN'),
+      status:      'pending',
     };
     setRequests(prev => [newReq, ...prev]);
     setForm({ title: '', description: '' });
@@ -59,9 +68,7 @@ export default function TenantMaintenance() {
     <div className="mt-page">
       {/* Header */}
       <div className="mt-header">
-        <div>
-          <p className="mt-sub">Theo dõi và gửi yêu cầu sửa chữa</p>
-        </div>
+        <p className="mt-sub">Theo dõi và gửi yêu cầu sửa chữa</p>
         <button className="mt-add-btn" onClick={() => setShowModal(true)}>
           Gửi yêu cầu mới
         </button>
@@ -73,35 +80,42 @@ export default function TenantMaintenance() {
           <p className="mt-summary-label">Tổng yêu cầu</p>
           <p className="mt-summary-count">{counts.total}</p>
         </div>
-        <div className="mt-summary-card mt-summary-card--orange">
+        <div className="mt-summary-card">
           <p className="mt-summary-label">Đang xử lý</p>
           <p className="mt-summary-count mt-summary-count--orange">{counts.inProgress}</p>
         </div>
-        <div className="mt-summary-card mt-summary-card--green">
+        <div className="mt-summary-card">
           <p className="mt-summary-label">Đã xử lý</p>
           <p className="mt-summary-count mt-summary-count--green">{counts.resolved}</p>
         </div>
       </div>
 
       {/* List */}
-      <div className="mt-list">
-        {requests.map(req => {
-          const cfg = STATUS_CONFIG[req.status];
-          return (
-            <div key={req.id} className="mt-item">
-              <span className={`mt-dot ${cfg.dotCls}`} />
-              <div className="mt-item-body">
-                <div className="mt-item-top">
-                  <p className="mt-item-title">{req.title}</p>
-                  <span className={`mt-badge ${cfg.badgeCls}`}>{cfg.label}</span>
+      {requests.length === 0 ? (
+        <div className="mt-empty">
+          <p>Chưa có yêu cầu nào</p>
+          <span>Nhấn "Gửi yêu cầu mới" để bắt đầu</span>
+        </div>
+      ) : (
+        <div className="mt-list">
+          {requests.map(req => {
+            const cfg = STATUS_CONFIG[req.status];
+            return (
+              <div key={req.id} className="mt-item">
+                <span className={`mt-dot ${cfg.dotCls}`} />
+                <div className="mt-item-body">
+                  <div className="mt-item-top">
+                    <p className="mt-item-title">{req.title}</p>
+                    <span className={`mt-badge ${cfg.badgeCls}`}>{cfg.label}</span>
+                  </div>
+                  <p className="mt-item-desc">{req.description}</p>
+                  <p className="mt-item-date">Gửi ngày {req.date}</p>
                 </div>
-                <p className="mt-item-desc">{req.description}</p>
-                <p className="mt-item-date">Gửi ngày {req.date}</p>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Modal — dark theme */}
       {showModal && (

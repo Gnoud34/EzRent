@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 
-const ROOMS_PREVIEW = [
-  { id: 1, number: '101', floor: 1, capacity: 2, area: 20, price: 3_500_000, status: 'available' },
-  { id: 2, number: '202', floor: 2, capacity: 2, area: 25, price: 4_200_000, status: 'occupied'  },
-  { id: 3, number: '303', floor: 3, capacity: 3, area: 30, price: 5_000_000, status: 'available' },
-  { id: 4, number: '404', floor: 4, capacity: 1, area: 18, price: 2_800_000, status: 'available' },
-];
+type Room = {
+  id: string;
+  number: string;
+  capacity: number;
+  status: 'available' | 'occupied';
+  notes: string;
+};
 
 const FEATURES = [
   { icon: '🔒', title: 'An ninh 24/7',        desc: 'Camera giám sát và bảo vệ túc trực toàn thời gian.' },
@@ -20,6 +21,30 @@ const FEATURES = [
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [rooms, setRooms] = useState<Room[]>([]);
+
+  useEffect(() => {
+    fetch('/mockdata.json')
+      .then(res => res.json())
+      .then(data => {
+        // Lấy 4 phòng đầu tiên để preview
+        setRooms(data.rooms.slice(0, 4));
+      })
+      .catch(err => console.error('Failed to load rooms:', err));
+  }, []);
+
+  // Helper: get price based on room number
+  const getPrice = (roomNumber: string) => {
+    const num = parseInt(roomNumber.replace('R', ''));
+    if (num >= 200) return 4_200_000;
+    if (num >= 100) return 3_500_000;
+    return 3_000_000;
+  };
+
+  // Helper: get floor from room number
+  const getFloor = (roomNumber: string) => {
+    return parseInt(roomNumber.charAt(1));
+  };
 
   return (
     <div className="lp-root">
@@ -44,7 +69,6 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="lp-hero">
-        {/* fix: dùng div thường thay vì lp-hero-inner không có trong CSS */}
         <div>
           <p className="lp-hero-badge">🏠 Hệ thống quản lý phòng trọ thông minh</p>
           <h1 className="lp-hero-title">Tìm phòng trọ<br /><span>ưng ý ngay hôm nay</span></h1>
@@ -83,30 +107,36 @@ export default function LandingPage() {
             <p>Xem trước một số phòng đang có sẵn</p>
           </div>
           <div className="lp-room-grid">
-            {ROOMS_PREVIEW.map(room => (
-              <div key={room.id} className="lp-room-card" onClick={() => navigate(`/rooms/${room.id}`)}>
-                <div className="lp-room-img">
-                  <svg width="40" height="40" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                  </svg>
-                  <span className={`lp-room-badge ${room.status === 'available' ? 'lp-room-badge--green' : 'lp-room-badge--gray'}`}>
-                    {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
-                  </span>
-                </div>
-                <div className="lp-room-body">
-                  <div className="lp-room-header">
-                    <h3>Phòng {room.number}</h3>
-                    <span className="lp-room-price">{room.price.toLocaleString('vi-VN')}đ<small>/tháng</small></span>
+            {rooms.map(room => {
+              const floor = getFloor(room.number);
+              const price = getPrice(room.number);
+              const area = room.capacity === 1 ? 18 : room.capacity === 2 ? 25 : 30;
+              
+              return (
+                <div key={room.id} className="lp-room-card" onClick={() => navigate(`/rooms/${room.id}`)}>
+                  <div className="lp-room-img">
+                    <svg width="40" height="40" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                        d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    </svg>
+                    <span className={`lp-room-badge ${room.status === 'available' ? 'lp-room-badge--green' : 'lp-room-badge--gray'}`}>
+                      {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
+                    </span>
                   </div>
-                  <div className="lp-room-meta">
-                    <span>🏢 Tầng {room.floor}</span>
-                    <span>👤 {room.capacity} người</span>
-                    <span>📐 {room.area}m²</span>
+                  <div className="lp-room-body">
+                    <div className="lp-room-header">
+                      <h3>Phòng {room.number}</h3>
+                      <span className="lp-room-price">{price.toLocaleString('vi-VN')}đ<small>/tháng</small></span>
+                    </div>
+                    <div className="lp-room-meta">
+                      <span>🏢 Tầng {floor}</span>
+                      <span>👤 {room.capacity} người</span>
+                      <span>📐 {area}m²</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="lp-view-all">
             <button className="lp-btn-outline-blue" onClick={() => navigate('/rooms')}>
