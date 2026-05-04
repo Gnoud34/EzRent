@@ -130,7 +130,7 @@
             "capacity": 2,
             "area": 30,
             "floor": 2,
-            "status": "occupied",
+            "status": "available",
             "amenities": [
                 "Giường",
                 "Tủ quần áo",
@@ -140,8 +140,7 @@
             ],
             "notes": "Double room with AC",
             "tenantIds": [
-                "4",
-                "6"
+                "4"
             ]
         },
         {
@@ -159,7 +158,9 @@
             ],
             "status": "available",
             "notes": "Single room",
-            "tenantIds": []
+            "tenantIds": [
+                "6"
+            ]
         },
         {
             "id": "8",
@@ -268,7 +269,7 @@
         {
             "id": "1",
             "roomNumber": "R101",
-            "title": "Điều hòa bị hỏng, không làm lạnh được",
+            "title": "Maintenance",
             "description": "Máy lạnh chạy nhưng không ra hơi lạnh, có tiếng kêu lạ.",
             "status": "pending",
             "createdAt": "2026-04-08",
@@ -277,7 +278,7 @@
         {
             "id": "2",
             "roomNumber": "R202",
-            "title": "Vòi nước bị rò rỉ",
+            "title": "Maintenance",
             "description": "Vòi nước trong phòng tắm bị rò rỉ. Nước chảy liên tục dù đã tắt van.",
             "status": "pending",
             "createdAt": "2026-04-09",
@@ -286,11 +287,29 @@
         {
             "id": "3",
             "roomNumber": "R201",
-            "title": "Bồn cầu bị tắc nghẽn",
+            "title": "Maintenance",
             "description": "Bồn cầu trong phòng tắm bị tắc nghẽn, nước không thoát được.",
             "status": "resolved",
             "createdAt": "2026-04-12",
             "createdBy": "3"
+        },
+        {
+            "id": "401",
+            "roomNumber": "R202",
+            "title": "Room Issue",
+            "description": "Tôi đang ở phòng đôi R202 một mình và muốn đăng ký ở ghép một mình (không nhận thêm người mới) để đảm bảo riêng tư. Vui lòng phản hồi chi phí chênh lệch.",
+            "status": "pending",
+            "createdAt": "2026-05-05",
+            "createdBy": "4"
+        },
+        {
+            "id": "4",
+            "roomNumber": "R203",
+            "title": "Early Checkout",
+            "description": "Muốn làm thủ tục trả phòng sớm vào cuối tháng sau.",
+            "status": "pending",
+            "createdAt": "2026-05-01",
+            "createdBy": "6"
         }
     ]
 }
