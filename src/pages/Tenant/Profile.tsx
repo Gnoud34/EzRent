@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import './Profile.css';
 import mockData from '../../../public/mockdata.json';
