@@ -285,30 +285,12 @@
         },
         {
             "id": "3",
-            "roomNumber": "R103",
-            "title": "Đèn trần bị hỏng",
-            "description": "Đèn trần trong phòng không sáng, có thể do bóng đèn bị cháy.",
-            "status": "pending",
-            "createdAt": "2026-04-10",
-            "createdBy": "2"
-        },
-        {
-            "id": "4",
-            "roomNumber": "R204",
-            "title": "Cửa sổ bị kẹt, khó mở",
-            "description": "Cửa sổ phòng bị kẹt, khó mở và đóng. Cần kiểm tra bản lề và khung cửa.",
-            "status": "pending",
-            "createdAt": "2026-04-11",
-            "createdBy": "3"
-        },
-        {
-            "id": "5",
             "roomNumber": "R201",
             "title": "Bồn cầu bị tắc nghẽn",
             "description": "Bồn cầu trong phòng tắm bị tắc nghẽn, nước không thoát được.",
-            "status": "pending",
+            "status": "resolved",
             "createdAt": "2026-04-12",
-            "createdBy": "1"
+            "createdBy": "3"
         }
     ]
 }

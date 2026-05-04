@@ -11,7 +11,7 @@ interface Tenant {
     roomId: string;
     status: 'inquiry' | 'active' | 'expired';
     moveInDate?: string;
-    contractEndDate?: string;
+    expireDate?: string;
     note?: string;
 }
 
@@ -26,32 +26,32 @@ const Tenants: React.FC = () => {
         phone: string;
         roomId: string;
         moveInDate: string;
-        contractEndDate: string;
+        expireDate: string;
         status: Tenant['status'];
         note: string;
     }>({
-        name: '', phone: '', roomId: '', moveInDate: '', contractEndDate: '', status: 'active', note: ''
+        name: '', phone: '', roomId: '', moveInDate: '', expireDate: '', status: 'active', note: ''
     });
 
     const getRoomNumber = (roomId: string) => mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
 
     const isExpired = (tenant: Tenant) => {
-        if (!tenant.contractEndDate) return false;
-        return new Date(tenant.contractEndDate) < new Date();
+        if (!tenant.expireDate) return false;
+        return new Date(tenant.expireDate) < new Date();
     };
 
     const filteredTenants = tenants.filter(t => t.status === activeTab);
 
     const openAddModal = () => {
         setEditingTenant(null);
-        setFormData({ 
-            name: '', 
-            phone: '', 
-            roomId: '', 
-            moveInDate: '', 
-            contractEndDate: '', 
+        setFormData({
+            name: '',
+            phone: '',
+            roomId: '',
+            moveInDate: '',
+            expireDate: '',
             status: activeTab === 'inquiry' ? 'inquiry' : 'active', // Tự động set status theo tab
-            note: '' 
+            note: ''
         });
         setIsModalOpen(true);
     };
@@ -60,7 +60,7 @@ const Tenants: React.FC = () => {
         setEditingTenant(tenant);
         setFormData({
             name: tenant.name, phone: tenant.phone, roomId: tenant.roomId,
-            moveInDate: tenant.moveInDate || '', contractEndDate: tenant.contractEndDate || '',
+            moveInDate: tenant.moveInDate || '', expireDate: tenant.expireDate || '',
             status: tenant.status, note: tenant.note || ''
         });
         setIsModalOpen(true);
@@ -71,10 +71,10 @@ const Tenants: React.FC = () => {
         setFormData({
             name: tenant.name,
             phone: tenant.phone,
-            roomId: '', 
+            roomId: '',
             moveInDate: new Date().toISOString().split('T')[0], // Mặc định ngày hôm nay
-            contractEndDate: '',
-            status: 'active', 
+            expireDate: '',
+            status: 'active',
             note: tenant.note || ''
         });
         setIsModalOpen(true);
@@ -124,6 +124,7 @@ const Tenants: React.FC = () => {
                                 <th>Phone</th>
                                 {activeTab !== 'inquiry' && <th>Room</th>}
                                 <th>Status</th>
+                                <th>Note</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -137,6 +138,9 @@ const Tenants: React.FC = () => {
                                         <span className={`status ${t.status === 'expired' ? 'left' : isExpired(t) ? 'expired' : 'active'}`}>
                                             {t.status.toUpperCase()}
                                         </span>
+                                    </td>
+                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={t.note}>
+                                        {t.note || '-'}
                                     </td>
                                     <td className="actions-cell">
                                         {activeTab === 'inquiry' && (
@@ -158,7 +162,7 @@ const Tenants: React.FC = () => {
                     <div className="modal">
                         <form onSubmit={handleSave} className="modal-box">
                             <h3>{editingTenant ? (formData.status === 'active' && editingTenant.status === 'inquiry' ? 'Confirm Move-in' : 'Edit') : 'Add New'}</h3>
-                            
+
                             <label className="form-label">Full Name</label>
                             <input placeholder="Enter name" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
 
@@ -182,9 +186,9 @@ const Tenants: React.FC = () => {
 
                                     <label className="form-label">Move-in Date</label>
                                     <input type="date" value={formData.moveInDate} onChange={e => setFormData({ ...formData, moveInDate: e.target.value })} required />
-                                    
+
                                     <label className="form-label">Contract End Date</label>
-                                    <input type="date" value={formData.contractEndDate} onChange={e => setFormData({ ...formData, contractEndDate: e.target.value })} required />
+                                    <input type="date" value={formData.expireDate} onChange={e => setFormData({ ...formData, expireDate: e.target.value })} required />
                                 </>
                             )}
 
