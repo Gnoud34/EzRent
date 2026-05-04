@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import './Profile.css';
-import mockData from '../../../public/mockdata.json';
+import mockData from '../../data/mockdata.json';
 type FormState = {
   name:  string;
   phone: string;

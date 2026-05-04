@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RoomListing.css';
+import mockData from '../../data/mockdata.json';
 
 type Status = 'all' | 'available' | 'occupied';
 
@@ -8,54 +9,34 @@ type Room = {
   id: string;
   number: string;
   capacity: number;
+  area: number;
+  floor: number;
+  price: number;
   status: 'available' | 'occupied';
-  notes: string;
+  description: string;
+  amenities: string[];
+  tenantIds: string[];
 };
+
+const ROOM_IMAGES = [
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400',
+];
 
 export default function RoomListing() {
   const navigate = useNavigate();
-  const [rooms, setRooms] = useState<Room[]>([]);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<Status>('all');
 
-  useEffect(() => {
-    fetch('/mockdata.json')
-      .then(res => res.json())
-      .then(data => setRooms(data.rooms))
-      .catch(err => console.error('Failed to load rooms:', err));
-  }, []);
+  const allRooms: Room[] = (mockData.rooms as unknown as Room[]) || [];
 
-  const filtered = rooms.filter(r => {
-    const matchSearch = r.number.toLowerCase().includes(search.toLowerCase()) || 
-                       r.number.includes(search);
+  const filtered = allRooms.filter(r => {
+    const matchSearch = r.number.toLowerCase().includes(search.toLowerCase()) ||
+                        r.floor.toString().includes(search);
     const matchStatus = status === 'all' || r.status === status;
     return matchSearch && matchStatus;
   });
-
-  // Helper functions
-  const getPrice = (roomNumber: string) => {
-    const num = parseInt(roomNumber.replace('R', ''));
-    if (num >= 200) return 4_200_000;
-    if (num >= 100) return 3_500_000;
-    return 3_000_000;
-  };
-
-  const getFloor = (roomNumber: string) => {
-    return parseInt(roomNumber.charAt(1));
-  };
-
-  const getArea = (capacity: number) => {
-    if (capacity === 1) return 18;
-    if (capacity === 2) return 25;
-    return 30;
-  };
-
-  const getAmenities = (capacity: number) => {
-    const base = ['WiFi', 'Điều hòa'];
-    if (capacity >= 2) base.push('Tủ lạnh');
-    if (capacity >= 3) base.push('Ban công');
-    return base;
-  };
 
   return (
     <div className="rl-root">
@@ -74,7 +55,6 @@ export default function RoomListing() {
       </nav>
 
       <div className="rl-body">
-        {/* ── Page header ── */}
         <div className="rl-page-header">
           <h1>Danh sách phòng trọ</h1>
           <p>Tìm phòng phù hợp với nhu cầu của bạn</p>
@@ -107,9 +87,8 @@ export default function RoomListing() {
           </div>
         </div>
 
-        <p className="rl-count">{filtered.length} phòng</p>
+        <p className="rl-count"><strong>{filtered.length}</strong> phòng được tìm thấy</p>
 
-        {/* ── Grid ── */}
         {filtered.length === 0 ? (
           <div className="rl-empty">
             <svg width="52" height="52" fill="none" stroke="#D1D5DB" viewBox="0 0 24 24">
@@ -121,48 +100,41 @@ export default function RoomListing() {
           </div>
         ) : (
           <div className="rl-grid">
-            {filtered.map(room => {
-              const price = getPrice(room.number);
-              const floor = getFloor(room.number);
-              const area = getArea(room.capacity);
-              const amenities = getAmenities(room.capacity);
+            {filtered.map((room, idx) => (
+              <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
+                {/* ── Ảnh phòng: ảnh đầu tiên mặc định, xoay vòng theo index ── */}
+                <div className="rl-card-img">
+                  <img
+                    src={ROOM_IMAGES[idx % ROOM_IMAGES.length]}
+                    alt={`Phòng ${room.number}`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <span className={`rl-status-badge ${room.status === 'available' ? 'rl-status-badge--green' : 'rl-status-badge--gray'}`}>
+                    {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
+                  </span>
+                </div>
 
-              return (
-                <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
-                  {/* Image */}
-                  <div className="rl-card-img">
-                    <svg width="36" height="36" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                        d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    </svg>
-                    <span className={`rl-status-badge ${room.status === 'available' ? 'rl-status-badge--green' : 'rl-status-badge--gray'}`}>
-                      {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
+                <div className="rl-card-body">
+                  <div className="rl-card-top">
+                    <h3>Phòng {room.number}</h3>
+                    <span className="rl-card-price">
+                      {room.price.toLocaleString('vi-VN')}đ<small>/tháng</small>
                     </span>
                   </div>
-
-                  {/* Body */}
-                  <div className="rl-card-body">
-                    <div className="rl-card-top">
-                      <h3>Phòng {room.number}</h3>
-                      <span className="rl-card-price">
-                        {price.toLocaleString('vi-VN')}đ<small>/tháng</small>
-                      </span>
-                    </div>
-                    <div className="rl-card-meta">
-                      <span>🏢 Tầng {floor}</span>
-                      <span>👤 {room.capacity} người</span>
-                      <span>📐 {area}m²</span>
-                    </div>
-                    <div className="rl-card-amenities">
-                      {amenities.slice(0, 3).map(a => (
-                        <span key={a} className="rl-amenity-tag">{a}</span>
-                      ))}
-                    </div>
-                    <button className="rl-card-btn">Xem chi tiết →</button>
+                  <div className="rl-card-meta">
+                    <span>🏢 Tầng {room.floor}</span>
+                    <span>👤 {room.capacity} người</span>
+                    <span>📐 {room.area}m²</span>
                   </div>
+                  <div className="rl-card-amenities">
+                    {room.amenities.slice(0, 3).map(a => (
+                      <span key={a} className="rl-amenity-tag">{a}</span>
+                    ))}
+                  </div>
+                  <button className="rl-card-btn">Xem chi tiết →</button>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
       </div>

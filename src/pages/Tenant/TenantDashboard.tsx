@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TenantDashboard.css';
-import mockData from '../../../public/mockdata.json';
+import mockData from '../../data/mockdata.json';
 
 /* ─── Lấy dữ liệu từ mockData ─── */
 const storedUser = JSON.parse(localStorage.getItem('user') || '{}');

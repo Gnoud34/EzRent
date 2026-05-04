@@ -168,3 +168,127 @@
 /* Responsive */
 @media (max-width: 768px) { .mr-grid { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .mr-page { padding: 16px 12px; } }
+/* ══════════════════════════════════════════════════════════════
+   IMAGE GALLERY (giống RoomDetail)
+══════════════════════════════════════════════════════════════ */
+.mr-gallery {
+  margin-bottom: 0;
+}
+
+/* ── Main image box ── */
+.mr-gallery-main {
+  position: relative;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  height: 280px;
+  background: #F3F4F6;
+}
+.mr-gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Status badge */
+.mr-status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #FEE2E2;
+  color: #DC2626;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+/* Prev / Next buttons */
+.mr-gallery-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.95);
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  transition: all 0.15s;
+  z-index: 2;
+  line-height: 1;
+}
+.mr-gallery-btn:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+.mr-gallery-btn--prev { left: 12px; }
+.mr-gallery-btn--next { right: 12px; }
+
+/* Dots */
+.mr-gallery-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+.mr-gallery-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.6);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
+}
+.mr-gallery-dot--active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+/* ── Thumbnails ── */
+.mr-gallery-thumbs {
+  display: flex;
+  gap: 0;
+}
+.mr-gallery-thumb {
+  flex: 1;
+  height: 70px;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+  border-top: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #fff;
+}
+.mr-gallery-thumb:last-child {
+  border-bottom-right-radius: 0;
+}
+.mr-gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mr-gallery-thumb:hover {
+  opacity: 0.8;
+}
+.mr-gallery-thumb--active {
+  border-color: #2563EB;
+  border-width: 2px;
+  opacity: 1;
+}

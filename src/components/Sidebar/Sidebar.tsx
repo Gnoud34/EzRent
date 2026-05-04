@@ -6,7 +6,7 @@ const Sidebar: React.FC = () => {
     const navigate = useNavigate();
     const menuItems = [
         { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/dashboard' },
-        { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms' },
+        { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms-admin' },
         { name: 'Tenant', icon: 'bi-people-fill', path: '/tenants' },
         { name: 'Maintenance', icon: 'bi-tools', path: '/maintenance' },
         { name: 'User Request', icon: 'bi-gear-fill', path: '/UserRequest' },

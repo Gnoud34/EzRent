@@ -1,29 +1,51 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useState } from 'react';
 import './MyRoom.css';
-import mockData from '../../../public/mockdata.json';
+import mockData from '../../data/mockdata.json';
 
 /* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
-const storedUser  = JSON.parse(localStorage.getItem('user') || '{}');
+const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
   || mockData.tenants[0];
 const currentRoom = mockData.rooms.find(r => r.id === currentTenant?.roomId)
   || mockData.rooms[0];
 
+/* ─── ẢNH CỐ ĐỊNH ─── */
+const ROOM_IMAGES = [
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800',
+];
+
 /* ─── Helpers ─── */
-function fmtDate(d: string) { return new Date(d).toLocaleDateString('vi-VN'); }
+function fmtDate(d: string) { 
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('vi-VN'); 
+}
+
 function getDaysLeft(d: string) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const end   = new Date(d); end.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const end = new Date(d); end.setHours(0, 0, 0, 0);
   return Math.ceil((end.getTime() - today.getTime()) / 86_400_000);
 }
 
 export default function MyRoom() {
+  const [currentImg, setCurrentImg] = useState(0);
+
   const contractEnd = currentTenant?.expireDate || '';
-  const moveInDate  = currentTenant?.moveInDate || '';
+  const moveInDate = currentTenant?.moveInDate || '';
   const days = contractEnd ? getDaysLeft(contractEnd) : 999;
   const roommates: { name: string; phone: string }[] = currentTenant?.roommates || [];
+
+  const prevImg = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImg(i => (i - 1 + ROOM_IMAGES.length) % ROOM_IMAGES.length);
+  };
+  const nextImg = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImg(i => (i + 1) % ROOM_IMAGES.length);
+  };
 
   return (
     <div className="mr-page">
@@ -34,52 +56,75 @@ export default function MyRoom() {
       <div className="mr-grid">
         {/* ── Left col ── */}
         <div className="mr-left">
-          {/* Room image */}
-          <div className="mr-img-box">
-            <svg width="56" height="56" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
-                d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-            </svg>
-            <span className="mr-status-badge">Đang thuê</span>
-          </div>
+          
+          {/* ═══ THAY ĐỔI TỪ ĐÂY ═══ */}
+          {/* ── Image gallery ── */}
+          <div className="mr-gallery">
+            {/* Main image */}
+            <div className="mr-gallery-main">
+              <img
+                src={ROOM_IMAGES[currentImg]}
+                alt={`Phòng ${currentRoom?.number}`}
+              />
 
-          {/* Room info rows */}
+              {/* Prev / Next buttons */}
+              <button className="mr-gallery-btn mr-gallery-btn--prev" onClick={prevImg}>
+                ‹
+              </button>
+              <button className="mr-gallery-btn mr-gallery-btn--next" onClick={nextImg}>
+                ›
+              </button>
+              
+              {/* Dots indicator */}
+              <div className="mr-gallery-dots">
+                {ROOM_IMAGES.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`mr-gallery-dot ${i === currentImg ? 'mr-gallery-dot--active' : ''}`}
+                    onClick={e => { e.stopPropagation(); setCurrentImg(i); }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Thumbnails */}
+            <div className="mr-gallery-thumbs">
+              {ROOM_IMAGES.map((src, i) => (
+                <button
+                  key={i}
+                  className={`mr-gallery-thumb ${i === currentImg ? 'mr-gallery-thumb--active' : ''}`}
+                  onClick={() => setCurrentImg(i)}
+                >
+                  <img src={src} alt={`Ảnh ${i + 1}`} />
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* ═══ HẾT THAY ĐỔI ═══ */}
+
           <div className="mr-info-panel">
             <div className="mr-info-row">
               <span className="mr-info-label">Số phòng</span>
-              <span className="mr-info-value mr-info-value--blue">{currentRoom.number}</span>
+              <span className="mr-info-value mr-info-value--blue">{currentRoom?.number}</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Tầng</span>
-              <span className="mr-info-value">Tầng {currentRoom.floor}</span>
+              <span className="mr-info-value">Tầng {currentRoom?.floor}</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Diện tích</span>
-              <span className="mr-info-value">{currentRoom.area} m²</span>
+              <span className="mr-info-value">{currentRoom?.area} m²</span>
             </div>
             <div className="mr-info-row">
               <span className="mr-info-label">Sức chứa</span>
-              <span className="mr-info-value">{currentRoom.capacity} người</span>
-            </div>
-            <div className="mr-info-row">
-              <span className="mr-info-label">Tiền thuê</span>
-              <span className="mr-info-value">
-                {(currentTenant?.monthlyRent ?? currentRoom.price).toLocaleString('vi-VN')} đ
-              </span>
-            </div>
-            <div className="mr-info-row">
-              <span className="mr-info-label">Tiền cọc</span>
-              <span className="mr-info-value">
-                {(currentTenant?.deposit ?? currentRoom.price * 2).toLocaleString('vi-VN')} đ
-              </span>
+              <span className="mr-info-value">{currentRoom?.capacity} người</span>
             </div>
           </div>
 
-          {/* Amenities */}
           <div className="mr-amenities-panel">
             <p className="mr-section-label">Tiện nghi</p>
             <div className="mr-amenities">
-              {(currentRoom.amenities || []).map((a: string) => (
+              {(currentRoom?.amenities || []).map((a: string) => (
                 <span key={a} className="mr-amenity-tag">{a}</span>
               ))}
             </div>
@@ -88,19 +133,16 @@ export default function MyRoom() {
 
         {/* ── Right col ── */}
         <div className="mr-right">
-          {/* Contract panel */}
           <div className="mr-contract-panel">
             <p className="mr-section-label">Thông tin hợp đồng</p>
             <div className="mr-contract-row">
               <span className="mr-contract-label">Ngày chuyển vào</span>
-              <span className="mr-contract-value">
-                {moveInDate ? fmtDate(moveInDate) : '—'}
-              </span>
+              <span className="mr-contract-value">{fmtDate(moveInDate)}</span>
             </div>
             <div className="mr-contract-row">
               <span className="mr-contract-label">Ngày hết hạn HĐ</span>
               <span className={`mr-contract-value ${days <= 30 ? 'mr-contract-value--orange' : ''}`}>
-                {contractEnd ? fmtDate(contractEnd) : '—'}
+                {fmtDate(contractEnd)}
               </span>
             </div>
             <div className="mr-contract-row">
@@ -111,33 +153,29 @@ export default function MyRoom() {
             </div>
           </div>
 
-          {/* Roommates */}
           {roommates.length > 0 && (
             <div className="mr-roommates-panel">
-              <div className="mr-roommates-icon">
-                <svg width="16" height="16" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
+              <p className="mr-section-label" style={{marginBottom: '12px'}}>Bạn cùng phòng</p>
               {roommates.map((r, i) => (
                 <div key={i} className="mr-roommate">
                   <div className="mr-roommate-avatar">
-                    {r.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+                    {r.name ? r.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase() : '??'}
                   </div>
                   <div className="mr-roommate-info">
-                    <svg width="14" height="14" fill="none" stroke="#6B7280" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <span>{r.phone}</span>
+                    <p className="mr-roommate-name">{r.name}</p>
+                    <div className="mr-roommate-phone">
+                      <svg width="14" height="14" fill="none" stroke="#6B7280" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                      <span>{r.phone}</span>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Description */}
           <div className="mr-desc-panel">
             <div className="mr-desc-icon">
               <svg width="14" height="14" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
@@ -146,7 +184,7 @@ export default function MyRoom() {
               </svg>
               <span>Mô tả phòng</span>
             </div>
-            <p className="mr-desc-text">{currentRoom.description}</p>
+            <p className="mr-desc-text">{currentRoom?.description || 'Không có mô tả'}</p>
           </div>
         </div>
       </div>
