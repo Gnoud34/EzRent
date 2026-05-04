@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import mockData from '../../data/mockdata.json';
@@ -13,14 +14,14 @@ interface Room {
     images: string[];
 }
 
-interface Tenant {
-    id: string;
-    name: string;
-    phone: string;
-    roomId: string;
-    moveInDate?: string;
-    status: string;
-}
+// interface Tenant {
+//     id: string;
+//     name: string;
+//     phone: string;
+//     roomId: string;
+//     moveInDate?: string;
+//     status: string;
+// }
 
 const Rooms: React.FC = () => {
     // 1. Khởi tạo danh sách phòng và bổ sung ảnh mặc định nếu thiếu
@@ -240,28 +241,28 @@ const Rooms: React.FC = () => {
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label>Room Number</label>
-                                    <input 
-                                        type="text" 
-                                        value={roomForm.number} 
-                                        onChange={e => setRoomForm({...roomForm, number: e.target.value})} 
-                                        required 
+                                    <input
+                                        type="text"
+                                        value={roomForm.number}
+                                        onChange={e => setRoomForm({ ...roomForm, number: e.target.value })}
+                                        required
                                         placeholder="e.g. R101"
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label>Capacity</label>
-                                    <input 
-                                        type="number" 
-                                        value={roomForm.capacity} 
-                                        onChange={e => setRoomForm({...roomForm, capacity: parseInt(e.target.value)})} 
-                                        required 
+                                    <input
+                                        type="number"
+                                        value={roomForm.capacity}
+                                        onChange={e => setRoomForm({ ...roomForm, capacity: parseInt(e.target.value) })}
+                                        required
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label>Status</label>
-                                    <select 
-                                        value={roomForm.status} 
-                                        onChange={e => setRoomForm({...roomForm, status: e.target.value})}
+                                    <select
+                                        value={roomForm.status}
+                                        onChange={e => setRoomForm({ ...roomForm, status: e.target.value })}
                                     >
                                         <option value="available">Available</option>
                                         <option value="occupied">Occupied</option>
@@ -269,18 +270,18 @@ const Rooms: React.FC = () => {
                                 </div>
                                 <div className="form-group">
                                     <label>Hero Image URL</label>
-                                    <input 
-                                        type="text" 
-                                        value={roomForm.heroImage} 
-                                        onChange={e => setRoomForm({...roomForm, heroImage: e.target.value})} 
+                                    <input
+                                        type="text"
+                                        value={roomForm.heroImage}
+                                        onChange={e => setRoomForm({ ...roomForm, heroImage: e.target.value })}
                                         placeholder="https://..."
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label>Notes</label>
-                                    <textarea 
-                                        value={roomForm.notes} 
-                                        onChange={e => setRoomForm({...roomForm, notes: e.target.value})}
+                                    <textarea
+                                        value={roomForm.notes}
+                                        onChange={e => setRoomForm({ ...roomForm, notes: e.target.value })}
                                     />
                                 </div>
                             </div>

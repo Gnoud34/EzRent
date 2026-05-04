@@ -36,6 +36,15 @@
             "id": "1",
             "number": "R101",
             "capacity": 1,
+            "area": 20,
+            "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Single room with AC",
             "tenantIds": [
@@ -46,6 +55,15 @@
             "id": "2",
             "number": "R102",
             "capacity": 2,
+            "area": 25,
+            "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Double room",
             "tenantIds": [
@@ -57,6 +75,15 @@
             "id": "3",
             "number": "R103",
             "capacity": 1,
+            "area": 20,
+            "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "available",
             "notes": "Single room",
             "tenantIds": []
@@ -65,14 +92,32 @@
             "id": "4",
             "number": "R104",
             "capacity": 2,
+            "area": 30,
+            "floor": 1,
             "status": "available",
             "notes": "Double room with balcony",
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "tenantIds": []
         },
         {
             "id": "5",
             "number": "R201",
             "capacity": 1,
+            "area": 20,
+            "floor": 2,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Single room",
             "tenantIds": [
@@ -83,7 +128,16 @@
             "id": "6",
             "number": "R202",
             "capacity": 2,
+            "area": 30,
+            "floor": 2,
             "status": "occupied",
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "notes": "Double room with AC",
             "tenantIds": [
                 "4",
@@ -94,6 +148,15 @@
             "id": "7",
             "number": "R203",
             "capacity": 1,
+            "area": 20,
+            "floor": 2,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "available",
             "notes": "Single room",
             "tenantIds": []
@@ -102,6 +165,16 @@
             "id": "8",
             "number": "R204",
             "capacity": 2,
+            "area": 30,
+            "floor": 2,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi",
+                "Ban công"
+            ],
             "status": "available",
             "notes": "Double room",
             "tenantIds": []
@@ -114,6 +187,7 @@
             "phone": "+84 123 456 789",
             "roomId": "1",
             "moveInDate": "2026-01-15",
+            "expireDate": "2026-01-14",
             "status": "active",
             "userId": "u1"
         },
@@ -123,6 +197,7 @@
             "phone": "+84 123 456 783",
             "roomId": "2",
             "moveInDate": "2026-02-01",
+            "expireDate": "2027-02-01",
             "status": "active",
             "userId": "u2"
         },
@@ -148,6 +223,7 @@
             "phone": "+84 123 456 735",
             "roomId": "5",
             "moveInDate": "2025-12-10",
+            "expireDate": "2026-12-10",
             "status": "active"
         },
         {
@@ -156,6 +232,7 @@
             "phone": "+84 123 456 726",
             "roomId": "6",
             "moveInDate": "2026-03-05",
+            "expireDate": "2027-03-05",
             "status": "active"
         },
         {
@@ -164,6 +241,7 @@
             "phone": "+84 123 456 732",
             "roomId": "2",
             "moveInDate": "2026-02-01",
+            "expireDate": "2027-02-01",
             "status": "active"
         },
         {
@@ -172,6 +250,7 @@
             "phone": "+84 123 456 712",
             "roomId": "6",
             "moveInDate": "2026-03-05",
+            "expireDate": "2027-03-05",
             "status": "active"
         },
         {
@@ -180,6 +259,7 @@
             "phone": "+84 900 111 222",
             "roomId": "1",
             "moveInDate": "2024-10-01",
+            "expireDate": "2025-10-01",
             "status": "expired",
             "note": "Đã trả phòng đúng hạn, hoàn cọc xong"
         }
@@ -188,7 +268,8 @@
         {
             "id": "1",
             "roomNumber": "R101",
-            "description": "Air conditioner not cooling properly",
+            "title": "Điều hòa bị hỏng, không làm lạnh được",
+            "description": "Máy lạnh chạy nhưng không ra hơi lạnh, có tiếng kêu lạ.",
             "status": "pending",
             "createdAt": "2026-04-08",
             "createdBy": "1"
@@ -196,10 +277,38 @@
         {
             "id": "2",
             "roomNumber": "R202",
-            "description": "Leaking faucet in bathroom",
+            "title": "Vòi nước bị rò rỉ",
+            "description": "Vòi nước trong phòng tắm bị rò rỉ. Nước chảy liên tục dù đã tắt van.",
             "status": "pending",
             "createdAt": "2026-04-09",
             "createdBy": "4"
+        },
+        {
+            "id": "3",
+            "roomNumber": "R103",
+            "title": "Đèn trần bị hỏng",
+            "description": "Đèn trần trong phòng không sáng, có thể do bóng đèn bị cháy.",
+            "status": "pending",
+            "createdAt": "2026-04-10",
+            "createdBy": "2"
+        },
+        {
+            "id": "4",
+            "roomNumber": "R204",
+            "title": "Cửa sổ bị kẹt, khó mở",
+            "description": "Cửa sổ phòng bị kẹt, khó mở và đóng. Cần kiểm tra bản lề và khung cửa.",
+            "status": "pending",
+            "createdAt": "2026-04-11",
+            "createdBy": "3"
+        },
+        {
+            "id": "5",
+            "roomNumber": "R201",
+            "title": "Bồn cầu bị tắc nghẽn",
+            "description": "Bồn cầu trong phòng tắm bị tắc nghẽn, nước không thoát được.",
+            "status": "pending",
+            "createdAt": "2026-04-12",
+            "createdBy": "1"
         }
     ]
 }
