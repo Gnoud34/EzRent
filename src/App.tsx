@@ -6,6 +6,7 @@ import Auth from './pages/Auth/Auth';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Settings from './pages/Settings/Settings';
 import Maintenances from './pages/Maintenances/Maintenances';
+import UserDetail from './pages/UserDetail/UserDetail';
 import UserRequest from './pages/UserRequest/UserRequest';
 import LandingPage from './LandingPage';
 import type { JSX } from 'react';
@@ -30,69 +31,77 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Auth />} />
-        
+
         <Route path="/" element={<Navigate to="/login" />} />
 
-        <Route 
-          path="/landing" 
+        <Route
+          path="/landing"
           element={
             <ProtectedRoute allowedRoles={['tenant', 'admin']}>
               <LandingPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        
-        <Route 
-          path="/dashboard" 
+
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <Dashboard />
             </ProtectedRoute>
-          } 
+          }
         />
-        
-        <Route 
-          path="/tenants" 
+
+        <Route
+          path="/tenants"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <Tenants />
             </ProtectedRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/rooms" 
+        <Route
+          path="/rooms"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <Rooms />
             </ProtectedRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/maintenance" 
+        <Route
+          path="/maintenance"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <Maintenances />
             </ProtectedRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="/settings" 
+        <Route
+          path="/settings"
           element={
             <ProtectedRoute allowedRoles={['admin', 'tenant']}>
               <Settings />
             </ProtectedRoute>
-          } 
+          }
         />
-                <Route 
-          path="/UserRequest" 
+        <Route
+          path="/UserRequest"
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <UserRequest />
             </ProtectedRoute>
-          } 
+          }
+        />
+        <Route
+          path="/user-detail"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'tenant']}>
+              <UserDetail />
+            </ProtectedRoute>
+          }
         />
 
         <Route path="*" element={<Navigate to="/login" />} />

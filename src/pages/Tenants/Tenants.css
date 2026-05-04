@@ -165,3 +165,31 @@
     color: #334155;
     text-align: left;
 }
+
+/* Tên người trong bảng */
+.tenant-name-link {
+    color: #1e293b; /* Màu xanh đen hiện đại */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-block;
+    position: relative;
+    text-decoration: none; /* Bỏ gạch chân mặc định */
+}
+
+/* Hiệu ứng khi di chuột vào tên */
+.tenant-name-link:hover {
+    color: #2563eb; /* Đổi sang xanh khi hover */
+}
+
+/* (Tùy chọn) Thêm một đường gạch chân mờ ảo khi hover cho tinh tế */
+/* .tenant-name-link:hover::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #2563eb;
+    border-radius: 2px;
+} */

@@ -3,6 +3,7 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import mockData from '../../data/mockdata.json';
 import './Tenants.css';
 import Header from '../../components/Header/Header';
+import { useNavigate } from 'react-router-dom';
 
 interface Tenant {
     id: string;
@@ -16,10 +17,14 @@ interface Tenant {
 }
 
 const Tenants: React.FC = () => {
+    const navigate = useNavigate();
+
+
     const [activeTab, setActiveTab] = useState<'inquiry' | 'active' | 'expired'>('active');
     const [tenants, setTenants] = useState<Tenant[]>(mockData.tenants as Tenant[]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTenant, setEditingTenant] = useState<Tenant | null>(null);
+
 
     const [formData, setFormData] = useState<{
         name: string;
@@ -131,7 +136,14 @@ const Tenants: React.FC = () => {
                         <tbody>
                             {filteredTenants.map(t => (
                                 <tr key={t.id}>
-                                    <td><strong>{t.name}</strong></td>
+                                    <td>
+                                        <span
+                                            className="tenant-name-link"
+                                            onClick={() => navigate('/user-detail', { state: { tenantData: t } })}
+                                        >
+                                            {t.name}
+                                        </span>
+                                    </td>
                                     <td>{t.phone}</td>
                                     {activeTab !== 'inquiry' && <td>{getRoomNumber(t.roomId)}</td>}
                                     <td>

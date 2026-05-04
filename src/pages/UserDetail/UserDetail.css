@@ -1,0 +1,135 @@
+.user-detail-content {
+    padding: 2rem 2.5rem;
+}
+
+.profile-card {
+    background: white;
+    max-width: 700px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 2.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Header của Profile */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #f8fafc;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar-wrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 4px solid #eff6ff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-initials {
+    width: 100%;
+    height: 100%;
+    background-color: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.profile-basic-info h3 {
+    font-size: 1.75rem;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+}
+
+.role-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.role-badge.admin {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+/* Bố cục lưới thông tin */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-item.full-width {
+    grid-column: span 2;
+}
+
+.info-item label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-item label i {
+    color: #2563eb;
+}
+
+.info-value {
+    font-size: 1.05rem;
+    color: #1e293b;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #f1f5f9;
+}
+
+/* Footer nút bấm */
+.profile-footer {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-edit-profile {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-edit-profile:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
