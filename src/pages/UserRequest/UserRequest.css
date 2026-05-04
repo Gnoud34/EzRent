@@ -80,3 +80,37 @@ textarea, input {
 @media (max-width: 900px) {
     .request-grid { grid-template-columns: 1fr; }
 }
+/* Thêm vào UserRequest.css */
+
+.category-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.category-select:focus {
+    border-color: #2563eb;
+}
+
+.req-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.req-category {
+    font-size: 11px;
+    background: #e2e8f0;
+    color: #475569;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
