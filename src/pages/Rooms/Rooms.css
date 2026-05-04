@@ -1,4 +1,3 @@
-/* --- 1. Layout & Section Header --- */
 .dashboard-layout {
     display: flex;
     background-color: #f8fafc;
@@ -35,7 +34,6 @@
     margin-top: 0.25rem;
 }
 
-/* --- 2. Buttons --- */
 .btn-add {
     background-color: #2563eb;
     color: white;
@@ -88,7 +86,6 @@
     background-color: #fef2f2;
 }
 
-/* --- 3. Table & Room Preview --- */
 .table-container {
     background: white;
     border-radius: 12px;
@@ -146,7 +143,6 @@
     font-weight: 700;
 }
 
-/* --- 4. Badges --- */
 .status-badge {
     display: inline-flex;
     padding: 0.25rem 0.75rem;
@@ -164,7 +160,6 @@
     gap: 0.5rem;
 }
 
-/* --- 5. Modal General Styles --- */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -216,7 +211,6 @@
     padding: 1.5rem;
 }
 
-/* --- 6. Room Detail Specific Styles --- */
 .room-detail-modal {
     max-width: 750px !important; /* Tăng nhẹ chiều rộng để chứa 2 cột thoải mái */
 }
@@ -301,14 +295,12 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* --- 7. Two Column Detail Layout --- */
 .detail-container-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
-/* Bên trái: Thông tin phòng */
 .info-detail-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -340,7 +332,6 @@
     grid-column: span 2;
 }
 
-/* Bên phải: Thẻ thông tin người ở */
 .occupant-info-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -432,7 +423,6 @@
     text-align: center;
 }
 
-/* --- 8. Form Styles (Add/Edit) --- */
 .form-group {
     margin-bottom: 1.25rem;
     display: flex;
@@ -491,7 +481,6 @@
     cursor: pointer;
 }
 
-/* --- 9. Animations & Responsive --- */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -509,4 +498,91 @@
     .hero-manage-img {
         height: 180px;
     }
+}
+/* Layout cho lưới upload ảnh */
+.image-upload-section {
+    margin-bottom: 20px;
+}
+
+.image-preview-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    height: 180px;
+}
+
+.hero-box {
+    grid-row: span 2;
+}
+
+.upload-box {
+    position: relative;
+    border-radius: 8px;
+    background: #f8f9fa;
+    border: 1px dashed #ced4da;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.upload-placeholder i { font-size: 20px; margin-bottom: 4px; }
+
+.img-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(220, 53, 69, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-link {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-size: 11px;
+    text-align: center;
+    padding: 3px 0;
+    cursor: pointer;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }

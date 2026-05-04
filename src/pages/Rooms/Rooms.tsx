@@ -14,17 +14,7 @@ interface Room {
     images: string[];
 }
 
-// interface Tenant {
-//     id: string;
-//     name: string;
-//     phone: string;
-//     roomId: string;
-//     moveInDate?: string;
-//     status: string;
-// }
-
 const Rooms: React.FC = () => {
-    // 1. Khởi tạo danh sách phòng và bổ sung ảnh mặc định nếu thiếu
     const [rooms, setRooms] = useState<Room[]>(mockData.rooms.map(r => ({
         ...r,
         images: (r as any).images || [
@@ -43,17 +33,16 @@ const Rooms: React.FC = () => {
         capacity: 1,
         status: 'available',
         notes: '',
-        heroImage: ''
+        images: ['', '', '']
     });
 
-    // Hàm lấy danh sách người thuê thuộc về một phòng cụ thể (Lọc từ mockData.tenants)
     const getTenantsInRoom = (roomId: string) => {
         return mockData.tenants.filter(t => t.roomId === roomId && t.status === 'active');
     };
 
     const openAddModal = () => {
         setEditingRoom(null);
-        setRoomForm({ number: '', capacity: 1, status: 'available', notes: '', heroImage: '' });
+        setRoomForm({ number: '', capacity: 1, status: 'available', notes: '', images: ['', '', ''] });
         setIsModalOpen(true);
     };
 
@@ -64,17 +53,33 @@ const Rooms: React.FC = () => {
             capacity: room.capacity,
             status: room.status,
             notes: room.notes,
-            heroImage: room.images[0] || ''
+            images: [...room.images]
         });
         setIsModalOpen(true);
+    };
+
+    const handleImageChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            const newImages = [...roomForm.images];
+            newImages[index] = imageUrl;
+            setRoomForm({ ...roomForm, images: newImages });
+        }
+    };
+
+    const removeImage = (index: number) => {
+        const newImages = [...roomForm.images];
+        newImages[index] = '';
+        setRoomForm({ ...roomForm, images: newImages });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (editingRoom) {
-            setRooms(rooms.map(r => r.id === editingRoom.id ? { ...editingRoom, ...roomForm, images: [roomForm.heroImage, ...editingRoom.images.slice(1)] } : r));
+            setRooms(rooms.map(r => r.id === editingRoom.id ? { ...editingRoom, ...roomForm } : r));
         } else {
-            setRooms([{ id: `${Date.now()}`, ...roomForm, images: [roomForm.heroImage, "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400", "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400"] }, ...rooms]);
+            setRooms([{ id: `${Date.now()}`, ...roomForm }, ...rooms]);
         }
         setIsModalOpen(false);
     };
@@ -145,7 +150,6 @@ const Rooms: React.FC = () => {
                 </div>
             </main>
 
-            {/* --- MODAL VIEW DETAIL --- */}
             {selectedRoomDetail && (
                 <div className="modal-overlay" onClick={() => setSelectedRoomDetail(null)}>
                     <div className="modal-content room-detail-modal" onClick={e => e.stopPropagation()}>
@@ -155,7 +159,6 @@ const Rooms: React.FC = () => {
                         </div>
 
                         <div className="modal-body">
-                            {/* Gallery Section */}
                             <div className="image-management-section">
                                 <label className="section-label">Gallery (Click photo to edit URL)</label>
                                 <div className="gallery-admin-grid">
@@ -175,9 +178,7 @@ const Rooms: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Info & Occupant Section */}
                             <div className="detail-container-grid">
-                                {/* Room Info */}
                                 <div className="info-detail-grid">
                                     <div className="detail-item">
                                         <label>Status</label>
@@ -193,16 +194,13 @@ const Rooms: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* THÔNG TIN NGƯỜI Ở (TENANT INFO) */}
                                 <div className="occupant-info-card">
                                     <label className="section-label-sm">Current Occupants</label>
                                     {selectedRoomDetail.status === 'occupied' ? (
                                         <div className="tenant-list-wrapper">
                                             {getTenantsInRoom(selectedRoomDetail.id).map(tenant => (
                                                 <div key={tenant.id} className="tenant-data-item">
-                                                    <div className="tenant-avatar-mini">
-                                                        {tenant.name.charAt(0)}
-                                                    </div>
+                                                    <div className="tenant-avatar-mini">{tenant.name.charAt(0)}</div>
                                                     <div className="tenant-details">
                                                         <p className="t-name">{tenant.name}</p>
                                                         <p className="t-phone"><i className="bi bi-telephone"></i> {tenant.phone}</p>
@@ -229,35 +227,66 @@ const Rooms: React.FC = () => {
                 </div>
             )}
 
-            {/* MODAL ADD/EDIT */}
             {isModalOpen && (
                 <div className="modal-overlay">
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                    <div className="modal-content room-form-modal" onClick={e => e.stopPropagation()}>
                         <form onSubmit={handleSubmit}>
                             <div className="modal-header">
                                 <h3>{editingRoom ? 'Edit Room' : 'Add New Room'}</h3>
                                 <button type="button" className="close-modal" onClick={() => setIsModalOpen(false)}>×</button>
                             </div>
                             <div className="modal-body">
-                                <div className="form-group">
-                                    <label>Room Number</label>
-                                    <input
-                                        type="text"
-                                        value={roomForm.number}
-                                        onChange={e => setRoomForm({ ...roomForm, number: e.target.value })}
-                                        required
-                                        placeholder="e.g. R101"
-                                    />
+
+                                <div className="image-upload-section">
+                                    <label className="section-label">Room Photos (Hero & Gallery)</label>
+                                    <div className="image-preview-grid">
+                                        {roomForm.images.map((img, idx) => (
+                                            <div key={idx} className={`upload-box ${idx === 0 ? 'hero-box' : 'sub-box'}`}>
+                                                {img ? (
+                                                    <div className="img-wrap">
+                                                        <img src={img} alt="preview" />
+                                                        <button type="button" className="btn-remove" onClick={() => removeImage(idx)}>×</button>
+                                                    </div>
+                                                ) : (
+                                                    <label className="upload-placeholder">
+                                                        <i className="bi bi-plus-lg"></i>
+                                                        <span>{idx === 0 ? 'Hero' : 'Photo'}</span>
+                                                        <input type="file" hidden accept="image/*" onChange={(e) => handleImageChange(idx, e)} />
+                                                    </label>
+                                                )}
+                                                {img && (
+                                                    <label className="change-link">
+                                                        Change
+                                                        <input type="file" hidden accept="image/*" onChange={(e) => handleImageChange(idx, e)} />
+                                                    </label>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="form-group">
-                                    <label>Capacity</label>
-                                    <input
-                                        type="number"
-                                        value={roomForm.capacity}
-                                        onChange={e => setRoomForm({ ...roomForm, capacity: parseInt(e.target.value) })}
-                                        required
-                                    />
+
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label>Room Number</label>
+                                        <input
+                                            type="text"
+                                            value={roomForm.number}
+                                            onChange={e => setRoomForm({ ...roomForm, number: e.target.value })}
+                                            required
+                                            placeholder="e.g. R101"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Capacity</label>
+                                        <input
+                                            type="number"
+                                            value={roomForm.capacity}
+                                            onChange={e => setRoomForm({ ...roomForm, capacity: parseInt(e.target.value) })}
+                                            required
+                                        />
+                                    </div>
                                 </div>
+
                                 <div className="form-group">
                                     <label>Status</label>
                                     <select
@@ -268,20 +297,13 @@ const Rooms: React.FC = () => {
                                         <option value="occupied">Occupied</option>
                                     </select>
                                 </div>
-                                <div className="form-group">
-                                    <label>Hero Image URL</label>
-                                    <input
-                                        type="text"
-                                        value={roomForm.heroImage}
-                                        onChange={e => setRoomForm({ ...roomForm, heroImage: e.target.value })}
-                                        placeholder="https://..."
-                                    />
-                                </div>
+
                                 <div className="form-group">
                                     <label>Notes</label>
                                     <textarea
                                         value={roomForm.notes}
                                         onChange={e => setRoomForm({ ...roomForm, notes: e.target.value })}
+                                        rows={3}
                                     />
                                 </div>
                             </div>
