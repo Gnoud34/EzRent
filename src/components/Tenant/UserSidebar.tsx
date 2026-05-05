@@ -4,12 +4,12 @@ import './UserSidebar.css';
 
 const UserSidebar: React.FC = () => {
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem('user') || '{}');
+  // const userData = JSON.parse(localStorage.getItem('user') || '{}');
 
-  const getInitials = (name: string) => {
-    if (!name) return 'NV';
-    return name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
-  };
+  // const getInitials = (name: string) => {
+  //   if (!name) return 'NV';
+  //   return name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+  // };
 
   const menuItems = [
     {
@@ -97,7 +97,7 @@ const UserSidebar: React.FC = () => {
 
       {/* Footer: user info + logout */}
       <div className="usb-footer">
-        <div className="usb-user">
+        {/* <div className="usb-user">
           <div className="usb-avatar">
             {userData.avatar ? (
               <img
@@ -115,8 +115,8 @@ const UserSidebar: React.FC = () => {
           <div className="usb-user-info">
             <p className="usb-user-name">{userData.name || 'Người dùng'}</p>
             <p className="usb-user-email">{userData.email || ''}</p>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
 
         <button className="usb-logout" onClick={handleLogout}>
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">

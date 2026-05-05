@@ -1,18 +1,18 @@
-/* ═══════════════════════════════════
-   RoomDetail.css — Guest role
-═══════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   RoomDetail.css — COMPLETE
+══════════════════════════════════════════════════════════════ */
 
 .rd-root {
   min-height: 100vh;
   background: #F9FAFB;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ── Navbar ── */
 .rd-nav {
   position: sticky;
   top: 0;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid #E5E7EB;
   z-index: 100;
@@ -88,9 +88,129 @@
   }
 }
 
-/* ── Left column ── */
+/* ══════════════════════════════════════════════════════════════
+   IMAGE GALLERY
+══════════════════════════════════════════════════════════════ */
+.rd-gallery {
+  margin-bottom: 20px;
+}
 
-/* Room image */
+/* ── Main image box ── */
+.rd-gallery-main {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 320px;
+  background: #EFF6FF;
+  margin-bottom: 10px;
+}
+.rd-gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s;
+}
+
+/* Status badge */
+.rd-gallery-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+/* Prev / Next buttons */
+.rd-gallery-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.15s, transform 0.15s;
+  z-index: 2;
+  line-height: 1;
+}
+.rd-gallery-btn:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.08);
+}
+.rd-gallery-btn--prev { left: 12px; }
+.rd-gallery-btn--next { right: 12px; }
+
+/* Dots */
+.rd-gallery-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+.rd-gallery-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.6);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+.rd-gallery-dot--active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+/* ── Thumbnails ── */
+.rd-gallery-thumbs {
+  display: flex;
+  gap: 8px;
+}
+.rd-gallery-thumb {
+  flex: 1;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.15s, opacity 0.15s;
+  background: #EFF6FF;
+}
+.rd-gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rd-gallery-thumb:hover { opacity: 0.85; }
+.rd-gallery-thumb--active {
+  border-color: #2563EB;
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LEFT COLUMN PANELS
+══════════════════════════════════════════════════════════════ */
+
+/* Fallback room image (khi không dùng gallery) */
 .rd-img {
   background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
   border-radius: 16px;
@@ -116,8 +236,6 @@
   padding: 6px 14px;
   border-radius: 20px;
 }
-.rd-green { background: #DCFCE7; color: #16A34A; }
-.rd-red   { background: #FEE2E2; color: #DC2626; }
 
 /* Panel */
 .rd-panel {
@@ -140,7 +258,15 @@
   line-height: 1.7;
   margin: 0;
 }
-.rd-panel div {
+
+/* Amenities list */
+.rd-amenities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+.rd-amenity-item {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -150,15 +276,16 @@
   font-weight: 500;
   padding: 6px 12px;
   border-radius: 8px;
-  margin: 0 6px 6px 0;
 }
-.rd-panel div::before {
+.rd-amenity-item::before {
   content: '✓';
   font-size: 11px;
   font-weight: 700;
 }
 
-/* ── Right sticky card ── */
+/* ══════════════════════════════════════════════════════════════
+   RIGHT STICKY CARD
+══════════════════════════════════════════════════════════════ */
 .rd-detail-card {
   background: #fff;
   border: 1px solid #E5E7EB;
@@ -174,25 +301,31 @@
   color: #111827;
   margin: 0 0 8px;
 }
-.rd-detail-card > p:first-of-type {
+
+/* Price — có 2 cách style giống nhau */
+.rd-detail-card > p:first-of-type,
+.rd-card-price {
   font-size: 22px;
   font-weight: 700;
   color: #2563EB;
   margin: 0 0 20px;
 }
-.rd-detail-card > p:first-of-type::after {
+.rd-detail-card > p:first-of-type::after,
+.rd-card-price::after {
   content: ' / tháng';
   font-size: 14px;
   font-weight: 400;
   color: #9CA3AF;
 }
-.rd-detail-card > div {
+
+/* Thông số phòng */
+.rd-info-box {
   background: #F9FAFB;
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
 }
-.rd-detail-card > div p {
+.rd-info-box p {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
@@ -201,26 +334,72 @@
   padding: 8px 0;
   border-bottom: 1px solid #E5E7EB;
 }
-.rd-detail-card > div p:last-child { border-bottom: none; }
-.rd-detail-card > div p strong {
+.rd-info-box p:last-child { border-bottom: none; }
+.rd-info-box p strong {
   font-weight: 600;
   color: #111827;
 }
-.rd-detail-card button {
+
+/* Action buttons */
+.rd-action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rd-action-btns button {
   width: 100%;
-  background: #2563EB;
-  color: #fff;
-  border: none;
   border-radius: 10px;
   padding: 13px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.15s;
 }
-.rd-detail-card button:hover { background: #1D4ED8; }
 
-/* ── Not found ── */
+/* Nút Đăng ký (Xanh) */
+.rd-btn-main {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+}
+.rd-btn-main:hover { background: #1D4ED8; }
+
+/* Nút Liên hệ (Viền) */
+.rd-btn-contact {
+  background: transparent;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+}
+.rd-btn-contact:hover {
+  background: #F0F7FF;
+  border-color: #2563EB;
+}
+
+/* Nút Xem phòng khác */
+.rd-btn-alt {
+  background: #F3F4F6;
+  color: #374151;
+  border: none;
+}
+.rd-btn-alt:hover { background: #E5E7EB; }
+
+/* ══════════════════════════════════════════════════════════════
+   COLOR HELPERS
+══════════════════════════════════════════════════════════════ */
+.rd-green,
+.rd-text-green { 
+  background: #DCFCE7 !important; 
+  color: #16A34A !important; 
+}
+.rd-red,
+.rd-text-red { 
+  background: #FEE2E2 !important; 
+  color: #DC2626 !important; 
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NOT FOUND PAGE
+══════════════════════════════════════════════════════════════ */
 .rd-not-found {
   min-height: 80vh;
   display: flex;
@@ -234,15 +413,3 @@
   color: #6B7280;
   margin: 0;
 }
-.rd-not-found button {
-  background: #2563EB;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.rd-not-found button:hover { background: #1D4ED8; }

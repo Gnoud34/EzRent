@@ -11,7 +11,7 @@
             "token": "fake-jwt-token-admin-123"
         },
         {
-            "id": "u1`",
+            "id": "u1",
             "email": "nva01@gmail.com",
             "password": "12345678",
             "name": "Nguyen Van An",
@@ -50,6 +50,15 @@
             "id": "2",
             "number": "R102",
             "capacity": 2,
+            "area": 25,
+            "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Double room",
             " amenities": "WiFi tốc độ cao, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
@@ -107,8 +116,7 @@
             "notes": "Double room with AC",
             " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": [
-                "4",
-                "6"
+                "4"
             ]
         },
         {
@@ -202,7 +210,8 @@
         {
             "id": "1",
             "roomNumber": "R101",
-            "description": "Air conditioner not cooling properly",
+            "title": "Maintenance",
+            "description": "Máy lạnh chạy nhưng không ra hơi lạnh, có tiếng kêu lạ.",
             "status": "pending",
             "createdAt": "2026-04-08",
             "createdBy": "1"
@@ -210,26 +219,38 @@
         {
             "id": "2",
             "roomNumber": "R202",
-            "description": "Leaking faucet in bathroom",
+            "title": "Maintenance",
+            "description": "Vòi nước trong phòng tắm bị rò rỉ. Nước chảy liên tục dù đã tắt van.",
             "status": "pending",
             "createdAt": "2026-04-09",
             "createdBy": "4"
         },
         {
             "id": "3",
-            "roomNumber": "R103",
-            "description": "Light bulb replacement needed",
+            "roomNumber": "R201",
+            "title": "Maintenance",
+            "description": "Bồn cầu trong phòng tắm bị tắc nghẽn, nước không thoát được.",
             "status": "resolved",
-            "createdAt": "2026-04-05",
-            "createdBy": "1"
+            "createdAt": "2026-04-12",
+            "createdBy": "3"
+        },
+        {
+            "id": "401",
+            "roomNumber": "R202",
+            "title": "Room Issue",
+            "description": "Tôi đang ở phòng đôi R202 một mình và muốn đăng ký ở ghép một mình (không nhận thêm người mới) để đảm bảo riêng tư. Vui lòng phản hồi chi phí chênh lệch.",
+            "status": "pending",
+            "createdAt": "2026-05-05",
+            "createdBy": "4"
         },
         {
             "id": "4",
-            "roomNumber": "R201",
-            "description": "Door lock issue",
+            "roomNumber": "R203",
+            "title": "Early Checkout",
+            "description": "Muốn làm thủ tục trả phòng sớm vào cuối tháng sau.",
             "status": "pending",
-            "createdAt": "2026-04-10",
-            "createdBy": "3"
+            "createdAt": "2026-05-01",
+            "createdBy": "6"
         }
     ]
 }

@@ -1,27 +1,26 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RoomListing.css';
+import mockData from '../../data/mockdata.json';
 
 type Status = 'all' | 'available' | 'occupied';
 
 type Room = {
-  id: number;
+  id: string;
   number: string;
-  floor: number;
   capacity: number;
   area: number;
-  price: number;
+  floor: number;
   status: 'available' | 'occupied';
+  description: string;
   amenities: string[];
+  tenantIds: string[];
 };
 
-const ROOMS: Room[] = [
-  { id: 1, number: '101', floor: 1, capacity: 2, area: 20, price: 3_500_000, status: 'available', amenities: ['WiFi', 'Điều hòa', 'Tủ lạnh'] },
-  { id: 2, number: '202', floor: 2, capacity: 2, area: 25, price: 4_200_000, status: 'occupied',  amenities: ['WiFi', 'Điều hòa', 'Ban công'] },
-  { id: 3, number: '303', floor: 3, capacity: 3, area: 30, price: 5_000_000, status: 'available', amenities: ['WiFi', 'Điều hòa', 'Tủ lạnh', 'Ban công'] },
-  { id: 4, number: '404', floor: 4, capacity: 1, area: 18, price: 2_800_000, status: 'available', amenities: ['WiFi', 'Điều hòa'] },
-  { id: 5, number: '105', floor: 1, capacity: 2, area: 22, price: 3_800_000, status: 'occupied',  amenities: ['WiFi', 'Tủ lạnh'] },
-  { id: 6, number: '206', floor: 2, capacity: 3, area: 28, price: 4_800_000, status: 'available', amenities: ['WiFi', 'Điều hòa', 'Tủ lạnh', 'Ban công'] },
+const ROOM_IMAGES = [
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400',
 ];
 
 export default function RoomListing() {
@@ -29,8 +28,11 @@ export default function RoomListing() {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<Status>('all');
 
-  const filtered = ROOMS.filter(r => {
-    const matchSearch = r.number.includes(search) || String(r.floor).includes(search);
+  const allRooms: Room[] = (mockData.rooms as unknown as Room[]) || [];
+
+  const filtered = allRooms.filter(r => {
+    const matchSearch = r.number.toLowerCase().includes(search.toLowerCase()) ||
+                        r.floor.toString().includes(search);
     const matchStatus = status === 'all' || r.status === status;
     return matchSearch && matchStatus;
   });
@@ -52,7 +54,6 @@ export default function RoomListing() {
       </nav>
 
       <div className="rl-body">
-        {/* ── Page header ── */}
         <div className="rl-page-header">
           <h1>Danh sách phòng trọ</h1>
           <p>Tìm phòng phù hợp với nhu cầu của bạn</p>
@@ -85,9 +86,8 @@ export default function RoomListing() {
           </div>
         </div>
 
-        <p className="rl-count">{filtered.length} phòng</p>
+        <p className="rl-count"><strong>{filtered.length}</strong> phòng được tìm thấy</p>
 
-        {/* ── Grid ── */}
         {filtered.length === 0 ? (
           <div className="rl-empty">
             <svg width="52" height="52" fill="none" stroke="#D1D5DB" viewBox="0 0 24 24">
@@ -99,25 +99,24 @@ export default function RoomListing() {
           </div>
         ) : (
           <div className="rl-grid">
-            {filtered.map(room => (
+            {filtered.map((room, idx) => (
               <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
-                {/* Image */}
+                {/* ── Ảnh phòng: ảnh đầu tiên mặc định, xoay vòng theo index ── */}
                 <div className="rl-card-img">
-                  <svg width="36" height="36" fill="none" stroke="#93C5FD" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                  </svg>
+                  <img
+                    src={ROOM_IMAGES[idx % ROOM_IMAGES.length]}
+                    alt={`Phòng ${room.number}`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                   <span className={`rl-status-badge ${room.status === 'available' ? 'rl-status-badge--green' : 'rl-status-badge--gray'}`}>
                     {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
                   </span>
                 </div>
 
-                {/* Body */}
                 <div className="rl-card-body">
                   <div className="rl-card-top">
                     <h3>Phòng {room.number}</h3>
                     <span className="rl-card-price">
-                      {room.price.toLocaleString('vi-VN')}đ<small>/tháng</small>
                     </span>
                   </div>
                   <div className="rl-card-meta">

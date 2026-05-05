@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import './Profile.css';
-
+import mockData from '../../data/mockdata.json';
 type FormState = {
   name: string;
   phone: string;
@@ -8,58 +9,50 @@ type FormState = {
   cccd: string;
 };
 
-const getStoredUser = () => {
-  try { return JSON.parse(localStorage.getItem('user') || '{}'); }
-  catch { return {}; }
-};
-
-const ROOM_INFO = {
-  number: '202', floor: 2,
-  moveInDate: '2024-01-15',
-  contractEnd: '2025-07-15',
-  monthlyRent: 4_200_000,
-};
-
-const ADDRESS = {
-  province: 'TP. Hồ Chí Minh',
-  district: 'Quận 1',
-  detail:   '123 Nguyễn Văn Cừ',
-};
-
 function fmtDate(d: string) { return new Date(d).toLocaleDateString('vi-VN'); }
-
 function getDaysLeft(d: string) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const end   = new Date(d); end.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const end = new Date(d); end.setHours(0, 0, 0, 0);
   return Math.ceil((end.getTime() - today.getTime()) / 86_400_000);
+}
+function getInitials(name: string) {
+  return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'NA';
 }
 
 export default function Profile() {
-  const stored = getStoredUser();
+  /* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
+  const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
+  const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
+    || mockData.tenants[0];
+  const currentRoom = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
+    || mockData.rooms[0]) as any;
+
   const [editMode, setEditMode] = useState(false);
-  const [saved, setSaved]       = useState(false);
-  const [form, setForm]         = useState<FormState>({
-    name:  stored.name  || 'Nguyễn Văn An',
-    phone: stored.phone || '0901 234 567',
-    email: stored.email || 'an.nguyen@email.com',
-    cccd:  stored.cccd  || '079 200 012 345',
+  const [saved, setSaved] = useState(false);
+  const [form, setForm] = useState<FormState>({
+    name: currentTenant?.name || storedUser.name || '',
+    phone: currentTenant?.phone || storedUser.phoneNumber || '',
+    email: currentTenant?.email || storedUser.email || '',
+    cccd: currentTenant?.idCard
+      ? currentTenant.idCard.replace(/(\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4')
+      : '',
   });
 
-  const getInitials = (name: string) =>
-    name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'NA';
-
   const handleSave = () => {
-    localStorage.setItem('user', JSON.stringify({ ...stored, ...form }));
+    localStorage.setItem('user', JSON.stringify({ ...storedUser, ...form }));
     setEditMode(false);
     setSaved(true);
   };
 
   const handleCancel = () => {
     setForm({
-      name:  stored.name  || 'Nguyễn Văn An',
-      phone: stored.phone || '0901 234 567',
-      email: stored.email || 'an.nguyen@email.com',
-      cccd:  stored.cccd  || '079 200 012 345',
+      name: currentTenant?.name || storedUser.name || '',
+      phone: currentTenant?.phone || storedUser.phoneNumber || '',
+      email: currentTenant?.email || storedUser.email || '',
+      cccd: currentTenant?.idCard
+        ? currentTenant.idCard.replace(/(\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4')
+        : '',
     });
     setEditMode(false);
   };
@@ -71,7 +64,9 @@ export default function Profile() {
     }
   }, [saved]);
 
-  const days = getDaysLeft(ROOM_INFO.contractEnd);
+  const contractEnd = currentTenant?.expireDate || '';
+  const moveInDate = currentTenant?.moveInDate || '';
+  const days = contractEnd ? getDaysLeft(contractEnd) : 999;
 
   return (
     <div className="pf-page">
@@ -89,25 +84,22 @@ export default function Profile() {
       )}
 
       <div className="pf-grid">
-        {/* ── Left: Avatar + Form ── */}
+        {/* ── Left ── */}
         <div className="pf-left">
-          {/* Avatar block */}
           <div className="pf-avatar-row">
             <div className="pf-avatar">{getInitials(form.name)}</div>
             <div className="pf-avatar-meta">
               <p className="pf-avatar-name">{form.name}</p>
-              <p className="pf-avatar-role">Người thuê · Phòng R{ROOM_INFO.number}</p>
+              <p className="pf-avatar-role">Người thuê · Phòng {currentRoom.number}</p>
               <span className="pf-status-badge">Đang thuê</span>
             </div>
           </div>
 
-          {/* Fields */}
           <div className="pf-fields">
             {([
-              { label: 'Họ và tên',      key: 'name',  type: 'text'  },
-              { label: 'Số điện thoại',  key: 'phone', type: 'tel'   },
-              { label: 'Email',           key: 'email', type: 'email' },
-              { label: 'CCCD / CMND',    key: 'cccd',  type: 'text'  },
+              { label: 'Họ và tên', key: 'name', type: 'text' },
+              { label: 'Số điện thoại', key: 'phone', type: 'tel' },
+              { label: 'Email', key: 'email', type: 'email' },
             ] as const).map(field => (
               <div key={field.key} className="pf-field-group">
                 <label className="pf-label">{field.label}</label>
@@ -119,29 +111,28 @@ export default function Profile() {
                     onChange={e => setForm(p => ({ ...p, [field.key]: e.target.value }))}
                   />
                 ) : (
-                  <div className="pf-value">{form[field.key]}</div>
+                  <div className="pf-value">{form[field.key] || '—'}</div>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Actions */}
           <div className="pf-actions">
             {editMode ? (
               <>
-                <button className="pf-btn-save"   onClick={handleSave}>Lưu</button>
-                <button className="pf-btn-cancel" onClick={handleCancel}>Đổi mật khẩu</button>
+                <button className="pf-btn-save" onClick={handleSave}>Lưu</button>
+                <button className="pf-btn-cancel" onClick={handleCancel}>Hủy</button>
               </>
             ) : (
               <>
-                <button className="pf-btn-save"   onClick={() => setEditMode(true)}>Chỉnh sửa</button>
+                <button className="pf-btn-save" onClick={() => setEditMode(true)}>Chỉnh sửa</button>
                 <button className="pf-btn-cancel" onClick={handleCancel}>Đổi mật khẩu</button>
               </>
             )}
           </div>
         </div>
 
-        {/* ── Right: Room info + Address ── */}
+        {/* ── Right ── */}
         <div className="pf-right">
           {/* Room info panel */}
           <div className="pf-panel">
@@ -155,23 +146,23 @@ export default function Profile() {
             <div className="pf-panel-row">
               <span className="pf-panel-label">Phòng đang thuê</span>
               <span className="pf-panel-value pf-panel-value--blue">
-                R{ROOM_INFO.number} - Tầng {ROOM_INFO.floor}
+                {currentRoom.number} - Tầng {currentRoom.floor}
               </span>
             </div>
             <div className="pf-panel-row">
               <span className="pf-panel-label">Ngày chuyển vào</span>
-              <span className="pf-panel-value">{fmtDate(ROOM_INFO.moveInDate)}</span>
+              <span className="pf-panel-value">
+                {moveInDate ? fmtDate(moveInDate) : '—'}
+              </span>
             </div>
             <div className="pf-panel-row">
               <span className="pf-panel-label">Hết hạn hợp đồng</span>
               <span className={`pf-panel-value ${days <= 30 ? 'pf-panel-value--orange' : ''}`}>
-                {fmtDate(ROOM_INFO.contractEnd)}
+                {contractEnd ? fmtDate(contractEnd) : '—'}
               </span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Tiền thuê/tháng</span>
               <span className="pf-panel-value">
-                {ROOM_INFO.monthlyRent.toLocaleString('vi-VN')} đ
               </span>
             </div>
           </div>
@@ -189,15 +180,15 @@ export default function Profile() {
             </div>
             <div className="pf-panel-row">
               <span className="pf-panel-label">Tỉnh / Thành phố</span>
-              <span className="pf-panel-value">{ADDRESS.province}</span>
+              <span className="pf-panel-value">{currentTenant?.province || '—'}</span>
             </div>
             <div className="pf-panel-row">
               <span className="pf-panel-label">Quận / Huyện</span>
-              <span className="pf-panel-value">{ADDRESS.district}</span>
+              <span className="pf-panel-value">{currentTenant?.district || '—'}</span>
             </div>
             <div className="pf-panel-row">
               <span className="pf-panel-label">Địa chỉ chi tiết</span>
-              <span className="pf-panel-value">{ADDRESS.detail}</span>
+              <span className="pf-panel-value">{currentTenant?.address || '—'}</span>
             </div>
           </div>
         </div>
