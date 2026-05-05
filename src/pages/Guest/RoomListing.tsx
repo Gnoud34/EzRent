@@ -11,7 +11,6 @@ type Room = {
   capacity: number;
   area: number;
   floor: number;
-  price: number;
   status: 'available' | 'occupied';
   description: string;
   amenities: string[];
@@ -118,7 +117,6 @@ export default function RoomListing() {
                   <div className="rl-card-top">
                     <h3>Phòng {room.number}</h3>
                     <span className="rl-card-price">
-                      {room.price.toLocaleString('vi-VN')}đ<small>/tháng</small>
                     </span>
                   </div>
                   <div className="rl-card-meta">

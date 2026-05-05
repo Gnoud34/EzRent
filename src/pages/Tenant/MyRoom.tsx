@@ -8,8 +8,8 @@ const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
   || mockData.tenants[0];
-const currentRoom = mockData.rooms.find(r => r.id === currentTenant?.roomId)
-  || mockData.rooms[0];
+const currentRoom = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
+  || mockData.rooms[0]) as any;
 
 /* ─── ẢNH CỐ ĐỊNH ─── */
 const ROOM_IMAGES = [

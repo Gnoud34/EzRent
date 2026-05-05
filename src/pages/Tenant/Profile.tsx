@@ -25,8 +25,8 @@ export default function Profile() {
   const currentUser   = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
   const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
     || mockData.tenants[0];
-  const currentRoom   = mockData.rooms.find(r => r.id === currentTenant?.roomId)
-    || mockData.rooms[0];
+ const currentRoom   = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
+    || mockData.rooms[0]) as any;
 
   const [editMode, setEditMode] = useState(false);
   const [saved, setSaved]       = useState(false);
@@ -163,9 +163,7 @@ export default function Profile() {
               </span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Tiền thuê/tháng</span>
               <span className="pf-panel-value">
-                {(currentTenant?.monthlyRent ?? currentRoom.price).toLocaleString('vi-VN')} đ
               </span>
             </div>
           </div>

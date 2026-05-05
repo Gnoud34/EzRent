@@ -9,23 +9,40 @@ const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = mockData.tenants.find(t => (t as any).userId === currentUser.id)
   || (mockData.tenants[0] as any);
-const currentRoom = mockData.rooms.find(r => r.id === currentTenant?.roomId)
-  || mockData.rooms[0];
-const myMaintenance = mockData.maintenanceRequests
+const currentRoom = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
+  || mockData.rooms[0]) as any;
+const myMaintenance = (mockData.maintenanceRequests as any[])
   .filter(m => m.tenantId === currentTenant?.id)
   .slice(0, 3);
 
 /* ─── Helpers ─── */
+function parseDate(d: string) {
+  if (!d) return new Date();
+  // Chuyển "15/1/2026" thành Date object chuẩn
+  const parts = d.split('/');
+  if (parts.length === 3) {
+    return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+  }
+  return new Date(d);
+}
+
 function getDaysLeft(d: string) {
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  const end   = new Date(d); end.setHours(0, 0, 0, 0);
+  const end = parseDate(d); end.setHours(0, 0, 0, 0);
   return Math.ceil((end.getTime() - today.getTime()) / 86_400_000);
 }
+
 function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('vi-VN');
+  const date = parseDate(d);
+  if (isNaN(date.getTime())) return '—';
+  return date.toLocaleDateString('vi-VN');
 }
+
 function fmtMonths(d: string) {
-  return Math.floor((Date.now() - new Date(d).getTime()) / (30 * 86_400_000));
+  const date = parseDate(d);
+  const diff = Date.now() - date.getTime();
+  const months = Math.floor(diff / (30 * 86_400_000));
+  return months > 0 ? months : 0;
 }
 
 const STATUS_DOT: Record<string, string> = {
@@ -66,7 +83,11 @@ export default function TenantDashboard() {
     {
       label: 'Ngày chuyển vào',
       value: moveInDate ? fmtDate(moveInDate) : '—',
-      sub:   moveInDate ? `${fmtMonths(moveInDate)} tháng trước` : '',
+      sub: moveInDate 
+        ? (getDaysLeft(moveInDate) > 0 
+        ? `Sắp đến (còn ${getDaysLeft(moveInDate)} ngày)` 
+        : `${fmtMonths(moveInDate)} tháng trước`) 
+        : '',
       iconBg: '#FFFBEB', iconColor: '#D97706',
       icon: <>
         <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth={2}/>
@@ -78,8 +99,8 @@ export default function TenantDashboard() {
     {
       label: 'Hết hạn HĐ',
       value: expireDate ? fmtDate(expireDate) : '—',
-      sub:   days > 0 ? `Còn ${days} ngày` : 'Đã hết hạn',
-      subColor: days <= 30 ? '#EA580C' : undefined,
+      sub: days > 0 ? `Còn ${days} ngày` : 'Đã hết hạn hợp đồng',
+      subColor: (days > 0 && days <= 30) ? '#EA580C' : (days <= 0 ? '#EF4444' : undefined),
       iconBg: '#F5F3FF', iconColor: '#7C3AED',
       icon: <>
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -159,7 +180,6 @@ export default function TenantDashboard() {
             { label: 'Tầng',      value: `Tầng ${currentRoom.floor}` },
             { label: 'Sức chứa',  value: `${currentRoom.capacity} người` },
             { label: 'Diện tích', value: `${currentRoom.area} m²` },
-            { label: 'Tiền thuê', value: `${(currentTenant?.monthlyRent ?? currentRoom.price).toLocaleString('vi-VN')} đ/tháng` },
             { label: 'Trạng thái', badge: true },
           ].map(row => (
             <div key={row.label} className="infoRow">

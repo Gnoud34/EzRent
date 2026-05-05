@@ -19,8 +19,8 @@ const currentUser   = mockData.users.find(u => u.id === storedUser.id) || mockDa
 const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
   || mockData.tenants[0];
 
-const initialRequests: Request[] = mockData.maintenanceRequests
-  .filter(m => m.tenantId === currentTenant?.id)
+const initialRequests: Request[] = (mockData.maintenanceRequests as any[])
+  .filter(m => m.createdBy === currentTenant?.id)
   .map(m => ({
     id:          m.id,
     title:       m.title,

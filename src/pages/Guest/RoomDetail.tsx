@@ -9,7 +9,6 @@ type Room = {
   floor: number;
   capacity: number;
   area: number;
-  price: number;
   status: 'available' | 'occupied';
   description: string;
   amenities: string[];
@@ -136,7 +135,6 @@ export default function RoomDetail() {
           {/* ── CỘT PHẢI ── */}
           <div className="rd-detail-card">
             <h1>Phòng {room.number}</h1>
-            <p className="rd-card-price">{room.price.toLocaleString('vi-VN')}đ</p>
 
             <div className="rd-info-box">
               <p><span>Tầng</span><strong>{room.floor}</strong></p>

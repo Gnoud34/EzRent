@@ -8,7 +8,6 @@ type Room = {
   capacity: number;
   area: number;
   floor: number;
-  price: number;
   status: string;
   description: string;
   amenities: string[];
@@ -129,7 +128,6 @@ export default function LandingPage() {
                 <div className="lp-room-body">
                   <div className="lp-room-header">
                     <h3>Phòng {room.number}</h3>
-                    <span className="lp-room-price">{room.price.toLocaleString('vi-VN')}đ<small>/tháng</small></span>
                   </div>
                   <div className="lp-room-meta">
                     <span>🏢 Tầng {room.floor}</span>
