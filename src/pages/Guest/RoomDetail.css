@@ -413,3 +413,103 @@
   color: #6B7280;
   margin: 0;
 }
+/* Modal Overlay - Lớp nền mờ bao phủ toàn màn hình */
+.rd-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Làm tối nền */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px); /* Làm mờ nền đằng sau (tùy chọn) */
+}
+
+/* Modal Content - Khối Form trắng */
+.rd-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.rd-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #666;
+}
+
+.rd-modal-content h3 {
+  margin-top: 0;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+}
+
+/* Form Styles */
+.rd-contact-form {
+  margin-top: 20px;
+}
+
+.rd-form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.rd-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.rd-form-group input, 
+.rd-form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  box-sizing: border-box; /* Đảm bảo padding không làm tràn input */
+}
+
+.rd-form-group input:focus, 
+.rd-form-group textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.rd-btn-submit {
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.rd-btn-submit:hover {
+  background-color: #1d4ed8;
+}

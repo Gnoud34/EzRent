@@ -151,3 +151,58 @@
   .mt-summary-card { padding: 12px; }
   .mt-summary-count { font-size: 22px; }
 }
+/* Filter Bar Container */
+.mt-filter-bar {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+/* Nút bấm (Chip) */
+.mt-filter-chip {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mt-filter-chip:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Khi nút được chọn (Active) - Giống màu xanh trong ảnh của bạn */
+.mt-filter-chip.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* Nhãn Category bên trong từng item request */
+.mt-item-cat-label {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* Select box trong modal */
+.mt-form-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: white;
+  margin-top: 5px;
+}

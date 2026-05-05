@@ -1,33 +1,22 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom'; // Import NavLink
 import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const isAdmin = user.role === 'admin';
-
-    // Define menu items based on user role
-    const menuItems = isAdmin 
-        ? [
-            { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/dashboard' },
-            { name: 'Rooms', icon: 'bi-door-open-fill', path: '/rooms-admin' },
-            { name: 'Tenants', icon: 'bi-people-fill', path: '/tenants' },
-            { name: 'Maintenance', icon: 'bi-tools', path: '/maintenance' },
-            { name: 'Settings', icon: 'bi-gear-fill', path: '/settings' },
-          ]
-        : [
-            { name: 'My Room', icon: 'bi-house-fill', path: '/dashboard' },
-            { name: 'Requests', icon: 'bi-chat-left-text-fill', path: '/maintenance' },
-            { name: 'Profile', icon: 'bi-person-badge-fill', path: '/profile' },
-            { name: 'Settings', icon: 'bi-gear-fill', path: '/settings' },
-          ];
+    const menuItems = [
+        { name: 'Dashboard', icon: 'bi-grid-1x2-fill', path: '/dashboard' },
+        { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms' },
+        { name: 'Tenant', icon: 'bi-people-fill', path: '/tenants' },
+        { name: 'Request', icon: 'bi-tools', path: '/maintenance' },
+        { name: 'User Request', icon: 'bi-gear-fill', path: '/UserRequest' },
+        { name: 'Setting', icon: 'bi-gear-fill', path: '/settings' },
+    ];
 
     const handleLogout = () => {
-        if (window.confirm('Are you sure you want to log out?')) {
+        if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
             localStorage.removeItem('user');
-            // Logic to clear specific tenant data if needed
-            localStorage.removeItem(`requests_${user.id}`); 
+            console.log('Đã đăng xuất. LocalStorage hiện tại:', localStorage.getItem('user'));
             navigate('/login');
         }
     };
@@ -36,30 +25,28 @@ const Sidebar: React.FC = () => {
         <aside className="sidebar">
             <div className="sidebar-logo">
                 <i className="bi bi-house-door-fill" style={{ fontSize: '24px', color: '#2563eb' }}></i>
-                <span>EzRent</span>
+                EzRent
             </div>
-            
             <nav className="sidebar-nav">
-                <ul>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
                     {menuItems.map((item) => (
                         <li key={item.name}>
                             <NavLink
                                 to={item.path}
                                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                             >
-                                <i className={`bi ${item.icon}`}></i>
-                                <span>{item.name}</span>
+                                <i className={`bi ${item.icon}`} style={{ marginRight: '12px' }}></i>
+                                {item.name}
                             </NavLink>
                         </li>
                     ))}
                 </ul>
             </nav>
-
             <div className="sidebar-footer">
-                <button className="logout-btn" onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-left"></i>
-                    <span>Logout</span>
-                </button>
+                <div className="logout-btn" onClick={handleLogout} style={{ cursor: 'pointer' }}>
+                    <i className="bi bi-box-arrow-left" style={{ marginRight: '12px' }}></i>
+                    Logout
+                </div>
             </div>
         </aside>
     );

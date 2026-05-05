@@ -25,6 +25,9 @@ export default function RoomDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentImg, setCurrentImg] = useState(0);
+  
+  // Bước 1: Tạo State để quản lý việc đóng/mở Form
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const allRooms = (mockData.rooms as unknown as Room[]) || [];
   const room = allRooms.find(r => r.id === id);
@@ -49,6 +52,13 @@ export default function RoomDetail() {
     setCurrentImg(i => (i + 1) % ROOM_IMAGES.length);
   };
 
+  // Hàm xử lý gửi form
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert("Cảm ơn bạn! Yêu cầu hỗ trợ đã được gửi.");
+    setIsFormOpen(false);
+  };
+
   return (
     <div className="rd-root">
       {/* ── Navbar ── */}
@@ -70,39 +80,19 @@ export default function RoomDetail() {
         <div className="rd-grid">
           {/* ── LEFT COLUMN ── */}
           <div className="rd-left-col">
-
-            {/* ── Image gallery ── */}
             <div className="rd-gallery">
-              {/* Main image */}
               <div className="rd-gallery-main">
                 <img
                   src={ROOM_IMAGES[currentImg]}
-                  alt={`Room ${room.number} - Image ${currentImg + 1}`}
+                  alt={`Room ${room.number}`}
                 />
-                {/* Status badge */}
                 <span className={`rd-gallery-badge ${available ? 'rd-green' : 'rd-red'}`}>
                   {available ? '✅ Available' : '🔴 Occupied'}
                 </span>
-                {/* Prev / Next buttons */}
-                <button className="rd-gallery-btn rd-gallery-btn--prev" onClick={prevImg}>
-                  ‹
-                </button>
-                <button className="rd-gallery-btn rd-gallery-btn--next" onClick={nextImg}>
-                  ›
-                </button>
-                {/* Dots indicator */}
-                <div className="rd-gallery-dots">
-                  {ROOM_IMAGES.map((_, i) => (
-                    <button
-                      key={i}
-                      className={`rd-gallery-dot ${i === currentImg ? 'rd-gallery-dot--active' : ''}`}
-                      onClick={e => { e.stopPropagation(); setCurrentImg(i); }}
-                    />
-                  ))}
-                </div>
+                <button className="rd-gallery-btn rd-gallery-btn--prev" onClick={prevImg}>‹</button>
+                <button className="rd-gallery-btn rd-gallery-btn--next" onClick={nextImg}>›</button>
               </div>
 
-              {/* Thumbnails */}
               <div className="rd-gallery-thumbs">
                 {ROOM_IMAGES.map((src, i) => (
                   <button
@@ -110,19 +100,17 @@ export default function RoomDetail() {
                     className={`rd-gallery-thumb ${i === currentImg ? 'rd-gallery-thumb--active' : ''}`}
                     onClick={() => setCurrentImg(i)}
                   >
-                    <img src={src} alt={`Thumbnail ${i + 1}`} />
+                    <img src={src} alt="thumb" />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Description */}
             <div className="rd-panel">
               <h3>Room Description</h3>
               <p>{room.description}</p>
             </div>
 
-            {/* Amenities */}
             <div className="rd-panel">
               <h3>Amenities</h3>
               <div className="rd-amenities-list">
@@ -136,7 +124,6 @@ export default function RoomDetail() {
           {/* ── RIGHT COLUMN ── */}
           <div className="rd-detail-card">
             <h1>Room {room.number}</h1>
-
             <div className="rd-info-box">
               <p><span>Floor</span><strong>{room.floor}</strong></p>
               <p><span>Capacity</span><strong>{room.capacity} Guests</strong></p>
@@ -152,22 +139,48 @@ export default function RoomDetail() {
             <div className="rd-action-btns">
               {available ? (
                 <>
-                  <button className="rd-btn-main" onClick={() => navigate('/login')}>
-                    📝 Register for Rent
-                  </button>
-                  <button className="rd-btn-contact" onClick={() => alert('Contact: 0901 234 567')}>
-                    📞 Contact Support
-                  </button>
+                  <button className="rd-btn-main" onClick={() => navigate('/login')}>📝 Register for Rent</button>
+                  {/* Bước 2: Khi ấn sẽ mở Form */}
+                  <button className="rd-btn-contact" onClick={() => setIsFormOpen(true)}>📞 Contact Support</button>
                 </>
               ) : (
-                <button className="rd-btn-alt" onClick={() => navigate('/rooms')}>
-                  🔍 View Other Available Rooms
-                </button>
+                <button className="rd-btn-alt" onClick={() => navigate('/rooms')}>🔍 View Other Available Rooms</button>
               )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* ── Bước 3: Modal Contact Form ── */}
+      {isFormOpen && (
+        <div className="rd-modal-overlay" onClick={() => setIsFormOpen(false)}>
+          <div className="rd-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="rd-modal-close" onClick={() => setIsFormOpen(false)}>&times;</button>
+            <h3>Contact Support</h3>
+            <p>Please fill out the form below to receive assistance for Room {room.number}.</p>
+            
+            <form onSubmit={handleSubmit} className="rd-contact-form">
+              <div className="rd-form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Your name..." required />
+              </div>
+              <div className="rd-form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="0901 234 567" required />
+              </div>
+              <div className="rd-form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="email@example.com" required />
+              </div>
+              <div className="rd-form-group">
+                <label>Message</label>
+                <textarea rows={4} placeholder="How can we help you?"></textarea>
+              </div>
+              <button type="submit" className="rd-btn-submit">Send Message</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
