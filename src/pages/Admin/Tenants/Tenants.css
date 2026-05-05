@@ -36,6 +36,15 @@
     gap: 8px;
     align-items: center;
 }
+.btn-move-out {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
 
 .btn-move {
     background: #f97316;

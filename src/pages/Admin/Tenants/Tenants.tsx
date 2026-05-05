@@ -19,7 +19,6 @@ interface Tenant {
 const Tenants: React.FC = () => {
     const navigate = useNavigate();
 
-    // 2. State
     const [activeTab, setActiveTab] = useState<Tenant['status']>('active');
     const [searchTerm, setSearchTerm] = useState('');
     const [tenants, setTenants] = useState<Tenant[]>(mockData.tenants as Tenant[]);
@@ -205,9 +204,12 @@ const Tenants: React.FC = () => {
                                 )}
                             </div>
 
-                            <div className="modal-footer">
+
+                            <div className="modal-actions">
                                 <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save Changes</button>
+                                <button type="submit" style={{ background: '#2563eb', color: 'white' }}>
+                                    {editingTenant?.status === 'inquiry' && formData.status === 'active' ? 'Confirm Move In' : 'Save'}
+                                </button>
                             </div>
                         </form>
                     </div>

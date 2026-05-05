@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TenantDashboard.css';
 import mockData from '../../data/mockdata.json';
 
-/* ─── Data Fetching ─── */
 const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = mockData.tenants.find(t => (t as any).userId === currentUser.id)
@@ -113,7 +111,6 @@ export default function TenantDashboard() {
   return (
     <div className="page">
 
-      {/* ── Header ── */}
       <div className="pageHeader">
         <div>
           <h1 className="pageTitle">Overview</h1>
@@ -121,7 +118,6 @@ export default function TenantDashboard() {
         </div>
       </div>
 
-      {/* ── Alert ── */}
       {days <= 30 && expireDate && (
         <div className={`alert ${days <= 7 ? 'alertRed' : 'alertOrange'}`}>
           <div className={`alertIcon ${days <= 7 ? 'alertIconRed' : 'alertIconOrange'}`}>
@@ -142,7 +138,6 @@ export default function TenantDashboard() {
         </div>
       )}
 
-      {/* ── Stat cards ── */}
       <div className="statGrid">
         {stats.map(s => (
           <div key={s.label} className="statCard">
@@ -162,10 +157,7 @@ export default function TenantDashboard() {
         ))}
       </div>
 
-      {/* ── Bottom grid ── */}
       <div className="bottomGrid">
-
-        {/* ── Room info panel ── */}
         <div className="panel">
           <div className="panelHeader">
             <svg width="15" height="15" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
@@ -196,10 +188,7 @@ export default function TenantDashboard() {
           </button>
         </div>
 
-        {/* ── Right column ── */}
         <div className="rightCol">
-
-          {/* Maintenance panel */}
           <div className="panel">
             <div className="panelHeader">
               <svg width="15" height="15" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
@@ -231,7 +220,6 @@ export default function TenantDashboard() {
             </button>
           </div>
 
-          {/* Quick links panel */}
           <div className="panel">
             <div className="panelHeader">
               <svg width="15" height="15" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">

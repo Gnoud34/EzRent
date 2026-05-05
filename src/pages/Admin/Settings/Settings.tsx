@@ -11,15 +11,11 @@ interface UserProfile {
 }
 
 const Settings: React.FC = () => {
-    // 1. Initialize user state safely
     const [user, setUser] = useState<UserProfile>(() => {
         const saved = localStorage.getItem('user');
         return saved ? JSON.parse(saved) : { name: 'Guest', email: '', phoneNumber: '' };
     });
-
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    // 2. Form state - linked to user data
     const [formData, setFormData] = useState({
         name: user.name,
         email: user.email,
@@ -32,7 +28,6 @@ const Settings: React.FC = () => {
         return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : '??';
     };
 
-    // Generic input handler
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -41,7 +36,6 @@ const Settings: React.FC = () => {
     const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            // Check file size (localStorage limit is ~5MB)
             if (file.size > 1024 * 1024) {
                 alert("Image too large. Please choose a file under 1MB.");
                 return;
@@ -77,8 +71,6 @@ const Settings: React.FC = () => {
         setUser(updatedUser); // Update local state
         
         alert('Settings saved successfully!');
-        // Note: If Header uses AuthContext, it would update automatically without reload.
-        // window.location.reload(); 
     };
 
     return (
@@ -92,7 +84,6 @@ const Settings: React.FC = () => {
                         <h2>Settings</h2>
                         <p>Manage your profile and property information</p>
                     </div>
-
                     <div className="settings-card">
                         <div className="avatar-section">
                             <div className="large-avatar-wrapper">
@@ -120,7 +111,6 @@ const Settings: React.FC = () => {
                                 )}
                             </div>
                         </div>
-
                         <form className="settings-form" onSubmit={handleSave}>
                             <div className="form-group">
                                 <label><i className="bi bi-person"></i> Full Name</label>
@@ -132,7 +122,6 @@ const Settings: React.FC = () => {
                                     required
                                 />
                             </div>
-
                             <div className="form-group">
                                 <label><i className="bi bi-envelope"></i> Email Address</label>
                                 <input
@@ -143,7 +132,6 @@ const Settings: React.FC = () => {
                                     required
                                 />
                             </div>
-
                             <div className="form-group">
                                 <label><i className="bi bi-telephone"></i> Phone Number</label>
                                 <input
@@ -153,7 +141,6 @@ const Settings: React.FC = () => {
                                     onChange={handleChange}
                                 />
                             </div>
-
                             <button type="submit" className="btn-save-settings">Save Changes</button>
                         </form>
                     </div>
