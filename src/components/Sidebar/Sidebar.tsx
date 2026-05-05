@@ -9,7 +9,6 @@ const Sidebar: React.FC = () => {
         { name: 'Room', icon: 'bi-door-open-fill', path: '/rooms' },
         { name: 'Tenant', icon: 'bi-people-fill', path: '/tenants' },
         { name: 'Maintenance', icon: 'bi-tools', path: '/maintenance' },
-        { name: 'User Request', icon: 'bi-gear-fill', path: '/UserRequest' },
         { name: 'Setting', icon: 'bi-gear-fill', path: '/settings' },
     ];
 
