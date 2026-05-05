@@ -1,0 +1,88 @@
+.pf-page { padding: 24px; background: #F9FAFB; min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+.pf-page-header { margin-bottom: 20px; }
+.pf-sub { font-size: 13px; color: #6B7280; margin: 0; }
+
+.pf-toast { display: flex; align-items: center; gap: 8px; background: #F0FDF4; border: 1px solid #BBF7D0; color: #16A34A; border-radius: 9px; padding: 12px 16px; font-size: 14px; font-weight: 500; margin-bottom: 20px; }
+
+/* Grid */
+.pf-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+
+/* ── Left ── */
+.pf-left { background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; padding: 24px; }
+
+/* Avatar row */
+.pf-avatar-row { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+.pf-avatar { width: 64px; height: 64px; border-radius: 50%; background: #BFDBFE; color: #1D4ED8; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pf-avatar-meta { flex: 1; }
+.pf-avatar-name { font-size: 16px; font-weight: 700; color: #111827; margin: 0 0 2px; }
+.pf-avatar-role { font-size: 13px; color: #6B7280; margin: 0 0 8px; }
+.pf-status-badge { display: inline-block; background: #DCFCE7; color: #16A34A; font-size: 12px; font-weight: 600; padding: 3px 12px; border-radius: 20px; }
+
+/* Fields */
+.pf-fields { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+.pf-field-group { display: flex; flex-direction: column; gap: 6px; }
+.pf-label { font-size: 12px; font-weight: 500; color: #6B7280; }
+.pf-input {
+  border: 1.5px solid #2563EB;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+  background: #1E293B;
+  color: #F1F5F9;
+  outline: none;
+}
+.pf-value {
+  background: #1E293B;
+  color: #F1F5F9;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Actions */
+.pf-actions { display: flex; gap: 10px; }
+.pf-btn-save {
+  flex: 1;
+  background: #1E293B;
+  color: #F1F5F9;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.pf-btn-save:hover { background: #0F172A; }
+.pf-btn-cancel {
+  flex: 1;
+  background: #1E293B;
+  color: #F1F5F9;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.pf-btn-cancel:hover { background: #0F172A; }
+
+/* ── Right ── */
+.pf-right { display: flex; flex-direction: column; gap: 16px; }
+
+.pf-panel { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px; }
+.pf-panel-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 14px; }
+.pf-panel-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F3F4F6; }
+.pf-panel-row:last-child { border-bottom: none; }
+.pf-panel-label { font-size: 13px; color: #9CA3AF; }
+.pf-panel-value { font-size: 13px; font-weight: 600; color: #374151; text-align: right; }
+.pf-panel-value--blue   { color: #2563EB; }
+.pf-panel-value--orange { color: #EA580C; }
+
+/* Responsive */
+@media (max-width: 900px) { .pf-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .pf-page { padding: 16px 12px; } }

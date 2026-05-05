@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import mockData from '../../data/mockdata.json';
+import Sidebar from '../../../components/Sidebar/Sidebar';
+import mockData from '../../../data/mockdata.json';
 import './Tenants.css';
-import Header from '../../components/Header/Header';
+import Header from '../../../components/Header/Header';
+import { useNavigate } from 'react-router-dom';
 
 interface Tenant {
     id: string;
@@ -11,40 +12,52 @@ interface Tenant {
     roomId: string;
     status: 'inquiry' | 'active' | 'expired';
     moveInDate?: string;
-    contractEndDate?: string;
+    expireDate?: string;
     note?: string;
 }
 
 const Tenants: React.FC = () => {
+    const navigate = useNavigate();
+
+
     const [activeTab, setActiveTab] = useState<'inquiry' | 'active' | 'expired'>('active');
     const [tenants, setTenants] = useState<Tenant[]>(mockData.tenants as Tenant[]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTenant, setEditingTenant] = useState<Tenant | null>(null);
+
 
     const [formData, setFormData] = useState<{
         name: string;
         phone: string;
         roomId: string;
         moveInDate: string;
-        contractEndDate: string;
+        expireDate: string;
         status: Tenant['status'];
         note: string;
     }>({
-        name: '', phone: '', roomId: '', moveInDate: '', contractEndDate: '', status: 'active', note: ''
+        name: '', phone: '', roomId: '', moveInDate: '', expireDate: '', status: 'active', note: ''
     });
 
     const getRoomNumber = (roomId: string) => mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
 
     const isExpired = (tenant: Tenant) => {
-        if (!tenant.contractEndDate) return false;
-        return new Date(tenant.contractEndDate) < new Date();
+        if (!tenant.expireDate) return false;
+        return new Date(tenant.expireDate) < new Date();
     };
 
     const filteredTenants = tenants.filter(t => t.status === activeTab);
 
     const openAddModal = () => {
         setEditingTenant(null);
-        setFormData({ name: '', phone: '', roomId: '', moveInDate: '', contractEndDate: '', status: 'active', note: '' });
+        setFormData({
+            name: '',
+            phone: '',
+            roomId: '',
+            moveInDate: '',
+            expireDate: '',
+            status: activeTab === 'inquiry' ? 'inquiry' : 'active', // Tự động set status theo tab
+            note: ''
+        });
         setIsModalOpen(true);
     };
 
@@ -52,8 +65,22 @@ const Tenants: React.FC = () => {
         setEditingTenant(tenant);
         setFormData({
             name: tenant.name, phone: tenant.phone, roomId: tenant.roomId,
-            moveInDate: tenant.moveInDate || '', contractEndDate: tenant.contractEndDate || '',
+            moveInDate: tenant.moveInDate || '', expireDate: tenant.expireDate || '',
             status: tenant.status, note: tenant.note || ''
+        });
+        setIsModalOpen(true);
+    };
+
+    const handleMoveToActive = (tenant: Tenant) => {
+        setEditingTenant(tenant);
+        setFormData({
+            name: tenant.name,
+            phone: tenant.phone,
+            roomId: '',
+            moveInDate: new Date().toISOString().split('T')[0], // Mặc định ngày hôm nay
+            expireDate: '',
+            status: 'active',
+            note: tenant.note || ''
         });
         setIsModalOpen(true);
     };
@@ -85,7 +112,7 @@ const Tenants: React.FC = () => {
                     <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
                         <h2 style={{ margin: 0 }}>Tenant List</h2>
                         <button className="btn-add" onClick={openAddModal} style={{ background: '#2563eb', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>
-                            + Add New Tenant
+                            {activeTab === 'inquiry' ? '+ Add New Inquiry' : '+ Add New Tenant'}
                         </button>
                     </div>
 
@@ -100,23 +127,39 @@ const Tenants: React.FC = () => {
                             <tr>
                                 <th>Name</th>
                                 <th>Phone</th>
-                                <th>Room</th>
+                                {activeTab !== 'inquiry' && <th>Room</th>}
                                 <th>Status</th>
+                                <th>Note</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredTenants.map(t => (
                                 <tr key={t.id}>
-                                    <td><strong>{t.name}</strong></td>
-                                    <td>{t.phone}</td>
-                                    <td>{getRoomNumber(t.roomId)}</td>
                                     <td>
-                                        <span className={`status ${t.status === 'expired' ? 'left' : isExpired(t) ? 'expired' : 'active'}`}>
-                                            {t.status === 'active' ? 'Active' : 'Inquiry'}
+                                        <span
+                                            className="tenant-name-link"
+                                            onClick={() => navigate('/user-detail', { state: { tenantData: t } })}
+                                        >
+                                            {t.name}
                                         </span>
                                     </td>
+                                    <td>{t.phone}</td>
+                                    {activeTab !== 'inquiry' && <td>{getRoomNumber(t.roomId)}</td>}
+                                    <td>
+                                        <span className={`status ${t.status === 'expired' ? 'left' : isExpired(t) ? 'expired' : 'active'}`}>
+                                            {t.status.toUpperCase()}
+                                        </span>
+                                    </td>
+                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={t.note}>
+                                        {t.note || '-'}
+                                    </td>
                                     <td className="actions-cell">
+                                        {activeTab === 'inquiry' && (
+                                            <button className="btn-move" onClick={() => handleMoveToActive(t)} style={{ background: '#10b981', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', marginRight: '5px', cursor: 'pointer' }}>
+                                                Move to Active
+                                            </button>
+                                        )}
                                         {activeTab === 'active' && <button className="btn-move" onClick={() => moveToHistory(t.id)}>Move Out</button>}
                                         <button className="btn-edit" onClick={() => openEditModal(t)}>Edit</button>
                                         <button className="btn-delete" onClick={() => handleDelete(t.id)}>Delete</button>
@@ -130,36 +173,45 @@ const Tenants: React.FC = () => {
                 {isModalOpen && (
                     <div className="modal">
                         <form onSubmit={handleSave} className="modal-box">
-                            <h3>{editingTenant ? 'Edit Tenant' : 'Add New Tenant'}</h3>
-                            
-                            <label style={{fontSize: '14px', fontWeight: 'bold', color: '#334155'}}>Full Name</label>
+                            <h3>{editingTenant ? (formData.status === 'active' && editingTenant.status === 'inquiry' ? 'Confirm Move-in' : 'Edit') : 'Add New'}</h3>
+
+                            <label className="form-label">Full Name</label>
                             <input placeholder="Enter name" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
 
-                            <label style={{fontSize: '14px', fontWeight: 'bold', color: '#334155'}}>Phone</label>
+                            <label className="form-label">Phone</label>
                             <input placeholder="Enter phone" required value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
 
-                            <label style={{fontSize: '14px', fontWeight: 'bold', color: '#334155'}}>Room</label>
-                            <select value={formData.roomId} onChange={e => setFormData({ ...formData, roomId: e.target.value })} required>
-                                <option value="">Select room</option>
-                                {mockData.rooms.map(r => {
-                                    // Logic: Một phòng bận nếu có ai đó đang ở (active) và ID người đó không phải người đang sửa
-                                    const isOccupied = tenants.some(t => t.roomId === r.id && t.status === 'active' && t.id !== editingTenant?.id);
-                                    return (
-                                        <option key={r.id} value={r.id} disabled={isOccupied} style={{ fontWeight: isOccupied ? 'bold' : 'normal' }}>
-                                            Room {r.number} {isOccupied ? '- (Occupied)' : '- (Available)'}
-                                        </option>
-                                    );
-                                })}
-                            </select>
+                            {formData.status === 'active' && (
+                                <>
+                                    <label className="form-label">Room</label>
+                                    <select value={formData.roomId} onChange={e => setFormData({ ...formData, roomId: e.target.value })} required>
+                                        <option value="">Select room</option>
+                                        {mockData.rooms.map(r => {
+                                            const isOccupied = tenants.some(t => t.roomId === r.id && t.status === 'active' && t.id !== editingTenant?.id);
+                                            return (
+                                                <option key={r.id} value={r.id} disabled={isOccupied}>
+                                                    Room {r.number} {isOccupied ? '(Occupied)' : ''}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
 
-                            <input type="date" value={formData.moveInDate} onChange={e => setFormData({ ...formData, moveInDate: e.target.value })} />
-                            <input type="date" value={formData.contractEndDate} onChange={e => setFormData({ ...formData, contractEndDate: e.target.value })} />
+                                    <label className="form-label">Move-in Date</label>
+                                    <input type="date" value={formData.moveInDate} onChange={e => setFormData({ ...formData, moveInDate: e.target.value })} required />
 
-                            <textarea placeholder="Requirements..." value={formData.note} onChange={e => setFormData({ ...formData, note: e.target.value })} />
+                                    <label className="form-label">Contract End Date</label>
+                                    <input type="date" value={formData.expireDate} onChange={e => setFormData({ ...formData, expireDate: e.target.value })} required />
+                                </>
+                            )}
+
+                            <label className="form-label">{formData.status === 'inquiry' ? 'Requirements' : 'Notes'}</label>
+                            <textarea placeholder="..." value={formData.note} onChange={e => setFormData({ ...formData, note: e.target.value })} />
 
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                                <button type="submit">Save</button>
+                                <button type="submit" style={{ background: '#2563eb', color: 'white' }}>
+                                    {editingTenant?.status === 'inquiry' && formData.status === 'active' ? 'Confirm Move In' : 'Save'}
+                                </button>
                             </div>
                         </form>
                     </div>

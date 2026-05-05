@@ -1,101 +1,96 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Tenants from './pages/Tenants/Tenants'
-import Rooms from './pages/Rooms/Rooms';
-import Auth from './pages/Auth/Auth';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import Settings from './pages/Settings/Settings';
-import Maintenances from './pages/Maintenances/Maintenances';
-import UserRequest from './pages/UserRequest/UserRequest';
-import LandingPage from './LandingPage';
 import type { JSX } from 'react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles: string[] }) => {
-  const userJson = localStorage.getItem('user');
-  const user = userJson ? JSON.parse(userJson) : null;
+// ── Admin ──
+import Dashboard    from './pages/Admin/Dashboard/Dashboard';
+import Tenants      from './pages/Admin/Tenants/Tenants';
+import Rooms        from './pages/Admin/Rooms/Rooms';
+import Auth         from './pages/Admin/Auth/Auth';
+import Settings     from './pages/Admin/Settings/Settings';
+import Maintenances from './pages/Admin/Maintenances/Maintenances';
+import UserRequest  from './pages/Admin/UserRequest/UserRequest';
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+// ── Guest ──
+import LandingPage from './pages/Guest/LandingPage';
+import RoomListing from './pages/Guest/RoomListing';
+import RoomDetail  from './pages/Guest/RoomDetail';
 
-  if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/landing" replace />;
-  }
+// ── Tenant layout ──
+import UserLayout from './components/Tenant/UserLayout';
 
+// ── Tenant pages ──
+import TenantDashboard from './pages/Tenant/TenantDashboard';
+import MyRoom          from './pages/Tenant/MyRoom';
+import Profile         from './pages/Tenant/Profile';
+import TenantMaintenance     from './pages/Tenant/TenantMaintenance';
+
+/* ─── Route guard ─── */
+const ProtectedRoute = ({
+  children,
+  allowedRoles,
+}: {
+  children: JSX.Element;
+  allowedRoles: string[];
+}) => {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user)                             return <Navigate to="/login" replace />;
+  if (!allowedRoles.includes(user.role)) return <Navigate to="/login" replace />;
   return children;
+};
+
+/* Redirect sau login theo role */
+const RoleRedirect = () => {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user)                  return <Navigate to="/login"            replace />;
+  if (user.role === 'admin')  return <Navigate to="/dashboard"        replace />;
+  if (user.role === 'tenant') return <Navigate to="/tenant/dashboard" replace />;
+  return <Navigate to="/login" replace />;
 };
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Auth />} />
-        
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* ── Guest (không cần đăng nhập) ── */}
+        <Route path="/"          element={<LandingPage />} />
+        <Route path="/rooms"     element={<RoomListing />} />
+        <Route path="/rooms/:id" element={<RoomDetail />} />
+        <Route path="/login"     element={<Auth />} />
+        <Route path="/home"      element={<RoleRedirect />} />
 
-        <Route 
-          path="/landing" 
+        {/* ── Tenant ── */}
+        <Route
+          path="/tenant"
           element={
-            <ProtectedRoute allowedRoles={['tenant', 'admin']}>
-              <LandingPage />
+            <ProtectedRoute allowedRoles={['tenant']}>
+              <UserLayout />
             </ProtectedRoute>
-          } 
-        />
-        
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Dashboard />
-            </ProtectedRoute>
-          } 
-        />
-        
-        <Route 
-          path="/tenants" 
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Tenants />
-            </ProtectedRoute>
-          } 
-        />
+          }
+        >
+          <Route index              element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard"   element={<TenantDashboard />} />
+          <Route path="my-room"     element={<MyRoom />} />
+          <Route path="profile"     element={<Profile />} />
+          <Route path="maintenance" element={<TenantMaintenance />} />
+        </Route>
 
-        <Route 
-          path="/rooms" 
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Rooms />
-            </ProtectedRoute>
-          } 
-        />
+        {/* ── Admin ── */}
+        <Route path="/dashboard"
+          element={<ProtectedRoute allowedRoles={['admin']}><Dashboard /></ProtectedRoute>} />
+        <Route path="/tenants"
+          element={<ProtectedRoute allowedRoles={['admin']}><Tenants /></ProtectedRoute>} />
+        <Route path="/rooms-admin"
+          element={<ProtectedRoute allowedRoles={['admin']}><Rooms /></ProtectedRoute>} />
+        <Route path="/maintenance"
+          element={<ProtectedRoute allowedRoles={['admin']}><Maintenances /></ProtectedRoute>} />
+        <Route path="/UserRequest"
+          element={<ProtectedRoute allowedRoles={['admin']}><UserRequest /></ProtectedRoute>} />
+        <Route path="/settings"
+          element={<ProtectedRoute allowedRoles={['admin', 'tenant']}><Settings /></ProtectedRoute>} />
 
-        <Route 
-          path="/maintenance" 
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Maintenances />
-            </ProtectedRoute>
-          } 
-        />
-
-        <Route 
-          path="/settings" 
-          element={
-            <ProtectedRoute allowedRoles={['admin', 'tenant']}>
-              <Settings />
-            </ProtectedRoute>
-          } 
-        />
-                <Route 
-          path="/UserRequest" 
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <UserRequest />
-            </ProtectedRoute>
-          } 
-        />
-
-        <Route path="*" element={<Navigate to="/login" />} />
+        {/* ── Fallback ── */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

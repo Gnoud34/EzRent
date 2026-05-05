@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import mockData from '../../data/mockdata.json'; 
+import mockData from '../../../data/mockdata.json'; 
 import './Auth.css';
 
 const Auth: React.FC = () => {
@@ -28,7 +28,7 @@ const Auth: React.FC = () => {
                 if (userFound.role === 'admin') {
                     navigate('/dashboard');
                 } else if (userFound.role === 'tenant') {
-                    navigate('/landing');
+                    navigate('/tenant/dashboard');
                 } else {
                     navigate('/');
                 }

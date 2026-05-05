@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import mockData from '../../data/mockdata.json';
+import Sidebar from '../../../components/Sidebar/Sidebar';
+import mockData from '../../../data/mockdata.json';
 import './Maintenances.css';
-import Header from '../../components/Header/Header';
+import Header from '../../../components/Header/Header';
 
 interface MaintenanceRequest {
     id: string;
     roomNumber: string;
+    title: string; // Thêm trường title (Category)
     description: string;
     status: string;
     createdAt: string;
@@ -14,13 +16,23 @@ interface MaintenanceRequest {
 }
 
 const Maintenances: React.FC = () => {
-    const [requests, setRequests] = useState<MaintenanceRequest[]>(mockData.maintenanceRequests);
-    const [filter, setFilter] = useState('all');
+    const [requests, setRequests] = useState<MaintenanceRequest[]>(mockData.maintenanceRequests as any);
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [categoryFilter, setCategoryFilter] = useState('all'); // State cho lọc Category
 
+    // Danh sách các loại category để hiển thị tag
+    const categories = [
+        { id: 'all', label: 'All Categories' },
+        { id: 'Maintenance', label: 'Maintenance' },
+        { id: 'Room Issue', label: 'Room Issue' },
+        { id: 'Early Checkout', label: 'Early Checkout' },
+        { id: 'Other', label: 'Other' }
+    ];
 
     const filteredRequests = requests.filter(req => {
-        if (filter === 'all') return true;
-        return req.status === filter;
+        const matchesStatus = statusFilter === 'all' || req.status === statusFilter;
+        const matchesCategory = categoryFilter === 'all' || req.title === categoryFilter;
+        return matchesStatus && matchesCategory;
     });
 
     const getTenantName = (tenantId: string) => {
@@ -40,15 +52,32 @@ const Maintenances: React.FC = () => {
                 <Header pageTitle="Maintenance Management" />
 
                 <div className="dashboard-content">
-                    <div className="section-header">
+                    <div className="section-header-main">
                         <div>
                             <h2>Repair Requests</h2>
                             <p>Track and manage room maintenance</p>
                         </div>
-                        <div className="filter-group">
-                            <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>All</button>
-                            <button className={filter === 'pending' ? 'active' : ''} onClick={() => setFilter('pending')}>Pending</button>
-                            <button className={filter === 'resolved' ? 'active' : ''} onClick={() => setFilter('resolved')}>Resolved</button>
+
+                        <div className="filters-container">
+                            {/* Filter theo Trạng thái */}
+                            <div className="filter-group">
+                                <button className={statusFilter === 'all' ? 'active' : ''} onClick={() => setStatusFilter('all')}>All Status</button>
+                                <button className={statusFilter === 'pending' ? 'active' : ''} onClick={() => setStatusFilter('pending')}>Pending</button>
+                                <button className={statusFilter === 'resolved' ? 'active' : ''} onClick={() => setStatusFilter('resolved')}>Resolved</button>
+                            </div>
+
+                            {/* Filter theo Danh mục (Category/Title) */}
+                            <div className="category-tags">
+                                {categories.map(cat => (
+                                    <span
+                                        key={cat.id}
+                                        className={`category-tag ${categoryFilter === cat.id ? 'active' : ''}`}
+                                        onClick={() => setCategoryFilter(cat.id)}
+                                    >
+                                        {cat.label}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
@@ -57,6 +86,7 @@ const Maintenances: React.FC = () => {
                             <thead>
                                 <tr>
                                     <th>Room</th>
+                                    <th>Category</th> {/* Thêm cột Category */}
                                     <th>Description</th>
                                     <th>Requested By</th>
                                     <th>Date</th>
@@ -68,9 +98,14 @@ const Maintenances: React.FC = () => {
                                 {filteredRequests.map(req => (
                                     <tr key={req.id}>
                                         <td className="room-col"><strong>{req.roomNumber}</strong></td>
-                                        <td className="desc-col">{req.description}</td>
+                                        <td>
+                                            <span className="table-category-label">{req.title}</span>
+                                        </td>
+                                        <td className="desc-col">
+                                            <div className="desc-text" title={req.description}>{req.description}</div>
+                                        </td>
                                         <td>{getTenantName(req.createdBy)}</td>
-                                        <td>{new Date(req.createdAt).toLocaleDateString()}</td>
+                                        <td>{req.createdAt}</td>
                                         <td>
                                             <span className={`status-badge ${req.status}`}>
                                                 {req.status.toUpperCase()}
@@ -93,7 +128,7 @@ const Maintenances: React.FC = () => {
                             </tbody>
                         </table>
                         {filteredRequests.length === 0 && (
-                            <div className="no-data">No maintenance requests found.</div>
+                            <div className="no-data">No requests found for this filter.</div>
                         )}
                     </div>
                 </div>

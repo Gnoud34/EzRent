@@ -38,6 +38,13 @@
             "capacity": 1,
             "area": 20,
             "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Single room with AC",
             "tenantIds": [
@@ -50,6 +57,13 @@
             "capacity": 2,
             "area": 25,
             "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Double room",
             "tenantIds": [
@@ -63,6 +77,13 @@
             "capacity": 1,
             "area": 20,
             "floor": 1,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "available",
             "notes": "Single room",
             "tenantIds": []
@@ -75,6 +96,13 @@
             "floor": 1,
             "status": "available",
             "notes": "Double room with balcony",
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "tenantIds": []
         },
         {
@@ -83,6 +111,13 @@
             "capacity": 1,
             "area": 20,
             "floor": 2,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "occupied",
             "notes": "Single room",
             "tenantIds": [
@@ -95,11 +130,17 @@
             "capacity": 2,
             "area": 30,
             "floor": 2,
-            "status": "occupied",
+            "status": "available",
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "notes": "Double room with AC",
             "tenantIds": [
-                "4",
-                "6"
+                "4"
             ]
         },
         {
@@ -108,9 +149,18 @@
             "capacity": 1,
             "area": 20,
             "floor": 2,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi"
+            ],
             "status": "available",
             "notes": "Single room",
-            "tenantIds": []
+            "tenantIds": [
+                "6"
+            ]
         },
         {
             "id": "8",
@@ -118,6 +168,14 @@
             "capacity": 2,
             "area": 30,
             "floor": 2,
+            "amenities": [
+                "Giường",
+                "Tủ quần áo",
+                "Bàn học",
+                "Điều hòa",
+                "Wifi",
+                "Ban công"
+            ],
             "status": "available",
             "notes": "Double room",
             "tenantIds": []
@@ -129,7 +187,8 @@
             "name": "Nguyen Van An",
             "phone": "+84 123 456 789",
             "roomId": "1",
-            "moveInDate": "2026-01-15",
+            "moveInDate": "2025-01-15",
+            "expireDate": "2026-10-14",
             "status": "active",
             "userId": "u1"
         },
@@ -139,6 +198,7 @@
             "phone": "+84 123 456 783",
             "roomId": "2",
             "moveInDate": "2026-02-01",
+            "expireDate": "2027-02-01",
             "status": "active",
             "userId": "u2"
         },
@@ -164,6 +224,7 @@
             "phone": "+84 123 456 735",
             "roomId": "5",
             "moveInDate": "2025-12-10",
+            "expireDate": "2026-12-10",
             "status": "active"
         },
         {
@@ -172,6 +233,7 @@
             "phone": "+84 123 456 726",
             "roomId": "6",
             "moveInDate": "2026-03-05",
+            "expireDate": "2027-03-05",
             "status": "active"
         },
         {
@@ -180,6 +242,7 @@
             "phone": "+84 123 456 732",
             "roomId": "2",
             "moveInDate": "2026-02-01",
+            "expireDate": "2027-02-01",
             "status": "active"
         },
         {
@@ -188,6 +251,7 @@
             "phone": "+84 123 456 712",
             "roomId": "6",
             "moveInDate": "2026-03-05",
+            "expireDate": "2027-03-05",
             "status": "active"
         },
         {
@@ -196,6 +260,7 @@
             "phone": "+84 900 111 222",
             "roomId": "1",
             "moveInDate": "2024-10-01",
+            "expireDate": "2025-10-01",
             "status": "expired",
             "note": "Đã trả phòng đúng hạn, hoàn cọc xong"
         }
@@ -204,7 +269,8 @@
         {
             "id": "1",
             "roomNumber": "R101",
-            "description": "Air conditioner not cooling properly",
+            "title": "Maintenance",
+            "description": "Máy lạnh chạy nhưng không ra hơi lạnh, có tiếng kêu lạ.",
             "status": "pending",
             "createdAt": "2026-04-08",
             "createdBy": "1"
@@ -212,10 +278,38 @@
         {
             "id": "2",
             "roomNumber": "R202",
-            "description": "Leaking faucet in bathroom",
+            "title": "Maintenance",
+            "description": "Vòi nước trong phòng tắm bị rò rỉ. Nước chảy liên tục dù đã tắt van.",
             "status": "pending",
             "createdAt": "2026-04-09",
             "createdBy": "4"
+        },
+        {
+            "id": "3",
+            "roomNumber": "R201",
+            "title": "Maintenance",
+            "description": "Bồn cầu trong phòng tắm bị tắc nghẽn, nước không thoát được.",
+            "status": "resolved",
+            "createdAt": "2026-04-12",
+            "createdBy": "3"
+        },
+        {
+            "id": "401",
+            "roomNumber": "R202",
+            "title": "Room Issue",
+            "description": "Tôi đang ở phòng đôi R202 một mình và muốn đăng ký ở ghép một mình (không nhận thêm người mới) để đảm bảo riêng tư. Vui lòng phản hồi chi phí chênh lệch.",
+            "status": "pending",
+            "createdAt": "2026-05-05",
+            "createdBy": "4"
+        },
+        {
+            "id": "4",
+            "roomNumber": "R203",
+            "title": "Early Checkout",
+            "description": "Muốn làm thủ tục trả phòng sớm vào cuối tháng sau.",
+            "status": "pending",
+            "createdAt": "2026-05-01",
+            "createdBy": "6"
         }
     ]
 }

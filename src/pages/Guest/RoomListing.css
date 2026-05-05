@@ -1,0 +1,296 @@
+/* ═══════════════════════════════════
+   RoomListing.css — Guest role
+═══════════════════════════════════ */
+
+.rl-root {
+  min-height: 100vh;
+  background: #F9FAFB;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Navbar ── */
+.rl-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #E5E7EB;
+  z-index: 100;
+}
+.rl-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rl-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.rl-logo:hover { opacity: 0.8; }
+.rl-btn-login {
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.rl-btn-login:hover { background: #1D4ED8; }
+
+/* ── Body container ── */
+.rl-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 72px;
+}
+
+/* ── Page header ── */
+.rl-page-header {
+  margin-bottom: 32px;
+}
+.rl-page-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+}
+.rl-page-header p {
+  font-size: 15px;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* ── Toolbar ── */
+.rl-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* Search box */
+.rl-search-box {
+  flex: 1;
+  min-width: 280px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.rl-search-box svg {
+  position: absolute;
+  left: 14px;
+  pointer-events: none;
+}
+.rl-search-box input {
+  width: 100%;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  padding: 11px 14px 11px 40px;
+  font-size: 14px;
+  color: #111827;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.rl-search-box input:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Filter buttons */
+.rl-filter-btns {
+  display: flex;
+  gap: 8px;
+}
+.rl-filter-btn {
+  background: #fff;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.rl-filter-btn:hover {
+  background: #F9FAFB;
+  border-color: #9CA3AF;
+}
+.rl-filter-btn--active {
+  background: #2563EB;
+  color: #fff;
+  border-color: #2563EB;
+}
+.rl-filter-btn--active:hover {
+  background: #1D4ED8;
+  border-color: #1D4ED8;
+}
+
+/* ── Result count ── */
+.rl-count {
+  font-size: 13px;
+  color: #9CA3AF;
+  margin: 0 0 16px;
+}
+
+/* ── Empty state ── */
+.rl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+}
+.rl-empty svg {
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+.rl-empty p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #6B7280;
+  margin: 0 0 6px;
+}
+.rl-empty span {
+  font-size: 14px;
+  color: #9CA3AF;
+}
+
+/* ── Grid ── */
+.rl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1000px) {
+  .rl-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .rl-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Room card ── */
+.rl-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.rl-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  border-color: #BFDBFE;
+}
+
+/* Card image */
+.rl-card-img {
+  height: 160px;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.rl-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.rl-status-badge--green { background: #DCFCE7; color: #16A34A; }
+.rl-status-badge--gray  { background: #F3F4F6; color: #6B7280; }
+
+/* Card body */
+.rl-card-body {
+  padding: 16px;
+}
+.rl-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.rl-card-top h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+.rl-card-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2563EB;
+  white-space: nowrap;
+}
+.rl-card-price small {
+  font-size: 11px;
+  font-weight: 400;
+  color: #9CA3AF;
+}
+
+.rl-card-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: #6B7280;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.rl-card-meta span {
+  white-space: nowrap;
+}
+
+.rl-card-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.rl-amenity-tag {
+  font-size: 11px;
+  font-weight: 500;
+  background: #EFF6FF;
+  color: #2563EB;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.rl-card-btn {
+  width: 100%;
+  background: #F9FAFB;
+  color: #2563EB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.rl-card-btn:hover {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+}
