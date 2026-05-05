@@ -3,16 +3,16 @@ import { useState, useEffect } from 'react';
 import './Profile.css';
 import mockData from '../../data/mockdata.json';
 type FormState = {
-  name:  string;
+  name: string;
   phone: string;
   email: string;
-  cccd:  string;
+  cccd: string;
 };
 
 function fmtDate(d: string) { return new Date(d).toLocaleDateString('vi-VN'); }
 function getDaysLeft(d: string) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const end   = new Date(d); end.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const end = new Date(d); end.setHours(0, 0, 0, 0);
   return Math.ceil((end.getTime() - today.getTime()) / 86_400_000);
 }
 function getInitials(name: string) {
@@ -21,20 +21,20 @@ function getInitials(name: string) {
 
 export default function Profile() {
   /* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
-  const storedUser    = JSON.parse(localStorage.getItem('user') || '{}');
-  const currentUser   = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
+  const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
   const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
     || mockData.tenants[0];
- const currentRoom   = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
+  const currentRoom = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
     || mockData.rooms[0]) as any;
 
   const [editMode, setEditMode] = useState(false);
-  const [saved, setSaved]       = useState(false);
-  const [form, setForm]         = useState<FormState>({
-    name:  currentTenant?.name  || storedUser.name  || '',
+  const [saved, setSaved] = useState(false);
+  const [form, setForm] = useState<FormState>({
+    name: currentTenant?.name || storedUser.name || '',
     phone: currentTenant?.phone || storedUser.phoneNumber || '',
     email: currentTenant?.email || storedUser.email || '',
-    cccd:  currentTenant?.idCard
+    cccd: currentTenant?.idCard
       ? currentTenant.idCard.replace(/(\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4')
       : '',
   });
@@ -47,10 +47,10 @@ export default function Profile() {
 
   const handleCancel = () => {
     setForm({
-      name:  currentTenant?.name  || storedUser.name  || '',
+      name: currentTenant?.name || storedUser.name || '',
       phone: currentTenant?.phone || storedUser.phoneNumber || '',
       email: currentTenant?.email || storedUser.email || '',
-      cccd:  currentTenant?.idCard
+      cccd: currentTenant?.idCard
         ? currentTenant.idCard.replace(/(\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4')
         : '',
     });
@@ -65,7 +65,7 @@ export default function Profile() {
   }, [saved]);
 
   const contractEnd = currentTenant?.expireDate || '';
-  const moveInDate  = currentTenant?.moveInDate || '';
+  const moveInDate = currentTenant?.moveInDate || '';
   const days = contractEnd ? getDaysLeft(contractEnd) : 999;
 
   return (
@@ -97,10 +97,9 @@ export default function Profile() {
 
           <div className="pf-fields">
             {([
-              { label: 'Họ và tên',     key: 'name',  type: 'text'  },
-              { label: 'Số điện thoại', key: 'phone', type: 'tel'   },
-              { label: 'Email',          key: 'email', type: 'email' },
-              { label: 'CCCD / CMND',   key: 'cccd',  type: 'text'  },
+              { label: 'Họ và tên', key: 'name', type: 'text' },
+              { label: 'Số điện thoại', key: 'phone', type: 'tel' },
+              { label: 'Email', key: 'email', type: 'email' },
             ] as const).map(field => (
               <div key={field.key} className="pf-field-group">
                 <label className="pf-label">{field.label}</label>
@@ -121,12 +120,12 @@ export default function Profile() {
           <div className="pf-actions">
             {editMode ? (
               <>
-                <button className="pf-btn-save"   onClick={handleSave}>Lưu</button>
+                <button className="pf-btn-save" onClick={handleSave}>Lưu</button>
                 <button className="pf-btn-cancel" onClick={handleCancel}>Hủy</button>
               </>
             ) : (
               <>
-                <button className="pf-btn-save"   onClick={() => setEditMode(true)}>Chỉnh sửa</button>
+                <button className="pf-btn-save" onClick={() => setEditMode(true)}>Chỉnh sửa</button>
                 <button className="pf-btn-cancel" onClick={handleCancel}>Đổi mật khẩu</button>
               </>
             )}
