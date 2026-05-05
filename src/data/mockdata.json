@@ -304,12 +304,12 @@
         },
         {
             "id": "4",
-            "roomNumber": "R203",
+            "roomNumber": "R102",
             "title": "Early Checkout",
             "description": "Muốn làm thủ tục trả phòng sớm vào cuối tháng sau.",
             "status": "pending",
             "createdAt": "2026-05-01",
-            "createdBy": "6"
+            "createdBy": "1"
         }
     ]
 }
