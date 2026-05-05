@@ -1,88 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserRequest.css';
-// import mockData from '../../data/mockdata.json';
 
 interface Request {
     id: string;
     roomNumber: string;
-    title: string;        // Khớp mock data
+    title: string;
     description: string;
-    status: string;
+    status: 'pending' | 'processing' | 'completed';
     createdAt: string;
-    createdBy: string;    // Khớp mock data (id của user)
+    createdBy: string;
 }
 
 const UserRequest: React.FC = () => {
-    // State cho các trường nhập liệu
-    const [title, setTitle] = useState('Maintenance'); // Dùng Category làm Title mặc định
+    // 1. Get current user info
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userRoom = user.roomId || user.roomNumber || "N/A";
+
+    // 2. State
+    const [title, setTitle] = useState('Maintenance');
     const [description, setDescription] = useState('');
     const [myRequests, setMyRequests] = useState<Request[]>([]);
 
-    // Lấy thông tin user hiện tại
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    // 3. Load data from localStorage on mount
+    useEffect(() => {
+        const savedRequests = localStorage.getItem(`requests_${user.id}`);
+        if (savedRequests) {
+            setMyRequests(JSON.parse(savedRequests));
+        }
+    }, [user.id]);
 
-    // useEffect(() => {
-    //     // Lọc danh sách yêu cầu dựa trên createdBy khớp với user.id
-    //     const filtered = mockData.maintenanceRequests.filter(req => req.createdBy === user.id);
-    //     setMyRequests(filtered as Request[]);
-    // }, [user.id]);
+    // 4. Save to localStorage whenever myRequests changes
+    useEffect(() => {
+        if (myRequests.length > 0) {
+            localStorage.setItem(`requests_${user.id}`, JSON.stringify(myRequests));
+        }
+    }, [myRequests, user.id]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!description.trim()) return;
 
-        // Tạo object mới khớp 100% các trường trong mock data
         const newRequest: Request = {
-            id: String(Date.now()), // Tạo ID duy nhất
-            roomNumber: "R203",     // Giả định phòng của user này
-            title: title,           // Lấy từ combo box
+            id: `REQ${Math.floor(Math.random() * 10000)}`,
+            roomNumber: userRoom,
+            title: title,
             description: description,
             status: 'pending',
-            createdAt: new Date().toISOString().split('T')[0], // Định dạng YYYY-MM-DD
-            createdBy: user.id      // Lưu ID người tạo
+            createdAt: new Date().toLocaleDateString('en-US'), // Changed to US format
+            createdBy: user.id
         };
 
         setMyRequests([newRequest, ...myRequests]);
+        
+        // Reset form
         setDescription('');
         setTitle('Maintenance');
-        alert('Yêu cầu đã được gửi thành công!');
+        
+        alert('Your request has been submitted successfully!');
     };
 
     return (
         <div className="user-request-container">
             <header className="user-header">
                 <h2>Room Service & Maintenance</h2>
-                <p>Gửi yêu cầu hỗ trợ về phòng hoặc dịch vụ.</p>
+                <p>Submit a support request for your room or building services.</p>
             </header>
 
             <div className="request-grid">
-                {/* Form gửi yêu cầu */}
+                {/* Form Section */}
                 <div className="request-form-card">
-                    <h3>Gửi yêu cầu mới</h3>
+                    <div className="card-header">
+                        <i className="bi bi-plus-circle"></i>
+                        <h3>New Request</h3>
+                    </div>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Số phòng</label>
-                            <input type="text" value="R203" disabled className="disabled-input" />
+                            <label>Room Number</label>
+                            <input 
+                                type="text" 
+                                value={userRoom} 
+                                disabled 
+                                className="disabled-input" 
+                            />
                         </div>
 
                         <div className="form-group">
-                            <label>Loại yêu cầu (Tiêu đề)</label>
+                            <label>Request Type</label>
                             <select
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 className="category-select"
                             >
-                                <option value="Sửa chữa thiết bị">Sửa chữa thiết bị (Maintenance)</option>
-                                <option value="Vấn đề về phòng">Vấn đề về phòng (Room Issue)</option>
-                                <option value="Yêu cầu trả phòng">Yêu cầu trả phòng (Early Checkout)</option>
-                                <option value="Yêu cầu khác">Khác (Other)</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Cleaning Service">Cleaning Service</option>
+                                <option value="Room Issue">Room Issue</option>
+                                <option value="Checkout Request">Checkout Request</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
 
                         <div className="form-group">
-                            <label>Mô tả chi tiết</label>
+                            <label>Detailed Description</label>
                             <textarea
-                                placeholder="Vui lòng mô tả chi tiết vấn đề bạn gặp phải..."
+                                placeholder="E.g., The living room light is flickering and needs replacement..."
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 rows={5}
@@ -90,34 +110,40 @@ const UserRequest: React.FC = () => {
                             ></textarea>
                         </div>
                         <button type="submit" className="btn-submit-request">
-                            <i className="bi bi-send"></i> Gửi yêu cầu
+                            <i className="bi bi-send-fill"></i> Submit Request
                         </button>
                     </form>
                 </div>
 
-                {/* Danh sách yêu cầu đã gửi */}
+                {/* History Section */}
                 <div className="request-history-card">
-                    <h3>Lịch sử yêu cầu của tôi</h3>
+                    <div className="card-header">
+                        <i className="bi bi-clock-history"></i>
+                        <h3>Request History</h3>
+                    </div>
                     <div className="history-list">
                         {myRequests.length === 0 ? (
-                            <p className="no-data">Bạn chưa có yêu cầu nào.</p>
+                            <div className="empty-state">
+                                <i className="bi bi-clipboard-x"></i>
+                                <p>You haven't submitted any requests yet.</p>
+                            </div>
                         ) : (
                             myRequests.map(req => (
                                 <div key={req.id} className="history-item">
-                                    <div className="history-info">
-                                        <div className="req-header">
-                                            <span className="req-id">#{req.id}</span>
-                                            <span className="req-category">{req.title}</span>
+                                    <div className="history-content">
+                                        <div className="req-top-bar">
+                                            <span className="req-id">{req.id}</span>
+                                            <span className={`status-pill ${req.status}`}>
+                                                {req.status === 'pending' ? 'Pending' : 'Processed'}
+                                            </span>
                                         </div>
+                                        <h4 className="req-title">{req.title}</h4>
                                         <p className="req-desc">{req.description}</p>
-                                        <div className="req-meta">
-                                            <small><i className="bi bi-clock"></i> {req.createdAt}</small>
-                                            <small style={{ marginLeft: '10px' }}><i className="bi bi-door-closed"></i> {req.roomNumber}</small>
+                                        <div className="req-footer">
+                                            <span><i className="bi bi-calendar3"></i> {req.createdAt}</span>
+                                            <span><i className="bi bi-geo-alt"></i> {req.roomNumber}</span>
                                         </div>
                                     </div>
-                                    <span className={`status-pill ${req.status}`}>
-                                        {req.status === 'pending' ? 'Đang chờ' : 'Đã xử lý'}
-                                    </span>
                                 </div>
                             ))
                         )}

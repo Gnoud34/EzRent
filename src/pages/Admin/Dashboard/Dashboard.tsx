@@ -1,12 +1,12 @@
 import React from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import StatCard from '../../../components/StatCard/StatCard';
-import Header from '../../../components/Header/Header'; // Import Header mới
+import Header from '../../../components/Header/Header';
 import mockData from '../../../data/mockdata.json';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-    // Logic tính toán chỉ số
+    // Metric calculation logic
     const totalRooms = mockData.rooms.length;
     const occupiedRooms = mockData.rooms.filter(r => r.status === 'occupied').length;
     const availableRooms = mockData.rooms.filter(r => r.status === 'available').length;
@@ -21,22 +21,22 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="dashboard-layout">
-            {/* 1. Sidebar bên trái */}
+            {/* 1. Left Sidebar */}
             <Sidebar />
 
-            {/* 2. Nội dung chính bên phải */}
+            {/* 2. Main Content Area */}
             <main className="main-view">
-                {/* Sử dụng Header chung đã thiết kế */}
+                {/* Standard Header component */}
                 <Header pageTitle="Dashboard" />
 
                 <div className="dashboard-content">
-                    {/* Phần tiêu đề Overview */}
+                    {/* Overview Header */}
                     <div className="section-title">
                         <h2>Overview</h2>
-                        <p>Current status of your boarding house</p>
+                        <p>Current status of your property management</p>
                     </div>
 
-                    {/* Hàng thẻ thống kê */}
+                    {/* Statistics Cards Row */}
                     <div className="stats-container">
                         <StatCard
                             title="Total Rooms"
@@ -68,9 +68,9 @@ const Dashboard: React.FC = () => {
                         />
                     </div>
 
-                    {/* Lưới hiển thị dữ liệu gần đây */}
+                    {/* Recent Data Grid */}
                     <div className="data-grid">
-                        {/* Cột Phòng gần đây */}
+                        {/* Recent Rooms Column */}
                         <div className="card-panel">
                             <h4 className="panel-header">
                                 <i className="bi bi-list-ul"></i> Recent Rooms
@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
                                 {recentRooms.map(room => (
                                     <div key={room.id} className="list-row">
                                         <div className="info-group">
-                                            <div className="info-main">{room.number}</div>
+                                            <div className="info-main">Room {room.number}</div>
                                             <div className="info-sub">Capacity: {room.capacity}</div>
                                         </div>
                                         <span className={`badge ${room.status === 'occupied' ? 'badge-occupied' : 'badge-available'}`}>
@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Cột Khách thuê gần đây */}
+                        {/* Recent Tenants Column */}
                         <div className="card-panel">
                             <h4 className="panel-header">
                                 <i className="bi bi-person-lines-fill"></i> Recent Tenants
@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
                                             <div className="info-main">{tenant.name}</div>
                                             <div className="info-sub">{tenant.phone}</div>
                                         </div>
-                                        <span className="room-label">{getRoomNumber(tenant.roomId)}</span>
+                                        <span className="room-label">Room {getRoomNumber(tenant.roomId)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
                 </div>
             </main>
 
-            {/* Giữ lại style CSS cho các thành phần đặc thù của Dashboard */}
+            {/* Dashboard-specific Styles */}
             <style>{`
                 .room-label {
                     background-color: #f0fdf4;

@@ -21,12 +21,12 @@ const ROOM_IMAGES = [
 ];
 
 const FEATURES = [
-  { icon: '🔒', title: 'An ninh 24/7',        desc: 'Camera giám sát và bảo vệ túc trực toàn thời gian.' },
-  { icon: '⚡', title: 'Điện nước đầy đủ',    desc: 'Hệ thống điện nước ổn định, tính phí minh bạch.' },
-  { icon: '🌐', title: 'WiFi tốc độ cao',     desc: 'Internet cáp quang miễn phí cho tất cả cư dân.' },
-  { icon: '🛠️', title: 'Bảo trì nhanh',      desc: 'Đội ngũ kỹ thuật xử lý sự cố trong vòng 24h.' },
-  { icon: '🅿️', title: 'Bãi đỗ xe',          desc: 'Hầm để xe rộng rãi, có hệ thống thẻ từ an toàn.' },
-  { icon: '🧹', title: 'Vệ sinh chung',       desc: 'Khu vực công cộng được vệ sinh sạch sẽ mỗi ngày.' },
+  { icon: '🔒', title: '24/7 Security',        desc: 'Surveillance cameras and guards on duty full-time.' },
+  { icon: '⚡', title: 'Utilities Included',    desc: 'Stable electricity and water systems with transparent billing.' },
+  { icon: '🌐', title: 'High-speed WiFi',      desc: 'Free fiber optic internet for all residents.' },
+  { icon: '🛠️', title: 'Quick Maintenance',    desc: 'Technical team handles issues within 24 hours.' },
+  { icon: '🅿️', title: 'Parking Lot',          desc: 'Spacious basement with secure keycard access.' },
+  { icon: '🧹', title: 'General Cleaning',     desc: 'Public areas are cleaned thoroughly every day.' },
 ];
 
 export default function LandingPage() {
@@ -46,10 +46,10 @@ export default function LandingPage() {
             <span>EzRent</span>
           </div>
           <div className="lp-nav-links">
-            <a href="#features">Tiện ích</a>
-            <a href="#rooms">Phòng trống</a>
-            <a href="#contact">Liên hệ</a>
-            <button className="lp-btn-outline" onClick={() => navigate('/login')}>Đăng nhập</button>
+            <a href="#features">Amenities</a>
+            <a href="#rooms">Available Rooms</a>
+            <a href="#contact">Contact</a>
+            <button className="lp-btn-outline" onClick={() => navigate('/login')}>Login</button>
           </div>
         </div>
       </nav>
@@ -57,28 +57,28 @@ export default function LandingPage() {
       {/* ── Hero ── */}
       <section className="lp-hero">
         <div>
-          <p className="lp-hero-badge">🏠 Hệ thống quản lý phòng trọ thông minh</p>
-          <h1 className="lp-hero-title">Tìm phòng trọ<br /><span>ưng ý ngay hôm nay</span></h1>
+          <p className="lp-hero-badge">🏠 Smart Rental Management System</p>
+          <h1 className="lp-hero-title">Find your<br /><span>perfect room today</span></h1>
           <p className="lp-hero-sub">
-            EzRent kết nối người thuê và chủ nhà một cách dễ dàng, minh bạch và hiệu quả.
+            EzRent connects tenants and landlords easily, transparently, and efficiently.
           </p>
           <div className="lp-hero-btns">
-            <button className="lp-btn-primary" onClick={() => navigate('/rooms')}>Xem phòng trống</button>
-            <button className="lp-btn-ghost"   onClick={() => navigate('/login')}>Đăng nhập</button>
+            <button className="lp-btn-primary" onClick={() => navigate('/rooms')}>View Vacancies</button>
+            <button className="lp-btn-ghost"   onClick={() => navigate('/login')}>Login</button>
           </div>
           <div className="lp-hero-stats">
-            <div className="lp-stat"><strong>120+</strong><span>Phòng trọ</span></div>
+            <div className="lp-stat"><strong>120+</strong><span>Rooms</span></div>
             <div className="lp-stat-divider" />
-            <div className="lp-stat"><strong>300+</strong><span>Khách thuê</span></div>
+            <div className="lp-stat"><strong>300+</strong><span>Tenants</span></div>
             <div className="lp-stat-divider" />
-            <div className="lp-stat"><strong>98%</strong><span>Hài lòng</span></div>
+            <div className="lp-stat"><strong>98%</strong><span>Satisfaction</span></div>
           </div>
         </div>
         <div className="lp-hero-img">
           <div className="lp-hero-img-placeholder">
             <img
               src={ROOM_IMAGES[0]}
-              alt="EzRent"
+              alt="EzRent Hero"
               style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 20 }}
             />
           </div>
@@ -89,8 +89,8 @@ export default function LandingPage() {
       <section id="features" className="lp-section lp-section--gray">
         <div className="lp-section-inner">
           <div className="lp-section-head">
-            <h2>Tại sao chọn EzRent?</h2>
-            <p>Chúng tôi mang đến trải nghiệm sống tốt nhất cho mọi cư dân.</p>
+            <h2>Why choose EzRent?</h2>
+            <p>We provide the best living experience for every resident.</p>
           </div>
           <div className="lp-feature-grid">
             {FEATURES.map(f => (
@@ -108,30 +108,29 @@ export default function LandingPage() {
       <section id="rooms" className="lp-section">
         <div className="lp-section-inner">
           <div className="lp-section-head">
-            <h2>Phòng nổi bật</h2>
-            <p>Những căn phòng mới nhất vừa được cập nhật.</p>
+            <h2>Featured Rooms</h2>
+            <p>Check out our latest updated listings.</p>
           </div>
           <div className="lp-room-grid">
             {featuredRooms.map((room, idx) => (
               <div key={room.id} className="lp-room-card" onClick={() => navigate(`/rooms/${room.id}`)}>
                 <div className="lp-room-img">
-                  {/* ── Ảnh phòng: xoay vòng 3 ảnh theo index ── */}
                   <img
                     src={ROOM_IMAGES[idx % ROOM_IMAGES.length]}
-                    alt={`Phòng ${room.number}`}
+                    alt={`Room ${room.number}`}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <span className={`lp-room-badge ${room.status === 'available' ? 'lp-room-badge--green' : 'lp-room-badge--gray'}`}>
-                    {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
+                    {room.status === 'available' ? 'Available' : 'Occupied'}
                   </span>
                 </div>
                 <div className="lp-room-body">
                   <div className="lp-room-header">
-                    <h3>Phòng {room.number}</h3>
+                    <h3>Room {room.number}</h3>
                   </div>
                   <div className="lp-room-meta">
-                    <span>🏢 Tầng {room.floor}</span>
-                    <span>👤 {room.capacity} người</span>
+                    <span>🏢 Floor {room.floor}</span>
+                    <span>👤 {room.capacity} Guests</span>
                     <span>📐 {room.area}m²</span>
                   </div>
                 </div>
@@ -140,7 +139,7 @@ export default function LandingPage() {
           </div>
           <div className="lp-view-all">
             <button className="lp-btn-outline-blue" onClick={() => navigate('/rooms')}>
-              Xem tất cả phòng →
+              View all rooms →
             </button>
           </div>
         </div>
@@ -150,20 +149,20 @@ export default function LandingPage() {
       <section id="contact" className="lp-section lp-section--gray">
         <div className="lp-section-inner lp-contact-grid">
           <div className="lp-contact-info">
-            <h2>Liên hệ với chúng tôi</h2>
-            <p>Bạn cần tư vấn thêm về phòng trọ hoặc muốn xem phòng trực tiếp?</p>
+            <h2>Get in touch</h2>
+            <p>Need advice about our rooms or want to schedule a viewing?</p>
             <div className="lp-contact-items">
-              <div className="lp-contact-item"><span>📍</span><p>123 Đường ABC, Quận X, TP. HCM</p></div>
+              <div className="lp-contact-item"><span>📍</span><p>123 ABC Street, District X, HCMC</p></div>
               <div className="lp-contact-item"><span>📞</span><p>0901 234 567</p></div>
               <div className="lp-contact-item"><span>✉️</span><p>support@ezrent.vn</p></div>
             </div>
           </div>
           <form className="lp-contact-form" onSubmit={e => e.preventDefault()}>
-            <h3>Gửi tin nhắn</h3>
+            <h3>Send a Message</h3>
             <div className="lp-form-row">
               <div className="lp-form-group">
-                <label>Họ và tên</label>
-                <input type="text" placeholder="Nguyễn Văn A" />
+                <label>Full Name</label>
+                <input type="text" placeholder="John Doe" />
               </div>
               <div className="lp-form-group">
                 <label>Email</label>
@@ -171,14 +170,14 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="lp-form-group">
-              <label>Số điện thoại</label>
+              <label>Phone Number</label>
               <input type="tel" placeholder="0901 234 567" />
             </div>
             <div className="lp-form-group">
-              <label>Tin nhắn</label>
-              <textarea rows={4} placeholder="Nội dung tin nhắn..." />
+              <label>Message</label>
+              <textarea rows={4} placeholder="How can we help you?" />
             </div>
-            <button type="submit" className="lp-btn-primary lp-btn-full">Gửi tin nhắn</button>
+            <button type="submit" className="lp-btn-primary lp-btn-full">Send Message</button>
           </form>
         </div>
       </section>
@@ -193,7 +192,7 @@ export default function LandingPage() {
             </svg>
             <span>EzRent</span>
           </div>
-          <p className="lp-footer-copy">© 2025 EzRent. All rights reserved.</p>
+          <p className="lp-footer-copy">© 2026 EzRent. All rights reserved.</p>
         </div>
       </footer>
     </div>

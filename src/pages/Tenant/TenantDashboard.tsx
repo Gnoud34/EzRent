@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './TenantDashboard.css';
 import mockData from '../../data/mockdata.json';
 
-/* ─── Lấy dữ liệu từ mockData ─── */
+/* ─── Data Fetching ─── */
 const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = mockData.tenants.find(t => (t as any).userId === currentUser.id)
@@ -18,7 +18,6 @@ const myMaintenance = (mockData.maintenanceRequests as any[])
 /* ─── Helpers ─── */
 function parseDate(d: string) {
   if (!d) return new Date();
-  // Chuyển "15/1/2026" thành Date object chuẩn
   const parts = d.split('/');
   if (parts.length === 3) {
     return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
@@ -35,7 +34,8 @@ function getDaysLeft(d: string) {
 function fmtDate(d: string) {
   const date = parseDate(d);
   if (isNaN(date.getTime())) return '—';
-  return date.toLocaleDateString('vi-VN');
+  // Changed to US locale
+  return date.toLocaleDateString('en-US');
 }
 
 function fmtMonths(d: string) {
@@ -46,14 +46,14 @@ function fmtMonths(d: string) {
 }
 
 const STATUS_DOT: Record<string, string> = {
-  pending:       'dotYellow',
+  pending:      'dotYellow',
   'in-progress': 'dotBlue',
   resolved:      'dotGreen',
 };
 const STATUS_BADGE: Record<string, { cls: string; label: string }> = {
-  pending:       { cls: 'badgeYellow', label: 'Chờ xử lý'  },
-  'in-progress': { cls: 'badgeBlue',   label: 'Đang xử lý' },
-  resolved:      { cls: 'badgeGray',   label: 'Đã xử lý'   },
+  pending:      { cls: 'badgeYellow', label: 'Pending'  },
+  'in-progress': { cls: 'badgeBlue',   label: 'In Progress' },
+  resolved:      { cls: 'badgeGray',   label: 'Resolved'   },
 };
 
 export default function TenantDashboard() {
@@ -65,28 +65,28 @@ export default function TenantDashboard() {
 
   const stats = [
     {
-      label: 'Số phòng',
-      value: `P.${currentRoom.number.replace('R', '')}`,
-      sub: `Tầng ${currentRoom.floor}`,
+      label: 'Room No.',
+      value: `Rm.${currentRoom.number.replace('R', '')}`,
+      sub: `Floor ${currentRoom.floor}`,
       iconBg: '#EFF6FF', iconColor: '#2563EB',
       icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />,
     },
     {
-      label: 'Trạng thái',
-      value: 'Đang thuê',
-      sub: 'Hợp đồng còn hiệu lực',
+      label: 'Status',
+      value: 'In Use',
+      sub: 'Contract is active',
       iconBg: '#F0FDF4', iconColor: '#16A34A',
       icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />,
     },
     {
-      label: 'Ngày chuyển vào',
+      label: 'Move-in Date',
       value: moveInDate ? fmtDate(moveInDate) : '—',
       sub: moveInDate 
         ? (getDaysLeft(moveInDate) > 0 
-        ? `Sắp đến (còn ${getDaysLeft(moveInDate)} ngày)` 
-        : `${fmtMonths(moveInDate)} tháng trước`) 
+        ? `Upcoming (${getDaysLeft(moveInDate)} days left)` 
+        : `${fmtMonths(moveInDate)} months ago`) 
         : '',
       iconBg: '#FFFBEB', iconColor: '#D97706',
       icon: <>
@@ -97,9 +97,9 @@ export default function TenantDashboard() {
       </>,
     },
     {
-      label: 'Hết hạn HĐ',
+      label: 'Contract Expire',
       value: expireDate ? fmtDate(expireDate) : '—',
-      sub: days > 0 ? `Còn ${days} ngày` : 'Đã hết hạn hợp đồng',
+      sub: days > 0 ? `${days} days left` : 'Contract expired',
       subColor: (days > 0 && days <= 30) ? '#EA580C' : (days <= 0 ? '#EF4444' : undefined),
       iconBg: '#F5F3FF', iconColor: '#7C3AED',
       icon: <>
@@ -116,8 +116,8 @@ export default function TenantDashboard() {
       {/* ── Header ── */}
       <div className="pageHeader">
         <div>
-          <h1 className="pageTitle">Tổng quan</h1>
-          <p className="pageSub">Thông tin thuê phòng của bạn</p>
+          <h1 className="pageTitle">Overview</h1>
+          <p className="pageSub">Room Details</p>
         </div>
       </div>
 
@@ -131,13 +131,13 @@ export default function TenantDashboard() {
             </svg>
           </div>
           <div className="alertBody">
-            <p className="alertTitle">Hợp đồng sắp hết hạn</p>
+            <p className="alertTitle">Contract Expiring Soon</p>
             <p className="alertDesc">
-              Hợp đồng còn <strong>{days} ngày</strong> (hết hạn {fmtDate(expireDate)}). Vui lòng liên hệ quản lý để gia hạn.
+              Your contract has <strong>{days} days left</strong> (Expires on {fmtDate(expireDate)}). Please contact management for renewal.
             </p>
           </div>
           <button className={`alertBtn ${days <= 7 ? 'alertBtnRed' : 'alertBtnOrange'}`}>
-            Liên hệ ngay
+            Contact Now
           </button>
         </div>
       )}
@@ -172,27 +172,27 @@ export default function TenantDashboard() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
             </svg>
-            <span className="panelTitle">Thông tin phòng</span>
+            <span className="panelTitle">Room Information</span>
           </div>
 
           {[
-            { label: 'Số phòng',  value: currentRoom.number,  blue: true },
-            { label: 'Tầng',      value: `Tầng ${currentRoom.floor}` },
-            { label: 'Sức chứa',  value: `${currentRoom.capacity} người` },
-            { label: 'Diện tích', value: `${currentRoom.area} m²` },
-            { label: 'Trạng thái', badge: true },
+            { label: 'Room Number',  value: currentRoom.number,  blue: true },
+            { label: 'Floor',      value: `Floor ${currentRoom.floor}` },
+            { label: 'Capacity',  value: `${currentRoom.capacity} People` },
+            { label: 'Area',      value: `${currentRoom.area} m²` },
+            { label: 'Status',    badge: true },
           ].map(row => (
             <div key={row.label} className="infoRow">
               <span className="infoLabel">{row.label}</span>
               {row.badge
-                ? <span className="badge badgeGreen">Đang thuê</span>
+                ? <span className="badge badgeGreen">Occupied</span>
                 : <span className={`infoValue${row.blue ? ' infoValueBlue' : ''}`}>{row.value}</span>
               }
             </div>
           ))}
 
           <button className="btnPrimary" onClick={() => navigate('/tenant/my-room')}>
-            Xem chi tiết phòng
+            View Room Details
           </button>
         </div>
 
@@ -206,11 +206,11 @@ export default function TenantDashboard() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
               </svg>
-              <span className="panelTitle">Yêu cầu bảo trì gần đây</span>
+              <span className="panelTitle">Recent Maintenance</span>
             </div>
 
             {myMaintenance.length === 0
-              ? <p style={{ fontSize: 12, color: '#9CA3AF', padding: '8px 0' }}>Chưa có yêu cầu nào.</p>
+              ? <p style={{ fontSize: 12, color: '#9CA3AF', padding: '8px 0' }}>No recent requests found.</p>
               : myMaintenance.map(req => {
                   const st = STATUS_BADGE[req.status] ?? { cls: 'badgeGray', label: req.status };
                   return (
@@ -227,7 +227,7 @@ export default function TenantDashboard() {
             }
 
             <button className="btnOutline" onClick={() => navigate('/tenant/maintenance')}>
-              + Gửi yêu cầu mới
+              + New Request
             </button>
           </div>
 
@@ -238,14 +238,14 @@ export default function TenantDashboard() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              <span className="panelTitle">Truy cập nhanh</span>
+              <span className="panelTitle">Quick Access</span>
             </div>
             <div className="quickGrid">
               {[
-                { label: 'Phòng của tôi', to: '/tenant/my-room',    d: 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z' },
-                { label: 'Hồ sơ cá nhân', to: '/tenant/profile',    d: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z' },
-                { label: 'Hợp đồng',      to: '/tenant/my-room',    d: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6' },
-                { label: 'Bảo trì',       to: '/tenant/maintenance', d: 'M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z' },
+                { label: 'My Room',    to: '/tenant/my-room',     d: 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z' },
+                { label: 'Profile',    to: '/tenant/profile',     d: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z' },
+                { label: 'Contract',   to: '/tenant/my-room',     d: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6' },
+                { label: 'Maintenance', to: '/tenant/maintenance', d: 'M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z' },
               ].map(q => (
                 <button key={q.label} className="quickBtn" onClick={() => navigate(q.to)}>
                   <svg width="20" height="20" fill="none" stroke="#2563EB" viewBox="0 0 24 24">

@@ -5,9 +5,9 @@ import './UserLayout.css';
 
 const PAGE_TITLES: Record<string, string> = {
   '/tenant/dashboard':   'Dashboard',
-  '/tenant/my-room':     'Phòng của tôi',
-  '/tenant/profile':     'Hồ sơ cá nhân',
-  '/tenant/maintenance': 'Bảo trì',
+  '/tenant/my-room':     'My Room',
+  '/tenant/profile':     'Profile',
+  '/tenant/maintenance': 'Maintenance',
 };
 
 const UserLayout: React.FC = () => {

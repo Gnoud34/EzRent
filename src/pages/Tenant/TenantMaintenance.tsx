@@ -13,7 +13,7 @@ interface Request {
   status: StatusKey;
 }
 
-/* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
+/* ─── Fetch data based on logged-in user ─── */
 const storedUser    = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser   = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
@@ -30,9 +30,9 @@ const initialRequests: Request[] = (mockData.maintenanceRequests as any[])
   }));
 
 const STATUS_CONFIG: Record<StatusKey, { label: string; dotCls: string; badgeCls: string }> = {
-  'in-progress': { label: 'Đang xử lý', dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--orange'  },
-  pending:       { label: 'Chờ xử lý',  dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--pending'  },
-  resolved:      { label: 'Đã xử lý',   dotCls: 'mt-dot--green',  badgeCls: 'mt-badge--resolved' },
+  'in-progress': { label: 'In Progress', dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--orange'  },
+  pending:       { label: 'Pending',     dotCls: 'mt-dot--orange', badgeCls: 'mt-badge--pending'  },
+  resolved:      { label: 'Resolved',    dotCls: 'mt-dot--green',  badgeCls: 'mt-badge--resolved' },
 };
 
 export default function TenantMaintenance() {
@@ -52,7 +52,7 @@ export default function TenantMaintenance() {
       id:          `M${Date.now()}`,
       title:       form.title.trim(),
       description: form.description.trim(),
-      date:        new Date().toLocaleDateString('vi-VN'),
+      date:        new Date().toLocaleDateString('en-US'), // Changed to US locale
       status:      'pending',
     };
     setRequests(prev => [newReq, ...prev]);
@@ -69,24 +69,24 @@ export default function TenantMaintenance() {
     <div className="mt-page">
       {/* Header */}
       <div className="mt-header">
-        <p className="mt-sub">Theo dõi và gửi yêu cầu sửa chữa</p>
+        <p className="mt-sub">Track and submit repair requests</p>
         <button className="mt-add-btn" onClick={() => setShowModal(true)}>
-          Gửi yêu cầu mới
+          New Request
         </button>
       </div>
 
       {/* Summary — 3 dark cards */}
       <div className="mt-summary-grid">
         <div className="mt-summary-card">
-          <p className="mt-summary-label">Tổng yêu cầu</p>
+          <p className="mt-summary-label">Total Requests</p>
           <p className="mt-summary-count">{counts.total}</p>
         </div>
         <div className="mt-summary-card">
-          <p className="mt-summary-label">Đang xử lý</p>
+          <p className="mt-summary-label">In Progress</p>
           <p className="mt-summary-count mt-summary-count--orange">{counts.inProgress}</p>
         </div>
         <div className="mt-summary-card">
-          <p className="mt-summary-label">Đã xử lý</p>
+          <p className="mt-summary-label">Resolved</p>
           <p className="mt-summary-count mt-summary-count--green">{counts.resolved}</p>
         </div>
       </div>
@@ -94,8 +94,8 @@ export default function TenantMaintenance() {
       {/* List */}
       {requests.length === 0 ? (
         <div className="mt-empty">
-          <p>Chưa có yêu cầu nào</p>
-          <span>Nhấn "Gửi yêu cầu mới" để bắt đầu</span>
+          <p>No requests found</p>
+          <span>Click "New Request" to get started</span>
         </div>
       ) : (
         <div className="mt-list">
@@ -110,7 +110,7 @@ export default function TenantMaintenance() {
                     <span className={`mt-badge ${cfg.badgeCls}`}>{cfg.label}</span>
                   </div>
                   <p className="mt-item-desc">{req.description}</p>
-                  <p className="mt-item-date">Gửi ngày {req.date}</p>
+                  <p className="mt-item-date">Submitted on {req.date}</p>
                 </div>
               </div>
             );
@@ -122,31 +122,31 @@ export default function TenantMaintenance() {
       {showModal && (
         <div className="mt-overlay" onClick={handleClose}>
           <div className="mt-modal" onClick={e => e.stopPropagation()}>
-            <h3 className="mt-modal-title">Gửi yêu cầu bảo trì mới</h3>
+            <h3 className="mt-modal-title">Submit New Maintenance Request</h3>
 
             <div className="mt-form-group">
-              <label>Tiêu đề sự cố</label>
+              <label>Issue Title</label>
               <input
                 type="text"
-                placeholder="VD: Điều hòa bị hỏng..."
+                placeholder="e.g., Broken air conditioner..."
                 value={form.title}
                 onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
               />
             </div>
 
             <div className="mt-form-group">
-              <label>Mô tả chi tiết</label>
+              <label>Detailed Description</label>
               <textarea
                 rows={4}
-                placeholder="Mô tả vấn đề bạn gặp phải..."
+                placeholder="Describe the problem you are experiencing..."
                 value={form.description}
                 onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
               />
             </div>
 
             <div className="mt-modal-actions">
-              <button className="mt-btn-cancel" onClick={handleClose}>Hủy</button>
-              <button className="mt-btn-submit" onClick={handleSubmit}>Gửi yêu cầu</button>
+              <button className="mt-btn-cancel" onClick={handleClose}>Cancel</button>
+              <button className="mt-btn-submit" onClick={handleSubmit}>Submit Request</button>
             </div>
           </div>
         </div>

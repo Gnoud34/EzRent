@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-import mockData from '../../../data/mockdata.json';
-import './Tenants.css';
 import Header from '../../../components/Header/Header';
+import mockData from '../../../data/mockdata.json';
 import { useNavigate } from 'react-router-dom';
+import './Tenants.css';
 
+// 1. Interfaces
 interface Tenant {
     id: string;
     name: string;
@@ -19,25 +20,18 @@ interface Tenant {
 const Tenants: React.FC = () => {
     const navigate = useNavigate();
 
-
-    const [activeTab, setActiveTab] = useState<'inquiry' | 'active' | 'expired'>('active');
+    // 2. State
+    const [activeTab, setActiveTab] = useState<Tenant['status']>('active');
+    const [searchTerm, setSearchTerm] = useState('');
     const [tenants, setTenants] = useState<Tenant[]>(mockData.tenants as Tenant[]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTenant, setEditingTenant] = useState<Tenant | null>(null);
 
-
-    const [formData, setFormData] = useState<{
-        name: string;
-        phone: string;
-        roomId: string;
-        moveInDate: string;
-        expireDate: string;
-        status: Tenant['status'];
-        note: string;
-    }>({
-        name: '', phone: '', roomId: '', moveInDate: '', expireDate: '', status: 'active', note: ''
+    const [formData, setFormData] = useState({
+        name: '', phone: '', roomId: '', moveInDate: '', expireDate: '', status: 'active' as Tenant['status'], note: ''
     });
 
+    // 3. Logic & Helpers
     const getRoomNumber = (roomId: string) => mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
 
     const isExpired = (tenant: Tenant) => {
@@ -45,43 +39,41 @@ const Tenants: React.FC = () => {
         return new Date(tenant.expireDate) < new Date();
     };
 
-    const filteredTenants = tenants.filter(t => t.status === activeTab);
+    // Memoized filtering and sorting for performance
+    const displayTenants = useMemo(() => {
+        return tenants
+            .filter(t => t.status === activeTab)
+            .filter(t => 
+                t.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                t.phone.includes(searchTerm)
+            )
+            .sort((a, b) => {
+                if (!a.expireDate || !b.expireDate) return 0;
+                return new Date(a.expireDate).getTime() - new Date(b.expireDate).getTime();
+            });
+    }, [tenants, activeTab, searchTerm]);
 
-    const openAddModal = () => {
-        setEditingTenant(null);
-        setFormData({
-            name: '',
-            phone: '',
-            roomId: '',
-            moveInDate: '',
-            expireDate: '',
-            status: activeTab === 'inquiry' ? 'inquiry' : 'active', // Tự động set status theo tab
-            note: ''
-        });
-        setIsModalOpen(true);
+    // 4. Action Handlers
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const openEditModal = (tenant: Tenant) => {
-        setEditingTenant(tenant);
-        setFormData({
-            name: tenant.name, phone: tenant.phone, roomId: tenant.roomId,
-            moveInDate: tenant.moveInDate || '', expireDate: tenant.expireDate || '',
-            status: tenant.status, note: tenant.note || ''
-        });
-        setIsModalOpen(true);
-    };
-
-    const handleMoveToActive = (tenant: Tenant) => {
-        setEditingTenant(tenant);
-        setFormData({
-            name: tenant.name,
-            phone: tenant.phone,
-            roomId: '',
-            moveInDate: new Date().toISOString().split('T')[0], // Mặc định ngày hôm nay
-            expireDate: '',
-            status: 'active',
-            note: tenant.note || ''
-        });
+    const openModal = (tenant?: Tenant, forceStatus?: Tenant['status']) => {
+        if (tenant) {
+            setEditingTenant(tenant);
+            setFormData({
+                name: tenant.name, phone: tenant.phone, roomId: tenant.roomId || '',
+                moveInDate: tenant.moveInDate || '', expireDate: tenant.expireDate || '',
+                status: forceStatus || tenant.status, note: tenant.note || ''
+            });
+        } else {
+            setEditingTenant(null);
+            setFormData({
+                name: '', phone: '', roomId: '', moveInDate: '', expireDate: '', 
+                status: activeTab === 'expired' ? 'active' : activeTab, note: ''
+            });
+        }
         setIsModalOpen(true);
     };
 
@@ -95,123 +87,132 @@ const Tenants: React.FC = () => {
         setIsModalOpen(false);
     };
 
-    const handleDelete = (id: string) => {
-        if (window.confirm('Delete this tenant?')) setTenants(prev => prev.filter(t => t.id !== id));
+    const deleteTenant = (id: string) => {
+        if (confirm('Are you sure you want to delete this record?')) {
+            setTenants(prev => prev.filter(t => t.id !== id));
+        }
     };
 
-    const moveToHistory = (id: string) => {
-        setTenants(prev => prev.map(t => t.id === id ? { ...t, status: 'expired' } : t));
+    const updateStatus = (id: string, newStatus: Tenant['status']) => {
+        setTenants(prev => prev.map(t => t.id === id ? { ...t, status: newStatus } : t));
     };
 
     return (
         <div className="dashboard-layout">
             <Sidebar />
             <main className="main-view">
-                <Header pageTitle="Tenant Management" />
+                <Header pageTitle="Tenants" />
+                
                 <div className="dashboard-content">
-                    <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                        <h2 style={{ margin: 0 }}>Tenant List</h2>
-                        <button className="btn-add" onClick={openAddModal} style={{ background: '#2563eb', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>
-                            {activeTab === 'inquiry' ? '+ Add New Inquiry' : '+ Add New Tenant'}
+                    <div className="section-header">
+                        <div className="header-left">
+                            <h2>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Tenants</h2>
+                            <input 
+                                type="text" 
+                                placeholder="Search by name or phone..." 
+                                className="search-input"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        <button className="btn-add" onClick={() => openModal()}>
+                            + Add {activeTab === 'inquiry' ? 'Inquiry' : 'Tenant'}
                         </button>
                     </div>
 
                     <div className="tabs-bar">
-                        <button className={activeTab === 'inquiry' ? 'active' : ''} onClick={() => setActiveTab('inquiry')}>Inquiry</button>
-                        <button className={activeTab === 'active' ? 'active' : ''} onClick={() => setActiveTab('active')}>Active</button>
-                        <button className={activeTab === 'expired' ? 'active' : ''} onClick={() => setActiveTab('expired')}>History</button>
+                        {(['inquiry', 'active', 'expired'] as const).map(tab => (
+                            <button 
+                                key={tab}
+                                className={activeTab === tab ? 'active' : ''} 
+                                onClick={() => setActiveTab(tab)}
+                            >
+                                {tab === 'expired' ? 'History' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                            </button>
+                        ))}
                     </div>
 
-                    <table className="tenants-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                {activeTab !== 'inquiry' && <th>Room</th>}
-                                <th>Status</th>
-                                <th>Note</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredTenants.map(t => (
-                                <tr key={t.id}>
-                                    <td>
-                                        <span
-                                            className="tenant-name-link"
-                                            onClick={() => navigate('/user-detail', { state: { tenantData: t } })}
-                                        >
-                                            {t.name}
-                                        </span>
-                                    </td>
-                                    <td>{t.phone}</td>
-                                    {activeTab !== 'inquiry' && <td>{getRoomNumber(t.roomId)}</td>}
-                                    <td>
-                                        <span className={`status ${t.status === 'expired' ? 'left' : isExpired(t) ? 'expired' : 'active'}`}>
-                                            {t.status.toUpperCase()}
-                                        </span>
-                                    </td>
-                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={t.note}>
-                                        {t.note || '-'}
-                                    </td>
-                                    <td className="actions-cell">
-                                        {activeTab === 'inquiry' && (
-                                            <button className="btn-move" onClick={() => handleMoveToActive(t)} style={{ background: '#10b981', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', marginRight: '5px', cursor: 'pointer' }}>
-                                                Move to Active
-                                            </button>
-                                        )}
-                                        {activeTab === 'active' && <button className="btn-move" onClick={() => moveToHistory(t.id)}>Move Out</button>}
-                                        <button className="btn-edit" onClick={() => openEditModal(t)}>Edit</button>
-                                        <button className="btn-delete" onClick={() => handleDelete(t.id)}>Delete</button>
-                                    </td>
+                    <div className="table-container">
+                        <table className="tenants-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    {activeTab !== 'inquiry' && <th>Room</th>}
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {displayTenants.length > 0 ? displayTenants.map(t => (
+                                    <tr key={t.id}>
+                                        <td className="tenant-link" onClick={() => navigate('/user-detail', { state: { tenantData: t } })}>
+                                            <strong>{t.name}</strong>
+                                        </td>
+                                        <td>{t.phone}</td>
+                                        {activeTab !== 'inquiry' && <td>Room {getRoomNumber(t.roomId)}</td>}
+                                        <td>
+                                            <span className={`badge ${t.status === 'expired' ? 'left' : isExpired(t) ? 'expired' : 'active'}`}>
+                                                {isExpired(t) && t.status === 'active' ? 'EXPIRED' : t.status.toUpperCase()}
+                                            </span>
+                                        </td>
+                                        <td className="actions-cell">
+                                            {activeTab === 'inquiry' && (
+                                                <button className="btn-move" onClick={() => openModal(t, 'active')}>Move In</button>
+                                            )}
+                                            {activeTab === 'active' && (
+                                                <button className="btn-move-out" onClick={() => updateStatus(t.id, 'expired')}>Move Out</button>
+                                            )}
+                                            <button className="btn-icon" onClick={() => openModal(t)} title="Edit"><i className="bi bi-pencil"></i></button>
+                                            <button className="btn-icon delete" onClick={() => deleteTenant(t.id)} title="Delete"><i className="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                )) : (
+                                    <tr><td colSpan={5} className="empty-row">No records found.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
+                {/* Modal Logic remains similar but uses handleInputChange for cleaner code */}
                 {isModalOpen && (
-                    <div className="modal">
+                    <div className="modal-overlay">
                         <form onSubmit={handleSave} className="modal-box">
-                            <h3>{editingTenant ? (formData.status === 'active' && editingTenant.status === 'inquiry' ? 'Confirm Move-in' : 'Edit') : 'Add New'}</h3>
+                            <h3>{editingTenant ? 'Update Tenant' : 'New Entry'}</h3>
+                            
+                            <div className="form-grid">
+                                <div className="field">
+                                    <label>Name</label>
+                                    <input name="name" required value={formData.name} onChange={handleInputChange} />
+                                </div>
+                                <div className="field">
+                                    <label>Phone</label>
+                                    <input name="phone" required value={formData.phone} onChange={handleInputChange} />
+                                </div>
+                                
+                                {formData.status === 'active' && (
+                                    <>
+                                        <div className="field">
+                                            <label>Room</label>
+                                            <select name="roomId" value={formData.roomId} onChange={handleInputChange} required>
+                                                <option value="">Select Room</option>
+                                                {mockData.rooms.map(r => (
+                                                    <option key={r.id} value={r.id}>Room {r.number}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="field">
+                                            <label>Move-in Date</label>
+                                            <input name="moveInDate" type="date" value={formData.moveInDate} onChange={handleInputChange} required />
+                                        </div>
+                                    </>
+                                )}
+                            </div>
 
-                            <label className="form-label">Full Name</label>
-                            <input placeholder="Enter name" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
-
-                            <label className="form-label">Phone</label>
-                            <input placeholder="Enter phone" required value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
-
-                            {formData.status === 'active' && (
-                                <>
-                                    <label className="form-label">Room</label>
-                                    <select value={formData.roomId} onChange={e => setFormData({ ...formData, roomId: e.target.value })} required>
-                                        <option value="">Select room</option>
-                                        {mockData.rooms.map(r => {
-                                            const isOccupied = tenants.some(t => t.roomId === r.id && t.status === 'active' && t.id !== editingTenant?.id);
-                                            return (
-                                                <option key={r.id} value={r.id} disabled={isOccupied}>
-                                                    Room {r.number} {isOccupied ? '(Occupied)' : ''}
-                                                </option>
-                                            );
-                                        })}
-                                    </select>
-
-                                    <label className="form-label">Move-in Date</label>
-                                    <input type="date" value={formData.moveInDate} onChange={e => setFormData({ ...formData, moveInDate: e.target.value })} required />
-
-                                    <label className="form-label">Contract End Date</label>
-                                    <input type="date" value={formData.expireDate} onChange={e => setFormData({ ...formData, expireDate: e.target.value })} required />
-                                </>
-                            )}
-
-                            <label className="form-label">{formData.status === 'inquiry' ? 'Requirements' : 'Notes'}</label>
-                            <textarea placeholder="..." value={formData.note} onChange={e => setFormData({ ...formData, note: e.target.value })} />
-
-                            <div className="modal-actions">
+                            <div className="modal-footer">
                                 <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                                <button type="submit" style={{ background: '#2563eb', color: 'white' }}>
-                                    {editingTenant?.status === 'inquiry' && formData.status === 'active' ? 'Confirm Move In' : 'Save'}
-                                </button>
+                                <button type="submit" className="btn-primary">Save Changes</button>
                             </div>
                         </form>
                     </div>

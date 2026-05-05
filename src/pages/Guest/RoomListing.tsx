@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RoomListing.css';
@@ -49,14 +50,14 @@ export default function RoomListing() {
             </svg>
             EzRent
           </div>
-          <button className="rl-btn-login" onClick={() => navigate('/login')}>Đăng nhập</button>
+          <button className="rl-btn-login" onClick={() => navigate('/login')}>Login</button>
         </div>
       </nav>
 
       <div className="rl-body">
         <div className="rl-page-header">
-          <h1>Danh sách phòng trọ</h1>
-          <p>Tìm phòng phù hợp với nhu cầu của bạn</p>
+          <h1>Room Listings</h1>
+          <p>Find the perfect room that fits your needs</p>
         </div>
 
         {/* ── Toolbar ── */}
@@ -68,7 +69,7 @@ export default function RoomListing() {
             </svg>
             <input
               type="text"
-              placeholder="Tìm theo số phòng, tầng..."
+              placeholder="Search by room number, floor..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
@@ -80,13 +81,13 @@ export default function RoomListing() {
                 className={`rl-filter-btn ${status === s ? 'rl-filter-btn--active' : ''}`}
                 onClick={() => setStatus(s)}
               >
-                {s === 'all' ? 'Tất cả' : s === 'available' ? '✅ Còn trống' : '🔴 Đã thuê'}
+                {s === 'all' ? 'All Rooms' : s === 'available' ? '✅ Available' : '🔴 Occupied'}
               </button>
             ))}
           </div>
         </div>
 
-        <p className="rl-count"><strong>{filtered.length}</strong> phòng được tìm thấy</p>
+        <p className="rl-count"><strong>{filtered.length}</strong> rooms found</p>
 
         {filtered.length === 0 ? (
           <div className="rl-empty">
@@ -94,34 +95,34 @@ export default function RoomListing() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                 d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
             </svg>
-            <p>Không tìm thấy phòng nào</p>
-            <span>Thử thay đổi bộ lọc hoặc từ khóa</span>
+            <p>No rooms found</p>
+            <span>Try adjusting your filters or keywords</span>
           </div>
         ) : (
           <div className="rl-grid">
             {filtered.map((room, idx) => (
               <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
-                {/* ── Ảnh phòng: ảnh đầu tiên mặc định, xoay vòng theo index ── */}
+                {/* ── Room Image: Default first image, rotates by index ── */}
                 <div className="rl-card-img">
                   <img
                     src={ROOM_IMAGES[idx % ROOM_IMAGES.length]}
-                    alt={`Phòng ${room.number}`}
+                    alt={`Room ${room.number}`}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <span className={`rl-status-badge ${room.status === 'available' ? 'rl-status-badge--green' : 'rl-status-badge--gray'}`}>
-                    {room.status === 'available' ? 'Còn trống' : 'Đã thuê'}
+                    {room.status === 'available' ? 'Available' : 'Occupied'}
                   </span>
                 </div>
 
                 <div className="rl-card-body">
                   <div className="rl-card-top">
-                    <h3>Phòng {room.number}</h3>
+                    <h3>Room {room.number}</h3>
                     <span className="rl-card-price">
                     </span>
                   </div>
                   <div className="rl-card-meta">
-                    <span>🏢 Tầng {room.floor}</span>
-                    <span>👤 {room.capacity} người</span>
+                    <span>🏢 Floor {room.floor}</span>
+                    <span>👤 {room.capacity} Guests</span>
                     <span>📐 {room.area}m²</span>
                   </div>
                   <div className="rl-card-amenities">
@@ -129,7 +130,7 @@ export default function RoomListing() {
                       <span key={a} className="rl-amenity-tag">{a}</span>
                     ))}
                   </div>
-                  <button className="rl-card-btn">Xem chi tiết →</button>
+                  <button className="rl-card-btn">View Details →</button>
                 </div>
               </div>
             ))}

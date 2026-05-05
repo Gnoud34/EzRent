@@ -15,7 +15,7 @@ const Auth: React.FC = () => {
         e.preventDefault();
 
         if (isLogin) {
-            // 1. Tìm user trong mockData
+            // 1. Find user in mockData
             const userFound = mockData.users.find(
                 (u) => u.email === email && u.password === password
             );
@@ -23,7 +23,7 @@ const Auth: React.FC = () => {
             if (userFound) {
                 localStorage.setItem('user', JSON.stringify(userFound));
 
-                console.log('Đăng nhập thành công với vai trò:', userFound.role);
+                console.log('Login successful. Role:', userFound.role);
 
                 if (userFound.role === 'admin') {
                     navigate('/dashboard');
@@ -33,13 +33,13 @@ const Auth: React.FC = () => {
                     navigate('/');
                 }
             } else {
-                console.error('Đăng nhập thất bại');
-                alert('Sai email hoặc mật khẩu! (Thử: ntd@gmail.com / password123)');
+                console.error('Login failed');
+                alert('Invalid email or password! (Try: ntd@gmail.com / password123)');
             }
 
         } else {
-            console.log('Đang đăng ký tài khoản mới:', { name, email, password });
-            alert('Đăng ký thành công! Hãy đăng nhập.');
+            console.log('Registering new account:', { name, email, password });
+            alert('Registration successful! Please log in.');
             setIsLogin(true);
         }
     };
@@ -48,7 +48,7 @@ const Auth: React.FC = () => {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <div className="auth-logo">
+                    <div className="auth-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
                         <i className="bi bi-house-door-fill"></i>
                         EzRent
                     </div>
@@ -79,7 +79,7 @@ const Auth: React.FC = () => {
                             <i className="bi bi-envelope"></i>
                             <input
                                 type="email"
-                                placeholder="Email (vd: ntd@gmail.com)"
+                                placeholder="Email (e.g., ntd@gmail.com)"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -93,7 +93,7 @@ const Auth: React.FC = () => {
                             <i className="bi bi-lock"></i>
                             <input
                                 type="password"
-                                placeholder="Mật khẩu (vd: password123)"
+                                placeholder="Password (e.g., password123)"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -108,7 +108,7 @@ const Auth: React.FC = () => {
 
                 <div className="auth-footer">
                     {isLogin ? "Don't have an account?" : "Already have an account?"}
-                    <span onClick={() => setIsLogin(!isLogin)} style={{ cursor: 'pointer', color: '#2563eb', marginLeft: '5px' }}>
+                    <span onClick={() => setIsLogin(!isLogin)} style={{ cursor: 'pointer', color: '#2563eb', marginLeft: '5px', fontWeight: 600 }}>
                         {isLogin ? 'Create one' : 'Login now'}
                     </span>
                 </div>

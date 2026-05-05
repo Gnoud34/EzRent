@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './MyRoom.css';
 import mockData from '../../data/mockdata.json';
 
-/* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
+/* ─── Fetch data based on logged-in user ─── */
 const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
@@ -11,7 +11,7 @@ const currentTenant = (mockData.tenants as any[]).find(t => t.userId === current
 const currentRoom = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
   || mockData.rooms[0]) as any;
 
-/* ─── ẢNH CỐ ĐỊNH ─── */
+/* ─── STATIC IMAGES ─── */
 const ROOM_IMAGES = [
   'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800',
   'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
@@ -21,7 +21,8 @@ const ROOM_IMAGES = [
 /* ─── Helpers ─── */
 function fmtDate(d: string) { 
   if (!d) return '—';
-  return new Date(d).toLocaleDateString('vi-VN'); 
+  // Updated to US Locale (MM/DD/YYYY)
+  return new Date(d).toLocaleDateString('en-US'); 
 }
 
 function getDaysLeft(d: string) {
@@ -50,21 +51,20 @@ export default function MyRoom() {
   return (
     <div className="mr-page">
       <div className="mr-page-header">
-        <p className="mr-sub">Thông tin đầy đủ về phòng bạn đang thuê</p>
+        <p className="mr-sub">Detailed information about your rented room</p>
       </div>
 
       <div className="mr-grid">
         {/* ── Left col ── */}
         <div className="mr-left">
           
-          {/* ═══ THAY ĐỔI TỪ ĐÂY ═══ */}
           {/* ── Image gallery ── */}
           <div className="mr-gallery">
             {/* Main image */}
             <div className="mr-gallery-main">
               <img
                 src={ROOM_IMAGES[currentImg]}
-                alt={`Phòng ${currentRoom?.number}`}
+                alt={`Room ${currentRoom?.number}`}
               />
 
               {/* Prev / Next buttons */}
@@ -95,34 +95,33 @@ export default function MyRoom() {
                   className={`mr-gallery-thumb ${i === currentImg ? 'mr-gallery-thumb--active' : ''}`}
                   onClick={() => setCurrentImg(i)}
                 >
-                  <img src={src} alt={`Ảnh ${i + 1}`} />
+                  <img src={src} alt={`Thumbnail ${i + 1}`} />
                 </button>
               ))}
             </div>
           </div>
-          {/* ═══ HẾT THAY ĐỔI ═══ */}
 
           <div className="mr-info-panel">
             <div className="mr-info-row">
-              <span className="mr-info-label">Số phòng</span>
+              <span className="mr-info-label">Room Number</span>
               <span className="mr-info-value mr-info-value--blue">{currentRoom?.number}</span>
             </div>
             <div className="mr-info-row">
-              <span className="mr-info-label">Tầng</span>
-              <span className="mr-info-value">Tầng {currentRoom?.floor}</span>
+              <span className="mr-info-label">Floor</span>
+              <span className="mr-info-value">Floor {currentRoom?.floor}</span>
             </div>
             <div className="mr-info-row">
-              <span className="mr-info-label">Diện tích</span>
+              <span className="mr-info-label">Area</span>
               <span className="mr-info-value">{currentRoom?.area} m²</span>
             </div>
             <div className="mr-info-row">
-              <span className="mr-info-label">Sức chứa</span>
-              <span className="mr-info-value">{currentRoom?.capacity} người</span>
+              <span className="mr-info-label">Capacity</span>
+              <span className="mr-info-value">{currentRoom?.capacity} People</span>
             </div>
           </div>
 
           <div className="mr-amenities-panel">
-            <p className="mr-section-label">Tiện nghi</p>
+            <p className="mr-section-label">Amenities</p>
             <div className="mr-amenities">
               {(currentRoom?.amenities || []).map((a: string) => (
                 <span key={a} className="mr-amenity-tag">{a}</span>
@@ -134,28 +133,28 @@ export default function MyRoom() {
         {/* ── Right col ── */}
         <div className="mr-right">
           <div className="mr-contract-panel">
-            <p className="mr-section-label">Thông tin hợp đồng</p>
+            <p className="mr-section-label">Contract Information</p>
             <div className="mr-contract-row">
-              <span className="mr-contract-label">Ngày chuyển vào</span>
+              <span className="mr-contract-label">Move-in Date</span>
               <span className="mr-contract-value">{fmtDate(moveInDate)}</span>
             </div>
             <div className="mr-contract-row">
-              <span className="mr-contract-label">Ngày hết hạn HĐ</span>
+              <span className="mr-contract-label">Expiry Date</span>
               <span className={`mr-contract-value ${days <= 30 ? 'mr-contract-value--orange' : ''}`}>
                 {fmtDate(contractEnd)}
               </span>
             </div>
             <div className="mr-contract-row">
-              <span className="mr-contract-label">Trạng thái HĐ</span>
+              <span className="mr-contract-label">Contract Status</span>
               <span className="mr-contract-badge">
-                {days > 0 ? 'Còn hiệu lực' : 'Đã hết hạn'}
+                {days > 0 ? 'Active' : 'Expired'}
               </span>
             </div>
           </div>
 
           {roommates.length > 0 && (
             <div className="mr-roommates-panel">
-              <p className="mr-section-label" style={{marginBottom: '12px'}}>Bạn cùng phòng</p>
+              <p className="mr-section-label" style={{marginBottom: '12px'}}>Roommates</p>
               {roommates.map((r, i) => (
                 <div key={i} className="mr-roommate">
                   <div className="mr-roommate-avatar">
@@ -182,9 +181,9 @@ export default function MyRoom() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M4 6h16M4 12h16M4 18h7" />
               </svg>
-              <span>Mô tả phòng</span>
+              <span>Room Description</span>
             </div>
-            <p className="mr-desc-text">{currentRoom?.description || 'Không có mô tả'}</p>
+            <p className="mr-desc-text">{currentRoom?.description || 'No description available'}</p>
           </div>
         </div>
       </div>

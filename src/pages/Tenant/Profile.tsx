@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import './Profile.css';
 import mockData from '../../data/mockdata.json';
+
 type FormState = {
   name: string;
   phone: string;
@@ -9,18 +10,21 @@ type FormState = {
   cccd: string;
 };
 
-function fmtDate(d: string) { return new Date(d).toLocaleDateString('vi-VN'); }
+// Changed to en-US locale
+function fmtDate(d: string) { return new Date(d).toLocaleDateString('en-US'); }
+
 function getDaysLeft(d: string) {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const end = new Date(d); end.setHours(0, 0, 0, 0);
   return Math.ceil((end.getTime() - today.getTime()) / 86_400_000);
 }
+
 function getInitials(name: string) {
   return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'NA';
 }
 
 export default function Profile() {
-  /* ─── Lấy dữ liệu theo user đang đăng nhập ─── */
+  /* ─── Fetch data based on logged-in user ─── */
   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
   const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
   const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
@@ -71,7 +75,7 @@ export default function Profile() {
   return (
     <div className="pf-page">
       <div className="pf-page-header">
-        <p className="pf-sub">Xem và chỉnh sửa thông tin cá nhân</p>
+        <p className="pf-sub">View and edit your personal information</p>
       </div>
 
       {saved && (
@@ -79,27 +83,27 @@ export default function Profile() {
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
           </svg>
-          Lưu thông tin thành công!
+          Information saved successfully!
         </div>
       )}
 
       <div className="pf-grid">
-        {/* ── Left ── */}
+        {/* ── Left Column ── */}
         <div className="pf-left">
           <div className="pf-avatar-row">
             <div className="pf-avatar">{getInitials(form.name)}</div>
             <div className="pf-avatar-meta">
               <p className="pf-avatar-name">{form.name}</p>
-              <p className="pf-avatar-role">Người thuê · Phòng {currentRoom.number}</p>
-              <span className="pf-status-badge">Đang thuê</span>
+              <p className="pf-avatar-role">Tenant · Room {currentRoom.number}</p>
+              <span className="pf-status-badge">Active</span>
             </div>
           </div>
 
           <div className="pf-fields">
             {([
-              { label: 'Họ và tên', key: 'name', type: 'text' },
-              { label: 'Số điện thoại', key: 'phone', type: 'tel' },
-              { label: 'Email', key: 'email', type: 'email' },
+              { label: 'Full Name', key: 'name', type: 'text' },
+              { label: 'Phone Number', key: 'phone', type: 'tel' },
+              { label: 'Email Address', key: 'email', type: 'email' },
             ] as const).map(field => (
               <div key={field.key} className="pf-field-group">
                 <label className="pf-label">{field.label}</label>
@@ -120,19 +124,19 @@ export default function Profile() {
           <div className="pf-actions">
             {editMode ? (
               <>
-                <button className="pf-btn-save" onClick={handleSave}>Lưu</button>
-                <button className="pf-btn-cancel" onClick={handleCancel}>Hủy</button>
+                <button className="pf-btn-save" onClick={handleSave}>Save</button>
+                <button className="pf-btn-cancel" onClick={handleCancel}>Cancel</button>
               </>
             ) : (
               <>
-                <button className="pf-btn-save" onClick={() => setEditMode(true)}>Chỉnh sửa</button>
-                <button className="pf-btn-cancel" onClick={handleCancel}>Đổi mật khẩu</button>
+                <button className="pf-btn-save" onClick={() => setEditMode(true)}>Edit Profile</button>
+                <button className="pf-btn-cancel" onClick={handleCancel}>Change Password</button>
               </>
             )}
           </div>
         </div>
 
-        {/* ── Right ── */}
+        {/* ── Right Column ── */}
         <div className="pf-right">
           {/* Room info panel */}
           <div className="pf-panel">
@@ -141,28 +145,24 @@ export default function Profile() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
               </svg>
-              <span>Thông tin thuê phòng</span>
+              <span>Rental Information</span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Phòng đang thuê</span>
+              <span className="pf-panel-label">Current Room</span>
               <span className="pf-panel-value pf-panel-value--blue">
-                {currentRoom.number} - Tầng {currentRoom.floor}
+                {currentRoom.number} - Floor {currentRoom.floor}
               </span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Ngày chuyển vào</span>
+              <span className="pf-panel-label">Move-in Date</span>
               <span className="pf-panel-value">
                 {moveInDate ? fmtDate(moveInDate) : '—'}
               </span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Hết hạn hợp đồng</span>
+              <span className="pf-panel-label">Contract Expiry</span>
               <span className={`pf-panel-value ${days <= 30 ? 'pf-panel-value--orange' : ''}`}>
                 {contractEnd ? fmtDate(contractEnd) : '—'}
-              </span>
-            </div>
-            <div className="pf-panel-row">
-              <span className="pf-panel-value">
               </span>
             </div>
           </div>
@@ -176,18 +176,18 @@ export default function Profile() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>Địa chỉ thường trú</span>
+              <span>Permanent Address</span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Tỉnh / Thành phố</span>
+              <span className="pf-panel-label">City / Province</span>
               <span className="pf-panel-value">{currentTenant?.province || '—'}</span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Quận / Huyện</span>
+              <span className="pf-panel-label">District</span>
               <span className="pf-panel-value">{currentTenant?.district || '—'}</span>
             </div>
             <div className="pf-panel-row">
-              <span className="pf-panel-label">Địa chỉ chi tiết</span>
+              <span className="pf-panel-label">Detailed Address</span>
               <span className="pf-panel-value">{currentTenant?.address || '—'}</span>
             </div>
           </div>

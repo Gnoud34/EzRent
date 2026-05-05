@@ -1,56 +1,84 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import Header from '../../../components/Header/Header';
 import './Settings.css';
 
+interface UserProfile {
+    name: string;
+    email: string;
+    phoneNumber: string;
+    avatar?: string | null;
+}
+
 const Settings: React.FC = () => {
-    // 1. Lấy dữ liệu user hiện tại
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
+    // 1. Initialize user state safely
+    const [user, setUser] = useState<UserProfile>(() => {
+        const saved = localStorage.getItem('user');
+        return saved ? JSON.parse(saved) : { name: 'Guest', email: '', phoneNumber: '' };
+    });
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // 2. State cho các trường thông tin
+    // 2. Form state - linked to user data
     const [formData, setFormData] = useState({
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phoneNumber || '',
-        address: '2 Pham Van Bach, Cau Giay, Ha Noi', // Mock data thêm
+        name: user.name,
+        email: user.email,
+        phone: user.phoneNumber,
+        address: '2 Pham Van Bach, Cau Giay, Ha Noi',
         propertyName: 'FunHome Central'
     });
 
     const getInitials = (name: string) => {
-        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : '??';
     };
 
-    // 3. Xử lý Upload Avatar
+    // Generic input handler
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            // Check file size (localStorage limit is ~5MB)
+            if (file.size > 1024 * 1024) {
+                alert("Image too large. Please choose a file under 1MB.");
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result as string;
                 const updatedUser = { ...user, avatar: base64String };
                 setUser(updatedUser);
-                // Lưu tạm vào localStorage để Header cập nhật ngay
                 localStorage.setItem('user', JSON.stringify(updatedUser));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    // 4. Xử lý Xóa Avatar
     const handleRemoveAvatar = () => {
         const updatedUser = { ...user, avatar: null };
         setUser(updatedUser);
         localStorage.setItem('user', JSON.stringify(updatedUser));
     };
 
-    // 5. Xử lý Save Changes
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
-        const updatedUser = { ...user, name: formData.name, email: formData.email, phoneNumber: formData.phone };
+        const updatedUser = { 
+            ...user, 
+            name: formData.name, 
+            email: formData.email, 
+            phoneNumber: formData.phone 
+        };
+        
         localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser); // Update local state
+        
         alert('Settings saved successfully!');
-        window.location.reload(); // Reload để đồng bộ toàn bộ app
+        // Note: If Header uses AuthContext, it would update automatically without reload.
+        // window.location.reload(); 
     };
 
     return (
@@ -60,19 +88,18 @@ const Settings: React.FC = () => {
                 <Header pageTitle="Settings" />
 
                 <div className="settings-content">
-                    <div className="section-title" style={{ marginBottom: '2rem' }}>
+                    <div className="section-title">
                         <h2>Settings</h2>
                         <p>Manage your profile and property information</p>
                     </div>
 
                     <div className="settings-card">
-                        {/* Avatar Section */}
                         <div className="avatar-section">
                             <div className="large-avatar-wrapper">
                                 {user.avatar ? (
                                     <img src={user.avatar} className="large-avatar-img" alt="Avatar" />
                                 ) : (
-                                    getInitials(user.name)
+                                    <div className="avatar-placeholder">{getInitials(user.name)}</div>
                                 )}
                             </div>
                             <div className="avatar-actions">
@@ -94,14 +121,15 @@ const Settings: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Form Section */}
                         <form className="settings-form" onSubmit={handleSave}>
                             <div className="form-group">
                                 <label><i className="bi bi-person"></i> Full Name</label>
                                 <input
                                     type="text"
+                                    name="name"
                                     value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
 
@@ -109,8 +137,10 @@ const Settings: React.FC = () => {
                                 <label><i className="bi bi-envelope"></i> Email Address</label>
                                 <input
                                     type="email"
+                                    name="email"
                                     value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    onChange={handleChange}
+                                    required
                                 />
                             </div>
 
@@ -118,28 +148,11 @@ const Settings: React.FC = () => {
                                 <label><i className="bi bi-telephone"></i> Phone Number</label>
                                 <input
                                     type="text"
+                                    name="phone"
                                     value={formData.phone}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                    onChange={handleChange}
                                 />
                             </div>
-
-                            {/* <div className="form-group">
-                                <label><i className="bi bi-geo-alt"></i> Property Address</label>
-                                <textarea
-                                    rows={2}
-                                    value={formData.address}
-                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                ></textarea>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Property Name</label>
-                                <input
-                                    type="text"
-                                    value={formData.propertyName}
-                                    onChange={(e) => setFormData({ ...formData, propertyName: e.target.value })}
-                                />
-                            </div> */}
 
                             <button type="submit" className="btn-save-settings">Save Changes</button>
                         </form>

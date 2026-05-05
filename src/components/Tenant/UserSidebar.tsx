@@ -25,7 +25,7 @@ const UserSidebar: React.FC = () => {
       ),
     },
     {
-      name: 'Phòng của tôi',
+      name: 'My Room',
       path: '/tenant/my-room',
       icon: (
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ const UserSidebar: React.FC = () => {
       ),
     },
     {
-      name: 'Hồ sơ',
+      name: 'Profile',
       path: '/tenant/profile',
       icon: (
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@ const UserSidebar: React.FC = () => {
       ),
     },
     {
-      name: 'Bảo trì',
+      name: 'Maintenance',
       path: '/tenant/maintenance',
       icon: (
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +57,7 @@ const UserSidebar: React.FC = () => {
   ];
 
   const handleLogout = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+    if (window.confirm('Are you sure you want to logout?')) {
       localStorage.removeItem('user');
       navigate('/login');
     }

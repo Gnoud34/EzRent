@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RoomDetail.css';
@@ -31,8 +32,8 @@ export default function RoomDetail() {
   if (!room) {
     return (
       <div className="rd-not-found">
-        <p>❌ Không tìm thấy thông tin phòng.</p>
-        <button onClick={() => navigate('/rooms')}>← Quay lại danh sách</button>
+        <p>❌ Room information not found.</p>
+        <button onClick={() => navigate('/rooms')}>← Back to Listings</button>
       </div>
     );
   }
@@ -54,20 +55,20 @@ export default function RoomDetail() {
       <nav className="rd-nav">
         <div className="rd-nav-inner">
           <div className="rd-logo" onClick={() => navigate('/')}>EzRent</div>
-          <button onClick={() => navigate('/login')}>Đăng nhập</button>
+          <button onClick={() => navigate('/login')}>Login</button>
         </div>
       </nav>
 
       <div className="rd-body">
         {/* ── Breadcrumb ── */}
         <div className="rd-breadcrumb">
-          <span onClick={() => navigate('/')}>Trang chủ</span> ›
-          <span onClick={() => navigate('/rooms')}> Phòng trọ</span> ›
-          <span> Phòng {room.number}</span>
+          <span onClick={() => navigate('/')}>Home</span> ›
+          <span onClick={() => navigate('/rooms')}> Room Listings</span> ›
+          <span> Room {room.number}</span>
         </div>
 
         <div className="rd-grid">
-          {/* ── CỘT TRÁI ── */}
+          {/* ── LEFT COLUMN ── */}
           <div className="rd-left-col">
 
             {/* ── Image gallery ── */}
@@ -76,11 +77,11 @@ export default function RoomDetail() {
               <div className="rd-gallery-main">
                 <img
                   src={ROOM_IMAGES[currentImg]}
-                  alt={`Phòng ${room.number} - ảnh ${currentImg + 1}`}
+                  alt={`Room ${room.number} - Image ${currentImg + 1}`}
                 />
                 {/* Status badge */}
                 <span className={`rd-gallery-badge ${available ? 'rd-green' : 'rd-red'}`}>
-                  {available ? '✅ Còn trống' : '🔴 Đã thuê'}
+                  {available ? '✅ Available' : '🔴 Occupied'}
                 </span>
                 {/* Prev / Next buttons */}
                 <button className="rd-gallery-btn rd-gallery-btn--prev" onClick={prevImg}>
@@ -109,7 +110,7 @@ export default function RoomDetail() {
                     className={`rd-gallery-thumb ${i === currentImg ? 'rd-gallery-thumb--active' : ''}`}
                     onClick={() => setCurrentImg(i)}
                   >
-                    <img src={src} alt={`Ảnh ${i + 1}`} />
+                    <img src={src} alt={`Thumbnail ${i + 1}`} />
                   </button>
                 ))}
               </div>
@@ -117,13 +118,13 @@ export default function RoomDetail() {
 
             {/* Description */}
             <div className="rd-panel">
-              <h3>Mô tả phòng</h3>
+              <h3>Room Description</h3>
               <p>{room.description}</p>
             </div>
 
             {/* Amenities */}
             <div className="rd-panel">
-              <h3>Tiện nghi</h3>
+              <h3>Amenities</h3>
               <div className="rd-amenities-list">
                 {room.amenities.map(a => (
                   <div key={a} className="rd-amenity-item">{a}</div>
@@ -132,18 +133,18 @@ export default function RoomDetail() {
             </div>
           </div>
 
-          {/* ── CỘT PHẢI ── */}
+          {/* ── RIGHT COLUMN ── */}
           <div className="rd-detail-card">
-            <h1>Phòng {room.number}</h1>
+            <h1>Room {room.number}</h1>
 
             <div className="rd-info-box">
-              <p><span>Tầng</span><strong>{room.floor}</strong></p>
-              <p><span>Sức chứa</span><strong>{room.capacity} người</strong></p>
-              <p><span>Diện tích</span><strong>{room.area} m²</strong></p>
+              <p><span>Floor</span><strong>{room.floor}</strong></p>
+              <p><span>Capacity</span><strong>{room.capacity} Guests</strong></p>
+              <p><span>Area</span><strong>{room.area} m²</strong></p>
               <p>
-                <span>Trạng thái</span>
+                <span>Status</span>
                 <strong className={available ? 'rd-text-green' : 'rd-text-red'}>
-                  {available ? 'Còn trống' : 'Đã thuê'}
+                  {available ? 'Available' : 'Occupied'}
                 </strong>
               </p>
             </div>
@@ -152,15 +153,15 @@ export default function RoomDetail() {
               {available ? (
                 <>
                   <button className="rd-btn-main" onClick={() => navigate('/login')}>
-                    📝 Đăng ký thuê phòng
+                    📝 Register for Rent
                   </button>
-                  <button className="rd-btn-contact" onClick={() => alert('Liên hệ: 0901 234 567')}>
-                    📞 Liên hệ tư vấn
+                  <button className="rd-btn-contact" onClick={() => alert('Contact: 0901 234 567')}>
+                    📞 Contact Support
                   </button>
                 </>
               ) : (
                 <button className="rd-btn-alt" onClick={() => navigate('/rooms')}>
-                  🔍 Xem phòng trống khác
+                  🔍 View Other Available Rooms
                 </button>
               )}
             </div>

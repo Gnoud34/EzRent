@@ -8,7 +8,7 @@ import Header from '../../../components/Header/Header';
 interface MaintenanceRequest {
     id: string;
     roomNumber: string;
-    title: string; // Thêm trường title (Category)
+    title: string; // Used as Category
     description: string;
     status: string;
     createdAt: string;
@@ -18,9 +18,9 @@ interface MaintenanceRequest {
 const Maintenances: React.FC = () => {
     const [requests, setRequests] = useState<MaintenanceRequest[]>(mockData.maintenanceRequests as any);
     const [statusFilter, setStatusFilter] = useState('all');
-    const [categoryFilter, setCategoryFilter] = useState('all'); // State cho lọc Category
+    const [categoryFilter, setCategoryFilter] = useState('all');
 
-    // Danh sách các loại category để hiển thị tag
+    // List of categories for filter tags
     const categories = [
         { id: 'all', label: 'All Categories' },
         { id: 'Maintenance', label: 'Maintenance' },
@@ -36,7 +36,7 @@ const Maintenances: React.FC = () => {
     });
 
     const getTenantName = (tenantId: string) => {
-        return mockData.tenants.find(t => t.id === tenantId)?.name || 'Unknown';
+        return mockData.tenants.find(t => t.id === tenantId)?.name || 'Unknown Tenant';
     };
 
     const handleUpdateStatus = (id: string, newStatus: string) => {
@@ -55,18 +55,33 @@ const Maintenances: React.FC = () => {
                     <div className="section-header-main">
                         <div>
                             <h2>Repair Requests</h2>
-                            <p>Track and manage room maintenance</p>
+                            <p>Track and manage room maintenance tasks</p>
                         </div>
 
                         <div className="filters-container">
-                            {/* Filter theo Trạng thái */}
+                            {/* Status Filter */}
                             <div className="filter-group">
-                                <button className={statusFilter === 'all' ? 'active' : ''} onClick={() => setStatusFilter('all')}>All Status</button>
-                                <button className={statusFilter === 'pending' ? 'active' : ''} onClick={() => setStatusFilter('pending')}>Pending</button>
-                                <button className={statusFilter === 'resolved' ? 'active' : ''} onClick={() => setStatusFilter('resolved')}>Resolved</button>
+                                <button 
+                                    className={statusFilter === 'all' ? 'active' : ''} 
+                                    onClick={() => setStatusFilter('all')}
+                                >
+                                    All Status
+                                </button>
+                                <button 
+                                    className={statusFilter === 'pending' ? 'active' : ''} 
+                                    onClick={() => setStatusFilter('pending')}
+                                >
+                                    Pending
+                                </button>
+                                <button 
+                                    className={statusFilter === 'resolved' ? 'active' : ''} 
+                                    onClick={() => setStatusFilter('resolved')}
+                                >
+                                    Resolved
+                                </button>
                             </div>
 
-                            {/* Filter theo Danh mục (Category/Title) */}
+                            {/* Category Filter Tags */}
                             <div className="category-tags">
                                 {categories.map(cat => (
                                     <span
@@ -86,7 +101,7 @@ const Maintenances: React.FC = () => {
                             <thead>
                                 <tr>
                                     <th>Room</th>
-                                    <th>Category</th> {/* Thêm cột Category */}
+                                    <th>Category</th>
                                     <th>Description</th>
                                     <th>Requested By</th>
                                     <th>Date</th>
@@ -102,7 +117,9 @@ const Maintenances: React.FC = () => {
                                             <span className="table-category-label">{req.title}</span>
                                         </td>
                                         <td className="desc-col">
-                                            <div className="desc-text" title={req.description}>{req.description}</div>
+                                            <div className="desc-text" title={req.description}>
+                                                {req.description}
+                                            </div>
                                         </td>
                                         <td>{getTenantName(req.createdBy)}</td>
                                         <td>{req.createdAt}</td>
@@ -128,7 +145,7 @@ const Maintenances: React.FC = () => {
                             </tbody>
                         </table>
                         {filteredRequests.length === 0 && (
-                            <div className="no-data">No requests found for this filter.</div>
+                            <div className="no-data">No requests found matching these filters.</div>
                         )}
                     </div>
                 </div>
