@@ -37,16 +37,11 @@
             "number": "R101",
             "capacity": 1,
             "area": 20,
+            "price": 5000000,
             "floor": 1,
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi"
-            ],
             "status": "occupied",
             "notes": "Single room with AC",
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": [
                 "1"
             ]
@@ -66,6 +61,7 @@
             ],
             "status": "occupied",
             "notes": "Double room",
+            " amenities": "WiFi tốc độ cao, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": [
                 "2",
                 "5"
@@ -76,33 +72,23 @@
             "number": "R103",
             "capacity": 1,
             "area": 20,
+            "price": 5000000,
             "floor": 1,
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi"
-            ],
             "status": "available",
             "notes": "Single room",
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": []
         },
         {
             "id": "4",
             "number": "R104",
             "capacity": 2,
-            "area": 30,
+            "area": 25,
+            "price": 6000000,
             "floor": 1,
             "status": "available",
             "notes": "Double room with balcony",
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi"
-            ],
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": []
         },
         {
@@ -110,16 +96,11 @@
             "number": "R201",
             "capacity": 1,
             "area": 20,
+            "price": 5000000,
             "floor": 2,
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi"
-            ],
             "status": "occupied",
             "notes": "Single room",
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": [
                 "3"
             ]
@@ -128,17 +109,12 @@
             "id": "6",
             "number": "R202",
             "capacity": 2,
-            "area": 30,
+            "area": 25,
+            "price": 6000000,
             "floor": 2,
-            "status": "available",
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi"
-            ],
+            "status": "occupied",
             "notes": "Double room with AC",
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": [
                 "4"
             ]
@@ -148,36 +124,23 @@
             "number": "R203",
             "capacity": 1,
             "area": 20,
+            "price": 5000000,
             "floor": 2,
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi"
-            ],
             "status": "available",
             "notes": "Single room",
-            "tenantIds": [
-                "6"
-            ]
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
+            "tenantIds": []
         },
         {
             "id": "8",
             "number": "R204",
             "capacity": 2,
-            "area": 30,
+            "area": 25,
+            "price": 6000000,
             "floor": 2,
-            "amenities": [
-                "Giường",
-                "Tủ quần áo",
-                "Bàn học",
-                "Điều hòa",
-                "Wifi",
-                "Ban công"
-            ],
             "status": "available",
             "notes": "Double room",
+            " amenities": "WiFi tốc độ cao, Điều hòa, Tủ lạnh, Bàn học, WC riêng, Giường ngủ",
             "tenantIds": []
         }
     ],
@@ -187,9 +150,8 @@
             "name": "Nguyen Van An",
             "phone": "+84 123 456 789",
             "roomId": "1",
-            "moveInDate": "2025-01-15",
-            "expireDate": "2026-10-14",
-            "status": "active",
+            "moveInDate": "2026-01-15",
+            "expiryDate": "2026-06-15",
             "userId": "u1"
         },
         {
@@ -198,34 +160,16 @@
             "phone": "+84 123 456 783",
             "roomId": "2",
             "moveInDate": "2026-02-01",
-            "expireDate": "2027-02-01",
-            "status": "active",
+            "expiryDate": "2026-07-31",
             "userId": "u2"
-        },
-        {
-            "id": "inq_01",
-            "name": "Tran Thi Hoa",
-            "phone": "+84 988 777 666",
-            "roomId": "",
-            "status": "inquiry",
-            "note": "Cần phòng tầng 1, có chỗ để xe điện"
-        },
-        {
-            "id": "inq_02",
-            "name": "Le Van Nam",
-            "phone": "+84 911 222 333",
-            "roomId": "3",
-            "status": "inquiry",
-            "note": "Muốn xem phòng R103 vào chiều mai"
         },
         {
             "id": "3",
             "name": "Nguyen Cong Chien",
             "phone": "+84 123 456 735",
             "roomId": "5",
-            "moveInDate": "2025-12-10",
-            "expireDate": "2026-12-10",
-            "status": "active"
+            "moveInDate": "2026-12-10",
+            "expiryDate": "2026-05-31"
         },
         {
             "id": "4",
@@ -233,8 +177,7 @@
             "phone": "+84 123 456 726",
             "roomId": "6",
             "moveInDate": "2026-03-05",
-            "expireDate": "2027-03-05",
-            "status": "active"
+            "expiryDate": "2026-08-31"
         },
         {
             "id": "5",
@@ -242,8 +185,7 @@
             "phone": "+84 123 456 732",
             "roomId": "2",
             "moveInDate": "2026-02-01",
-            "expireDate": "2027-02-01",
-            "status": "active"
+            "expiryDate": "2026-07-31"
         },
         {
             "id": "6",
@@ -251,8 +193,7 @@
             "phone": "+84 123 456 712",
             "roomId": "6",
             "moveInDate": "2026-03-05",
-            "expireDate": "2027-03-05",
-            "status": "active"
+            "expiryDate": "2026-08-31"
         },
         {
             "id": "old_01",
@@ -260,7 +201,7 @@
             "phone": "+84 900 111 222",
             "roomId": "1",
             "moveInDate": "2024-10-01",
-            "expireDate": "2025-10-01",
+            "expiryDate": "2024-10-01",
             "status": "expired",
             "note": "Đã trả phòng đúng hạn, hoàn cọc xong"
         }
