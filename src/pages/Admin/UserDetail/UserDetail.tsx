@@ -5,7 +5,6 @@ import Header from '../../../components/Header/Header';
 import mockData from '../../../data/mockdata.json'; // To map roomId to Room Number
 import './UserDetail.css';
 
-// 1. Define a flexible interface for both Admin and Tenant data
 interface DetailUser {
     name?: string;
     email?: string;
@@ -22,7 +21,6 @@ const UserDetail: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     
-    // Check if we are viewing a tenant (passed via state) or ourselves
     const isTenantView = !!location.state?.tenantData;
 
     const [displayUser] = useState<DetailUser | null>(() => {
@@ -59,7 +57,6 @@ const UserDetail: React.FC = () => {
         );
     }
 
-    // Determine values based on available keys
     const userName = displayUser.name || 'Unknown User';
     const userPhone = displayUser.phone || displayUser.phoneNumber || 'N/A';
     const userRoleOrStatus = (displayUser.status || displayUser.role || 'Member').toUpperCase();

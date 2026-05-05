@@ -100,7 +100,6 @@
     padding: 40px;
     color: #94a3b8;
 }
-/* Thêm/Sửa vào Maintenances.css */
 
 .section-header-main {
     margin-bottom: 2rem;
@@ -113,7 +112,6 @@
     gap: 1rem;
 }
 
-/* Style cho các Tag Category */
 .category-tags {
     display: flex;
     flex-wrap: wrap;
@@ -144,7 +142,6 @@
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
-/* Nhãn category trong bảng */
 .table-category-label {
     font-size: 12px;
     background: #f1f5f9;
@@ -154,7 +151,6 @@
     font-weight: 600;
 }
 
-/* Cắt ngắn mô tả nếu quá dài */
 .desc-text {
     max-width: 250px;
     white-space: nowrap;
@@ -162,7 +158,6 @@
     text-overflow: ellipsis;
 }
 
-/* Các style cũ vẫn giữ nguyên */
 .filter-group {
     background: #f1f5f9;
     padding: 4px;
@@ -171,4 +166,3 @@
     gap: 4px;
     width: fit-content;
 }
-/* ... */

@@ -24,7 +24,6 @@ const DEFAULT_IMAGES = [
 ];
 
 const Rooms: React.FC = () => {
-    // Initialize state with proper mapping to avoid 'any'
     const [rooms, setRooms] = useState<Room[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingRoom, setEditingRoom] = useState<Room | null>(null);
@@ -38,7 +37,6 @@ const Rooms: React.FC = () => {
         images: ['', '', '']
     });
 
-    // Simulate Data Loading
     useEffect(() => {
         const initialRooms: Room[] = mockData.rooms.map((r: any) => ({
             ...r,
@@ -169,7 +167,6 @@ const Rooms: React.FC = () => {
                 </div>
             </main>
 
-            {/* Modal components remain largely the same, ensure they check for roomForm.images[idx] existing */}
         </div>
     );
 };

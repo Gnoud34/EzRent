@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif; /* Hoặc Arial nếu chưa cài font */
+  font-family: 'Inter', sans-serif; 
 }
 
 body {

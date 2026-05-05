@@ -15,7 +15,6 @@ const Auth: React.FC = () => {
         e.preventDefault();
 
         if (isLogin) {
-            // 1. Find user in mockData
             const userFound = mockData.users.find(
                 (u) => u.email === email && u.password === password
             );

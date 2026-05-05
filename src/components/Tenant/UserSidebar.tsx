@@ -4,12 +4,7 @@ import './UserSidebar.css';
 
 const UserSidebar: React.FC = () => {
   const navigate = useNavigate();
-  // const userData = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // const getInitials = (name: string) => {
-  //   if (!name) return 'NV';
-  //   return name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
-  // };
 
   const menuItems = [
     {
@@ -65,7 +60,6 @@ const UserSidebar: React.FC = () => {
 
   return (
     <aside className="usb-sidebar">
-      {/* Logo */}
       <div className="usb-logo">
         <div className="usb-logo-icon">
           <svg width="18" height="18" fill="none" stroke="#2563EB" viewBox="0 0 24 24">
@@ -76,7 +70,6 @@ const UserSidebar: React.FC = () => {
         <span>EzRent</span>
       </div>
 
-      {/* Nav */}
       <nav className="usb-nav">
         <ul>
           {menuItems.map(item => (
@@ -95,29 +88,7 @@ const UserSidebar: React.FC = () => {
         </ul>
       </nav>
 
-      {/* Footer: user info + logout */}
       <div className="usb-footer">
-        {/* <div className="usb-user">
-          <div className="usb-avatar">
-            {userData.avatar ? (
-              <img
-                src={userData.avatar}
-                alt={userData.name}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerText = getInitials(userData.name);
-                }}
-              />
-            ) : (
-              getInitials(userData.name || '')
-            )}
-          </div>
-          <div className="usb-user-info">
-            <p className="usb-user-name">{userData.name || 'Người dùng'}</p>
-            <p className="usb-user-email">{userData.email || ''}</p>
-          </div> */}
-        {/* </div> */}
-
         <button className="usb-logout" onClick={handleLogout}>
           <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

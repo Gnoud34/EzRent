@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import mockData from '../../../data/mockdata.json';
@@ -8,7 +7,7 @@ import Header from '../../../components/Header/Header';
 interface MaintenanceRequest {
     id: string;
     roomNumber: string;
-    title: string; // Used as Category
+    title: string; 
     description: string;
     status: string;
     createdAt: string;
@@ -20,7 +19,6 @@ const Maintenances: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState('all');
     const [categoryFilter, setCategoryFilter] = useState('all');
 
-    // List of categories for filter tags
     const categories = [
         { id: 'all', label: 'All Categories' },
         { id: 'Maintenance', label: 'Maintenance' },
@@ -59,7 +57,6 @@ const Maintenances: React.FC = () => {
                         </div>
 
                         <div className="filters-container">
-                            {/* Status Filter */}
                             <div className="filter-group">
                                 <button 
                                     className={statusFilter === 'all' ? 'active' : ''} 
@@ -81,7 +78,6 @@ const Maintenances: React.FC = () => {
                                 </button>
                             </div>
 
-                            {/* Category Filter Tags */}
                             <div className="category-tags">
                                 {categories.map(cat => (
                                     <span

@@ -4,14 +4,13 @@
 
 .settings-card {
     background: white;
-    max-width: 600px; /* Độ rộng vừa phải cho form */
+    max-width: 600px; 
     border-radius: 16px;
     border: 1px solid #e2e8f0;
     padding: 2rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Phần quản lý Avatar to */
 .avatar-section {
     display: flex;
     align-items: center;
@@ -22,25 +21,22 @@
 }
 
 .large-avatar-wrapper {
-    /* Tăng kích thước lên to hơn */
     width: 250px;
     height: 250px;
     
-    /* Chuyển sang hình vuông bo góc nhẹ */
-    border-radius: 20px; /* Góc bo nhẹ 20px */
+    border-radius: 20px; 
     
     background-color: #2563eb;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem; /* Tăng cỡ chữ viết tắt */
+    font-size: 3rem; 
     font-weight: 700;
-    overflow: hidden; /* Đảm bảo ảnh được bo góc theo khung */
+    overflow: hidden; 
     
-    /* Bo viền trắng nổi bật */
     border: 5px solid #eff6ff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Bóng mờ nhẹ */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
 }
 .large-avatar-img {
     width: 100%;

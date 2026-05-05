@@ -1,6 +1,5 @@
 .mt-page { padding: 24px; background: #F9FAFB; min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
 
-/* Header */
 .mt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .mt-sub    { font-size: 13px; color: #6B7280; margin: 0; }
 .mt-add-btn {
@@ -16,7 +15,6 @@
 }
 .mt-add-btn:hover { background: #1F2937; }
 
-/* Summary cards — dark */
 .mt-summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -34,7 +32,6 @@
 .mt-summary-count--orange { color: #FB923C; }
 .mt-summary-count--green  { color: #34D399; }
 
-/* List */
 .mt-list { display: flex; flex-direction: column; gap: 0; background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; }
 
 .mt-item {
@@ -48,19 +45,16 @@
 .mt-item:last-child { border-bottom: none; }
 .mt-item:hover { background: #FAFAFA; }
 
-/* Dot */
 .mt-dot { display: block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
 .mt-dot--orange { background: #FB923C; }
 .mt-dot--green  { background: #34D399; }
 
-/* Item body */
 .mt-item-body { flex: 1; min-width: 0; }
 .mt-item-top  { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
 .mt-item-title { font-size: 14px; font-weight: 600; color: #111827; margin: 0; line-height: 1.4; }
 .mt-item-desc  { font-size: 13px; color: #6B7280; margin: 0 0 4px; line-height: 1.5; }
 .mt-item-date  { font-size: 12px; color: #9CA3AF; margin: 0; }
 
-/* Badges */
 .mt-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
 .mt-badge--orange  { background: #FEF3C7; color: #D97706; }
 .mt-badge--pending { background: #FEF3C7; color: #D97706; }
@@ -70,7 +64,6 @@
   border-radius: 6px;
 }
 
-/* ── Modal — dark theme ── */
 .mt-overlay {
   position: fixed;
   inset: 0;
@@ -144,14 +137,12 @@
 }
 .mt-btn-submit:hover { background: #E5E7EB; }
 
-/* Responsive */
 @media (max-width: 600px) {
   .mt-page { padding: 16px 12px; }
   .mt-summary-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .mt-summary-card { padding: 12px; }
   .mt-summary-count { font-size: 22px; }
 }
-/* Filter Bar Container */
 .mt-filter-bar {
   display: flex;
   gap: 12px;
@@ -159,7 +150,6 @@
   flex-wrap: wrap;
 }
 
-/* Nút bấm (Chip) */
 .mt-filter-chip {
   padding: 8px 20px;
   border-radius: 50px;
@@ -177,7 +167,6 @@
   border-color: #cbd5e1;
 }
 
-/* Khi nút được chọn (Active) - Giống màu xanh trong ảnh của bạn */
 .mt-filter-chip.active {
   background: #2563eb;
   color: white;
@@ -185,7 +174,6 @@
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-/* Nhãn Category bên trong từng item request */
 .mt-item-cat-label {
   display: inline-block;
   background: #f1f5f9;
@@ -196,7 +184,6 @@
   margin-top: 4px;
 }
 
-/* Select box trong modal */
 .mt-form-select {
   width: 100%;
   padding: 10px;

@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════
-   RoomListing.css — Guest role
-═══════════════════════════════════ */
+
 
 .rl-root {
   min-height: 100vh;
@@ -8,7 +6,6 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* ── Navbar ── */
 .rl-nav {
   position: sticky;
   top: 0;
@@ -50,14 +47,12 @@
 }
 .rl-btn-login:hover { background: #1D4ED8; }
 
-/* ── Body container ── */
 .rl-body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 32px 24px 72px;
 }
 
-/* ── Page header ── */
 .rl-page-header {
   margin-bottom: 32px;
 }
@@ -73,7 +68,6 @@
   margin: 0;
 }
 
-/* ── Toolbar ── */
 .rl-toolbar {
   display: flex;
   gap: 12px;
@@ -81,7 +75,6 @@
   flex-wrap: wrap;
 }
 
-/* Search box */
 .rl-search-box {
   flex: 1;
   min-width: 280px;
@@ -110,7 +103,6 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Filter buttons */
 .rl-filter-btns {
   display: flex;
   gap: 8px;
@@ -141,14 +133,12 @@
   border-color: #1D4ED8;
 }
 
-/* ── Result count ── */
 .rl-count {
   font-size: 13px;
   color: #9CA3AF;
   margin: 0 0 16px;
 }
 
-/* ── Empty state ── */
 .rl-empty {
   display: flex;
   flex-direction: column;
@@ -172,7 +162,6 @@
   color: #9CA3AF;
 }
 
-/* ── Grid ── */
 .rl-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -186,7 +175,6 @@
   .rl-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Room card ── */
 .rl-card {
   background: #fff;
   border: 1px solid #E5E7EB;
@@ -202,7 +190,6 @@
   border-color: #BFDBFE;
 }
 
-/* Card image */
 .rl-card-img {
   height: 160px;
   background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
@@ -223,7 +210,6 @@
 .rl-status-badge--green { background: #DCFCE7; color: #16A34A; }
 .rl-status-badge--gray  { background: #F3F4F6; color: #6B7280; }
 
-/* Card body */
 .rl-card-body {
   padding: 16px;
 }

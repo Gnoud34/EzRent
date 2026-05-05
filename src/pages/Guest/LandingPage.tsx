@@ -35,7 +35,6 @@ export default function LandingPage() {
 
   return (
     <div className="lp-root">
-      {/* ── Navbar ── */}
       <nav className="lp-nav">
         <div className="lp-nav-inner">
           <div className="lp-logo">
@@ -54,7 +53,6 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ── Hero ── */}
       <section className="lp-hero">
         <div>
           <p className="lp-hero-badge">🏠 Smart Rental Management System</p>
@@ -85,7 +83,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Features ── */}
       <section id="features" className="lp-section lp-section--gray">
         <div className="lp-section-inner">
           <div className="lp-section-head">
@@ -104,7 +101,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Room preview ── */}
       <section id="rooms" className="lp-section">
         <div className="lp-section-inner">
           <div className="lp-section-head">
@@ -145,7 +141,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Contact ── */}
       <section id="contact" className="lp-section lp-section--gray">
         <div className="lp-section-inner lp-contact-grid">
           <div className="lp-contact-info">

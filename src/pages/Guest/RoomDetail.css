@@ -1,6 +1,4 @@
-/* ══════════════════════════════════════════════════════════════
-   RoomDetail.css — COMPLETE
-══════════════════════════════════════════════════════════════ */
+
 
 .rd-root {
   min-height: 100vh;
@@ -8,7 +6,6 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ── Navbar ── */
 .rd-nav {
   position: sticky;
   top: 0;
@@ -47,14 +44,12 @@
 }
 .rd-nav-inner button:hover { background: #1D4ED8; }
 
-/* ── Body container ── */
 .rd-body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px 24px 72px;
 }
 
-/* ── Breadcrumb ── */
 .rd-breadcrumb {
   display: flex;
   align-items: center;
@@ -74,7 +69,6 @@
   cursor: default;
 }
 
-/* ── Main grid ── */
 .rd-grid {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -88,14 +82,11 @@
   }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   IMAGE GALLERY
-══════════════════════════════════════════════════════════════ */
+
 .rd-gallery {
   margin-bottom: 20px;
 }
 
-/* ── Main image box ── */
 .rd-gallery-main {
   position: relative;
   border-radius: 16px;
@@ -112,7 +103,6 @@
   transition: opacity 0.2s;
 }
 
-/* Status badge */
 .rd-gallery-badge {
   position: absolute;
   top: 14px;
@@ -124,7 +114,7 @@
   z-index: 2;
 }
 
-/* Prev / Next buttons */
+
 .rd-gallery-btn {
   position: absolute;
   top: 50%;
@@ -153,7 +143,6 @@
 .rd-gallery-btn--prev { left: 12px; }
 .rd-gallery-btn--next { right: 12px; }
 
-/* Dots */
 .rd-gallery-dots {
   position: absolute;
   bottom: 12px;
@@ -178,7 +167,6 @@
   transform: scale(1.3);
 }
 
-/* ── Thumbnails ── */
 .rd-gallery-thumbs {
   display: flex;
   gap: 8px;
@@ -206,11 +194,7 @@
   opacity: 1;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   LEFT COLUMN PANELS
-══════════════════════════════════════════════════════════════ */
 
-/* Fallback room image (khi không dùng gallery) */
 .rd-img {
   background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
   border-radius: 16px;
@@ -237,7 +221,6 @@
   border-radius: 20px;
 }
 
-/* Panel */
 .rd-panel {
   background: #fff;
   border: 1px solid #E5E7EB;
@@ -259,7 +242,6 @@
   margin: 0;
 }
 
-/* Amenities list */
 .rd-amenities-list {
   display: flex;
   flex-wrap: wrap;
@@ -283,9 +265,7 @@
   font-weight: 700;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   RIGHT STICKY CARD
-══════════════════════════════════════════════════════════════ */
+
 .rd-detail-card {
   background: #fff;
   border: 1px solid #E5E7EB;
@@ -302,7 +282,6 @@
   margin: 0 0 8px;
 }
 
-/* Price — có 2 cách style giống nhau */
 .rd-detail-card > p:first-of-type,
 .rd-card-price {
   font-size: 22px;
@@ -318,7 +297,6 @@
   color: #9CA3AF;
 }
 
-/* Thông số phòng */
 .rd-info-box {
   background: #F9FAFB;
   border-radius: 12px;
@@ -340,7 +318,6 @@
   color: #111827;
 }
 
-/* Action buttons */
 .rd-action-btns {
   display: flex;
   flex-direction: column;
@@ -356,7 +333,6 @@
   transition: all 0.15s;
 }
 
-/* Nút Đăng ký (Xanh) */
 .rd-btn-main {
   background: #2563EB;
   color: #fff;
@@ -364,7 +340,6 @@
 }
 .rd-btn-main:hover { background: #1D4ED8; }
 
-/* Nút Liên hệ (Viền) */
 .rd-btn-contact {
   background: transparent;
   color: #2563EB;
@@ -375,7 +350,6 @@
   border-color: #2563EB;
 }
 
-/* Nút Xem phòng khác */
 .rd-btn-alt {
   background: #F3F4F6;
   color: #374151;
@@ -383,9 +357,7 @@
 }
 .rd-btn-alt:hover { background: #E5E7EB; }
 
-/* ══════════════════════════════════════════════════════════════
-   COLOR HELPERS
-══════════════════════════════════════════════════════════════ */
+
 .rd-green,
 .rd-text-green { 
   background: #DCFCE7 !important; 
@@ -397,9 +369,6 @@
   color: #DC2626 !important; 
 }
 
-/* ══════════════════════════════════════════════════════════════
-   NOT FOUND PAGE
-══════════════════════════════════════════════════════════════ */
 .rd-not-found {
   min-height: 80vh;
   display: flex;
@@ -413,22 +382,20 @@
   color: #6B7280;
   margin: 0;
 }
-/* Modal Overlay - Lớp nền mờ bao phủ toàn màn hình */
 .rd-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Làm tối nền */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(4px); /* Làm mờ nền đằng sau (tùy chọn) */
+  backdrop-filter: blur(4px);
 }
 
-/* Modal Content - Khối Form trắng */
 .rd-modal-content {
   background: white;
   padding: 30px;
@@ -487,7 +454,7 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   font-family: inherit;
-  box-sizing: border-box; /* Đảm bảo padding không làm tràn input */
+  box-sizing: border-box;
 }
 
 .rd-form-group input:focus, 

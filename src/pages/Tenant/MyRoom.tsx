@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import './MyRoom.css';
 import mockData from '../../data/mockdata.json';
 
-/* ─── Fetch data based on logged-in user ─── */
 const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 const currentUser = mockData.users.find(u => u.id === storedUser.id) || mockData.users[1];
 const currentTenant = (mockData.tenants as any[]).find(t => t.userId === currentUser.id)
@@ -11,17 +9,14 @@ const currentTenant = (mockData.tenants as any[]).find(t => t.userId === current
 const currentRoom = (mockData.rooms.find(r => r.id === currentTenant?.roomId)
   || mockData.rooms[0]) as any;
 
-/* ─── STATIC IMAGES ─── */
 const ROOM_IMAGES = [
   'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800',
   'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
   'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800',
 ];
 
-/* ─── Helpers ─── */
 function fmtDate(d: string) { 
   if (!d) return '—';
-  // Updated to US Locale (MM/DD/YYYY)
   return new Date(d).toLocaleDateString('en-US'); 
 }
 
@@ -55,19 +50,14 @@ export default function MyRoom() {
       </div>
 
       <div className="mr-grid">
-        {/* ── Left col ── */}
         <div className="mr-left">
-          
-          {/* ── Image gallery ── */}
           <div className="mr-gallery">
-            {/* Main image */}
             <div className="mr-gallery-main">
               <img
                 src={ROOM_IMAGES[currentImg]}
                 alt={`Room ${currentRoom?.number}`}
               />
 
-              {/* Prev / Next buttons */}
               <button className="mr-gallery-btn mr-gallery-btn--prev" onClick={prevImg}>
                 ‹
               </button>
@@ -75,7 +65,6 @@ export default function MyRoom() {
                 ›
               </button>
               
-              {/* Dots indicator */}
               <div className="mr-gallery-dots">
                 {ROOM_IMAGES.map((_, i) => (
                   <button
@@ -87,7 +76,6 @@ export default function MyRoom() {
               </div>
             </div>
 
-            {/* Thumbnails */}
             <div className="mr-gallery-thumbs">
               {ROOM_IMAGES.map((src, i) => (
                 <button
@@ -130,7 +118,6 @@ export default function MyRoom() {
           </div>
         </div>
 
-        {/* ── Right col ── */}
         <div className="mr-right">
           <div className="mr-contract-panel">
             <p className="mr-section-label">Contract Information</p>

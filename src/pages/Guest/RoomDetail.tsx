@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RoomDetail.css';
@@ -26,7 +25,6 @@ export default function RoomDetail() {
   const navigate = useNavigate();
   const [currentImg, setCurrentImg] = useState(0);
   
-  // Bước 1: Tạo State để quản lý việc đóng/mở Form
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const allRooms = (mockData.rooms as unknown as Room[]) || [];
@@ -52,7 +50,6 @@ export default function RoomDetail() {
     setCurrentImg(i => (i + 1) % ROOM_IMAGES.length);
   };
 
-  // Hàm xử lý gửi form
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert("Cảm ơn bạn! Yêu cầu hỗ trợ đã được gửi.");
@@ -61,7 +58,6 @@ export default function RoomDetail() {
 
   return (
     <div className="rd-root">
-      {/* ── Navbar ── */}
       <nav className="rd-nav">
         <div className="rd-nav-inner">
           <div className="rd-logo" onClick={() => navigate('/')}>EzRent</div>
@@ -70,7 +66,6 @@ export default function RoomDetail() {
       </nav>
 
       <div className="rd-body">
-        {/* ── Breadcrumb ── */}
         <div className="rd-breadcrumb">
           <span onClick={() => navigate('/')}>Home</span> ›
           <span onClick={() => navigate('/rooms')}> Room Listings</span> ›
@@ -78,7 +73,6 @@ export default function RoomDetail() {
         </div>
 
         <div className="rd-grid">
-          {/* ── LEFT COLUMN ── */}
           <div className="rd-left-col">
             <div className="rd-gallery">
               <div className="rd-gallery-main">
@@ -121,7 +115,6 @@ export default function RoomDetail() {
             </div>
           </div>
 
-          {/* ── RIGHT COLUMN ── */}
           <div className="rd-detail-card">
             <h1>Room {room.number}</h1>
             <div className="rd-info-box">
@@ -140,7 +133,6 @@ export default function RoomDetail() {
               {available ? (
                 <>
                   <button className="rd-btn-main" onClick={() => navigate('/login')}>📝 Register for Rent</button>
-                  {/* Bước 2: Khi ấn sẽ mở Form */}
                   <button className="rd-btn-contact" onClick={() => setIsFormOpen(true)}>📞 Contact Support</button>
                 </>
               ) : (
@@ -151,7 +143,6 @@ export default function RoomDetail() {
         </div>
       </div>
 
-      {/* ── Bước 3: Modal Contact Form ── */}
       {isFormOpen && (
         <div className="rd-modal-overlay" onClick={() => setIsFormOpen(false)}>
           <div className="rd-modal-content" onClick={(e) => e.stopPropagation()}>

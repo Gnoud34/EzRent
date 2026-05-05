@@ -1,11 +1,9 @@
-/* ── Reset & Root ── */
 .lp-root {
   font-family: 'Segoe UI', sans-serif;
   color: #111827;
   background: #fff;
 }
 
-/* ── Navbar ── */
 .lp-nav {
   position: sticky;
   top: 0;
@@ -45,7 +43,6 @@
 }
 .lp-nav-links a:hover { color: #111827; }
 
-/* ── Buttons ── */
 .lp-btn-primary {
   background: #2563EB;
   color: #fff;
@@ -99,7 +96,6 @@
 }
 .lp-btn-outline-blue:hover { background: #EFF6FF; }
 
-/* ── Hero ── */
 .lp-hero {
   max-width: 1200px;
   margin: 0 auto;
@@ -163,7 +159,6 @@
   font-weight: 700;
 }
 
-/* ── Sections ── */
 .lp-section { padding: 72px 0; }
 .lp-section--gray { background: #F9FAFB; }
 .lp-section-inner {
@@ -187,7 +182,6 @@
   margin: 0;
 }
 
-/* ── Room grid ── */
 .lp-room-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -245,7 +239,6 @@
 
 .lp-view-all { text-align: center; margin-top: 32px; }
 
-/* ── Features ── */
 .lp-feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -261,7 +254,6 @@
 .lp-feature-card h4 { font-size: 15px; font-weight: 700; color: #111827; margin: 0 0 8px; }
 .lp-feature-card p  { font-size: 13px; color: #6B7280; margin: 0; line-height: 1.6; }
 
-/* ── Contact ── */
 .lp-contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -300,7 +292,6 @@
 .lp-form-group input:focus,
 .lp-form-group textarea:focus { border-color: #2563EB; }
 
-/* ── Footer ── */
 .lp-footer {
   background: #111827;
   padding: 28px 24px;
@@ -315,7 +306,6 @@
 .lp-footer-logo span { color: #fff; }
 .lp-footer-copy { font-size: 13px; color: #9CA3AF; margin: 0; }
 
-/* ── Responsive ── */
 @media (max-width: 900px) {
   .lp-hero { grid-template-columns: 1fr; }
   .lp-hero-img { display: none; }

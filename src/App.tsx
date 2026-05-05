@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import type { JSX } from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-// ── Admin ──
 import Dashboard    from './pages/Admin/Dashboard/Dashboard';
 import Tenants      from './pages/Admin/Tenants/Tenants';
 import Rooms        from './pages/Admin/Rooms/Rooms';
@@ -11,21 +10,15 @@ import Settings     from './pages/Admin/Settings/Settings';
 import Maintenances from './pages/Admin/Maintenances/Maintenances';
 import UserRequest  from './pages/Admin/UserRequest/UserRequest';
 
-// ── Guest ──
 import LandingPage from './pages/Guest/LandingPage';
 import RoomListing from './pages/Guest/RoomListing';
 import RoomDetail  from './pages/Guest/RoomDetail';
-
-// ── Tenant layout ──
 import UserLayout from './components/Tenant/UserLayout';
-
-// ── Tenant pages ──
 import TenantDashboard from './pages/Tenant/TenantDashboard';
 import MyRoom          from './pages/Tenant/MyRoom';
 import Profile         from './pages/Tenant/Profile';
 import TenantMaintenance     from './pages/Tenant/TenantMaintenance';
 
-/* ─── Route guard ─── */
 const ProtectedRoute = ({
   children,
   allowedRoles,
@@ -39,7 +32,6 @@ const ProtectedRoute = ({
   return children;
 };
 
-/* Redirect sau login theo role */
 const RoleRedirect = () => {
   const user = JSON.parse(localStorage.getItem('user') || 'null');
   if (!user)                  return <Navigate to="/login"            replace />;
@@ -52,14 +44,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* ── Guest (không cần đăng nhập) ── */}
         <Route path="/"          element={<LandingPage />} />
         <Route path="/rooms"     element={<RoomListing />} />
         <Route path="/rooms/:id" element={<RoomDetail />} />
         <Route path="/login"     element={<Auth />} />
         <Route path="/home"      element={<RoleRedirect />} />
 
-        {/* ── Tenant ── */}
         <Route
           path="/tenant"
           element={
@@ -75,7 +65,6 @@ function App() {
           <Route path="maintenance" element={<TenantMaintenance />} />
         </Route>
 
-        {/* ── Admin ── */}
         <Route path="/dashboard"
           element={<ProtectedRoute allowedRoles={['admin']}><Dashboard /></ProtectedRoute>} />
         <Route path="/tenants"
@@ -89,7 +78,6 @@ function App() {
         <Route path="/settings"
           element={<ProtectedRoute allowedRoles={['admin', 'tenant']}><Settings /></ProtectedRoute>} />
 
-        {/* ── Fallback ── */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

@@ -23,15 +23,11 @@ const UserLayout: React.FC = () => {
 
   return (
     <div className="ul-root">
-      {/* Sidebar */}
       <UserSidebar />
 
-      {/* Main */}
       <div className="ul-main">
-        {/* Header */}
         <header className="ul-header">
           <h2 className="ul-page-title">{pageTitle}</h2>
-
           <div className="ul-header-right">
             <div className="ul-user-info">
               <span className="ul-user-name">{userData.name || 'Nguyễn Văn An'}</span>
@@ -54,7 +50,6 @@ const UserLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Page content */}
         <main className="ul-content">
           <Outlet />
         </main>

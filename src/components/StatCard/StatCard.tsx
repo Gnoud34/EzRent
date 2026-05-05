@@ -4,7 +4,7 @@ import './StatCard.css';
 interface StatCardProps {
     title: string;
     value: number | string;
-    icon: string; // Truyền vào class ví dụ: "bi-house"
+    icon: string;
     color: string;
     bgColor: string;
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RoomListing.css';
@@ -40,7 +39,6 @@ export default function RoomListing() {
 
   return (
     <div className="rl-root">
-      {/* ── Navbar ── */}
       <nav className="rl-nav">
         <div className="rl-nav-inner">
           <div className="rl-logo" onClick={() => navigate('/')}>
@@ -60,7 +58,6 @@ export default function RoomListing() {
           <p>Find the perfect room that fits your needs</p>
         </div>
 
-        {/* ── Toolbar ── */}
         <div className="rl-toolbar">
           <div className="rl-search-box">
             <svg width="16" height="16" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
@@ -102,7 +99,6 @@ export default function RoomListing() {
           <div className="rl-grid">
             {filtered.map((room, idx) => (
               <div key={room.id} className="rl-card" onClick={() => navigate(`/rooms/${room.id}`)}>
-                {/* ── Room Image: Default first image, rotates by index ── */}
                 <div className="rl-card-img">
                   <img
                     src={ROOM_IMAGES[idx % ROOM_IMAGES.length]}

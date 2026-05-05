@@ -11,7 +11,6 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* Header của Profile */
 .profile-header {
     display: flex;
     align-items: center;
@@ -68,7 +67,6 @@
     color: #ef4444;
 }
 
-/* Bố cục lưới thông tin */
 .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -108,7 +106,6 @@
     border: 1px solid #f1f5f9;
 }
 
-/* Footer nút bấm */
 .profile-footer {
     margin-top: 2.5rem;
     display: flex;

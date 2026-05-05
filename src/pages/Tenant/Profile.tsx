@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import './Profile.css';
 import mockData from '../../data/mockdata.json';
@@ -88,7 +87,6 @@ export default function Profile() {
       )}
 
       <div className="pf-grid">
-        {/* ── Left Column ── */}
         <div className="pf-left">
           <div className="pf-avatar-row">
             <div className="pf-avatar">{getInitials(form.name)}</div>
@@ -130,15 +128,12 @@ export default function Profile() {
             ) : (
               <>
                 <button className="pf-btn-save" onClick={() => setEditMode(true)}>Edit Profile</button>
-                <button className="pf-btn-cancel" onClick={handleCancel}>Change Password</button>
-              </>
+                </>
             )}
           </div>
         </div>
 
-        {/* ── Right Column ── */}
         <div className="pf-right">
-          {/* Room info panel */}
           <div className="pf-panel">
             <div className="pf-panel-header">
               <svg width="15" height="15" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">
@@ -167,7 +162,6 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Address panel */}
           <div className="pf-panel">
             <div className="pf-panel-header">
               <svg width="15" height="15" fill="none" stroke="#9CA3AF" viewBox="0 0 24 24">

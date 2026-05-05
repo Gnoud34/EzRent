@@ -8,7 +8,6 @@ const LandingPage: React.FC = () => {
     const userJson = localStorage.getItem('user');
     const user = userJson ? JSON.parse(userJson) : null;
 
-    // Hiệu ứng đổi màu Navbar khi cuộn chuột
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
@@ -22,7 +21,6 @@ const LandingPage: React.FC = () => {
 
     return (
         <div className="landing-container">
-            {/* Navbar */}
             <nav className={`landing-nav ${scrolled ? 'scrolled' : ''}`}>
                 <div className="logo">
                     <i className="bi bi-house-heart-fill"></i>
@@ -39,7 +37,6 @@ const LandingPage: React.FC = () => {
                 </div>
             </nav>
 
-            {/* Hero Section */}
             <header className="landing-hero">
                 <div className="hero-content">
                     <span className="badge">Tenant Dashboard</span>
@@ -53,7 +50,6 @@ const LandingPage: React.FC = () => {
                 </div>
             </header>
 
-            {/* Main Actions */}
             <main className="content-section">
                 <div className="features-grid">
                     <div className="feature-card bill-card" onClick={() => navigate('/bills')}>

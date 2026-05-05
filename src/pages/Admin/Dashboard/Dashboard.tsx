@@ -6,7 +6,6 @@ import mockData from '../../../data/mockdata.json';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-    // Metric calculation logic
     const totalRooms = mockData.rooms.length;
     const occupiedRooms = mockData.rooms.filter(r => r.status === 'occupied').length;
     const availableRooms = mockData.rooms.filter(r => r.status === 'available').length;
@@ -21,22 +20,15 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="dashboard-layout">
-            {/* 1. Left Sidebar */}
             <Sidebar />
-
-            {/* 2. Main Content Area */}
             <main className="main-view">
-                {/* Standard Header component */}
                 <Header pageTitle="Dashboard" />
-
                 <div className="dashboard-content">
-                    {/* Overview Header */}
                     <div className="section-title">
                         <h2>Overview</h2>
                         <p>Current status of your property management</p>
                     </div>
 
-                    {/* Statistics Cards Row */}
                     <div className="stats-container">
                         <StatCard
                             title="Total Rooms"
@@ -68,9 +60,7 @@ const Dashboard: React.FC = () => {
                         />
                     </div>
 
-                    {/* Recent Data Grid */}
                     <div className="data-grid">
-                        {/* Recent Rooms Column */}
                         <div className="card-panel">
                             <h4 className="panel-header">
                                 <i className="bi bi-list-ul"></i> Recent Rooms
@@ -90,7 +80,6 @@ const Dashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Recent Tenants Column */}
                         <div className="card-panel">
                             <h4 className="panel-header">
                                 <i className="bi bi-person-lines-fill"></i> Recent Tenants
@@ -111,7 +100,6 @@ const Dashboard: React.FC = () => {
                 </div>
             </main>
 
-            {/* Dashboard-specific Styles */}
             <style>{`
                 .room-label {
                     background-color: #f0fdf4;

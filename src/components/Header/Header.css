@@ -3,7 +3,7 @@
     background-color: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Đẩy 2 bên ra xa */
+    justify-content: space-between;
     padding: 0 2rem;
     border-bottom: 1px solid #f1f5f9;
     position: sticky;
@@ -27,7 +27,7 @@
 .user-info {
     display: flex;
     flex-direction: column;
-    text-align: right; /* Căn lề phải cho text */
+    text-align: right; 
 }
 
 .user-name {
@@ -44,7 +44,7 @@
 .user-avatar {
     width: 40px;
     height: 40px;
-    background-color: #2563eb; /* Màu xanh chủ đạo của EzRent */
+    background-color: #2563eb;
     color: white;
     border-radius: 50%;
     display: flex;

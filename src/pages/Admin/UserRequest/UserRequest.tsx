@@ -12,16 +12,13 @@ interface Request {
 }
 
 const UserRequest: React.FC = () => {
-    // 1. Get current user info
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const userRoom = user.roomId || user.roomNumber || "N/A";
 
-    // 2. State
     const [title, setTitle] = useState('Maintenance');
     const [description, setDescription] = useState('');
     const [myRequests, setMyRequests] = useState<Request[]>([]);
 
-    // 3. Load data from localStorage on mount
     useEffect(() => {
         const savedRequests = localStorage.getItem(`requests_${user.id}`);
         if (savedRequests) {
@@ -29,7 +26,6 @@ const UserRequest: React.FC = () => {
         }
     }, [user.id]);
 
-    // 4. Save to localStorage whenever myRequests changes
     useEffect(() => {
         if (myRequests.length > 0) {
             localStorage.setItem(`requests_${user.id}`, JSON.stringify(myRequests));
@@ -46,13 +42,10 @@ const UserRequest: React.FC = () => {
             title: title,
             description: description,
             status: 'pending',
-            createdAt: new Date().toLocaleDateString('en-US'), // Changed to US format
+            createdAt: new Date().toLocaleDateString('en-US'),
             createdBy: user.id
         };
-
         setMyRequests([newRequest, ...myRequests]);
-        
-        // Reset form
         setDescription('');
         setTitle('Maintenance');
         
@@ -115,7 +108,6 @@ const UserRequest: React.FC = () => {
                     </form>
                 </div>
 
-                {/* History Section */}
                 <div className="request-history-card">
                     <div className="card-header">
                         <i className="bi bi-clock-history"></i>

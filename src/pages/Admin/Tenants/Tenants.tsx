@@ -5,7 +5,6 @@ import mockData from '../../../data/mockdata.json';
 import { useNavigate } from 'react-router-dom';
 import './Tenants.css';
 
-// 1. Interfaces
 interface Tenant {
     id: string;
     name: string;
@@ -31,7 +30,6 @@ const Tenants: React.FC = () => {
         name: '', phone: '', roomId: '', moveInDate: '', expireDate: '', status: 'active' as Tenant['status'], note: ''
     });
 
-    // 3. Logic & Helpers
     const getRoomNumber = (roomId: string) => mockData.rooms.find(r => r.id === roomId)?.number || 'N/A';
 
     const isExpired = (tenant: Tenant) => {
@@ -39,7 +37,6 @@ const Tenants: React.FC = () => {
         return new Date(tenant.expireDate) < new Date();
     };
 
-    // Memoized filtering and sorting for performance
     const displayTenants = useMemo(() => {
         return tenants
             .filter(t => t.status === activeTab)
@@ -53,7 +50,6 @@ const Tenants: React.FC = () => {
             });
     }, [tenants, activeTab, searchTerm]);
 
-    // 4. Action Handlers
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -175,7 +171,6 @@ const Tenants: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Modal Logic remains similar but uses handleInputChange for cleaner code */}
                 {isModalOpen && (
                     <div className="modal-overlay">
                         <form onSubmit={handleSave} className="modal-box">
